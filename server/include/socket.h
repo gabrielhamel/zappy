@@ -49,7 +49,6 @@ int socket_list_destroy(sock_list_t *list);
 sock_t *socket_list_get_socket(sock_list_t *list, int fd);
 sock_t **socket_list_get_event(sock_list_t *list);
 int socket_list_destroy_no_close(sock_list_t *list);
-
 sock_t *socket_init(ctor_t ctor, dtor_t dtor);
 sock_t *socket_cli_init(uint16_t port, uint32_t ip, ctor_t ctor, dtor_t dtor);
 sock_t *socket_serv_init(uint16_t port, ctor_t ctor, dtor_t dtor);

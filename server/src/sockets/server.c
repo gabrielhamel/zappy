@@ -67,7 +67,7 @@ int socket_destroy(sock_t *socket)
     return (0);
 }
 
-sock_t *socket_server_accept_cli(sock_t *server, ctor_t ctor, dtor_t dtor)
+sock_t *socket_serv_accept_cli(sock_t *server, ctor_t ctor, dtor_t dtor)
 {
     sock_t *client = malloc(sizeof(sock_t));
     int fd = -1;
