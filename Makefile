@@ -20,7 +20,11 @@ SRC_SERV =	./server/src/sockets/client.c		\
 			./server/src/utils/read.c			\
 			./server/src/utils/strings.c		\
 			./server/src/fct_cli.c				\
-			./server/src/commands/ping.c
+			./server/src/commands/ping.c		\
+			./server/src/parsing/checking.c		\
+			./server/src/parsing/team_names.c	\
+			./server/src/parsing/arguments.c	\
+			./server/src/parsing/types.c
 
 INC_DIR =	-I ./server/include
 
