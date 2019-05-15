@@ -19,8 +19,8 @@ SRC_SERV =	./server/src/sockets/client.c		\
 			./server/src/utils/ioutils.c		\
 			./server/src/utils/read.c			\
 			./server/src/utils/strings.c		\
-			./server/src/fct_cli.c				\
-			./server/src/commands/ping.c
+			./server/src/fct_cli.c
+			# ./server/src/commands/buffer_cmd/buffer_cmd.c
 
 INC_DIR =	-I ./server/include
 

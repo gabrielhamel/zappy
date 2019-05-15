@@ -10,11 +10,19 @@
 
 #include "socket.h"
 #include "utils.h"
+#include "buffer_cmd.h"
+
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
 
 #define BUFF_CMD(x) ((zappy_client_t *)x->data)->cmd_buff
+
+typedef enum {
+    IA,
+    GRAPHICAL,
+    UNDEFINED
+} client_type_t;
 
 typedef struct {
     const char *name;
@@ -23,6 +31,8 @@ typedef struct {
 
 typedef struct {
     char *cmd_buff;
+    client_type_t cli_type;
+    un_cli_t client;
 } zappy_client_t;
 
 extern command_t commands_g[];
