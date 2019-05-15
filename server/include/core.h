@@ -15,3 +15,5 @@ typedef struct core_s {
 
 
 void init_core(core_t *core, size_t w, size_t h);
+
+void core_loop(core_t *core);

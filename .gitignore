@@ -1,1 +1,8 @@
+*.o
+*.a
+*.so
 .vscode
+.idea
+zappy_server
+zappy_ai
+vgcore.*

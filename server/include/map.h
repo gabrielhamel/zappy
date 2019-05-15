@@ -7,16 +7,9 @@
 
 #pragma once
 
-#include <stdlib.h> 
+#include <stdlib.h>
 
-typedef enum ITEM_E {
-    FOOD,
-    DERAUMERE,
-    SIBUR,
-    MENDIANE,
-    PHIRAS,
-    THYSTAME
-} ITEM_T; 
+#include "item.h"
 
 typedef struct tile_s tile_t;
 
