@@ -10,6 +10,9 @@
 
 #define ZAPPY_CLIENT(x) ((zappy_client_t *)(x->data))
 
+#include "ia.h"
+#include "player.h"
+
 typedef struct s_buffer_cmd {
     char **cmd;
     struct s_buffer_cmd *next;
@@ -17,17 +20,9 @@ typedef struct s_buffer_cmd {
 
 typedef buffer_cmd_t *list_t;
 
-typedef struct {
-    list_t list_head;
-} IA_client_t;
-
-typedef struct {
-    list_t list_head;
-} graphic_client_t;
-
 typedef union {
-    IA_client_t *IA;
-    graphic_client_t *graphic;
+    ia_t *IA;
+    player_t *graphic;
 } un_cli_t;
 
 // void list_dump(list_t list);

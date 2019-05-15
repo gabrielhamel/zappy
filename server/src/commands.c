@@ -7,6 +7,7 @@
 
 #include "server.h"
 #include "buffer_cmd.h"
+#include "player.h"
 
 static void list_dump(list_t list)
 {
@@ -51,7 +52,7 @@ void exec_command(sock_t *cli, sock_list_t *list, char **arg, zarg_t *zarg)
     sock_t client;
     zappy_client_t *test = malloc(sizeof(zappy_client_t));
 
-    test->client.graphic = malloc(sizeof(graphic_client_t));
+    test->client.graphic = malloc(sizeof(player_t));
     test->client.graphic->list_head = NULL;
 
     client.data = test;
