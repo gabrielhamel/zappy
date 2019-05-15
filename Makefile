@@ -26,7 +26,8 @@ SRC_SERV =	./server/src/sockets/client.c		\
 			./server/src/parsing/arguments.c	\
 			./server/src/parsing/types.c
 
-SRC_AI =	./ai/src/main.cpp
+SRC_AI =	./ai/src/main.cpp					\
+			./ai/src/Server.cpp
 
 INC_DIR =	-I ./server/include \
 			-I ./ai/include
