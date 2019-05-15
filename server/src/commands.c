@@ -42,7 +42,7 @@ static void test_lists(sock_t *cli)
     list_dump(ZAPPY_CLIENT(cli)->client.graphic->list_head);
 }
 
-void exec_command(sock_t *cli, sock_list_t *list, char **arg)
+void exec_command(sock_t *cli, sock_list_t *list, char **arg, zarg_t *zarg)
 {
     (void)cli;
     (void)list;

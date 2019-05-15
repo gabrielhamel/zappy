@@ -2,15 +2,13 @@
 ** EPITECH PROJECT, 2019
 ** PSU_zappy_2018
 ** File description:
-** server
+** parser
 */
 
 #pragma once
 
 #include "socket.h"
 #include "utils.h"
-#include "buffer_cmd.h"
-
 #include <stdio.h>
 #include <string.h>
 #include <stdbool.h>
@@ -19,12 +17,6 @@
 #define ARRAY_SIZE(x) (sizeof(x) / sizeof(*x))
 #define BUFF_CMD(x) ((zappy_client_t *)x->data)->cmd_buff
 
-typedef enum {
-    IA,
-    GRAPHICAL,
-    UNDEFINED
-} client_type_t;
-
 typedef struct {
     const char *name;
     void (*func)(sock_t *, sock_list_t *, char **);
@@ -32,8 +24,6 @@ typedef struct {
 
 typedef struct {
     char *cmd_buff;
-    client_type_t cli_type;
-    un_cli_t client;
 } zappy_client_t;
 
 extern command_t commands_g[];

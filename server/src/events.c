@@ -7,7 +7,7 @@
 
 #include "server.h"
 
-static void server_event(sock_list_t *list, sock_t *server)
+static void server_event(sock_list_t *list, sock_t *server, zarg_t *zarg)
 {
     sock_t *tmp = socket_serv_accept_cli(server, init_client, end_client);
 
@@ -20,7 +20,7 @@ static void destroy_ftp_sock(sock_list_t *list, sock_t *cli)
     socket_list_remove(list, cli);
 }
 
-static void client_event(sock_list_t *list, sock_t *client)
+static void client_event(sock_list_t *list, sock_t *client, zarg_t *zarg)
 {
     char *buff = read_line(client);
     char **toks;
@@ -33,17 +33,15 @@ static void client_event(sock_list_t *list, sock_t *client)
         len = strlen(buff);
         free(buff);
         if (toks != NULL && len)
-            exec_command(client, list, toks);
-        if (toks != NULL)
-            destroy_array(toks);
+            exec_command(client, list, toks, zarg);
     }
 }
 
-void manage_event(sock_list_t *list, sock_t **evt_socks)
+void manage_event(sock_list_t *list, sock_t **evt_socks, zarg_t *zarg)
 {
     for (size_t i = 0; evt_socks[i] != NULL; i++)
         if (evt_socks[i]->type == SERVER)
-            server_event(list, evt_socks[i]);
+            server_event(list, evt_socks[i], zarg);
         else
-            client_event(list, evt_socks[i]);
+            client_event(list, evt_socks[i], zarg);
 }

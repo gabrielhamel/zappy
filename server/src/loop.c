@@ -23,7 +23,7 @@ static void forcequit(int sig)
     *test = false;
 }
 
-static void zappy_loop(sock_list_t *list)
+static void zappy_loop(sock_list_t *list, zarg_t *zarg)
 {
     sock_t **tab;
 
@@ -32,20 +32,23 @@ static void zappy_loop(sock_list_t *list)
         list->tab = tab;
         if (tab == NULL)
             continue;
-        manage_event(list, tab);
+        manage_event(list, tab, zarg);
         free(tab);
     }
 }
 
-void launch_zappy(uint16_t port)
+int launch_zappy(zarg_t *zarg)
 {
     sock_list_t *list = socket_list_init();
     sock_t *tmp;
 
     list->tab = NULL;
-    tmp = socket_serv_init(port, NULL, NULL);
+    tmp = socket_serv_init(zarg->port, NULL, NULL);
+    if (tmp == NULL)
+        return (84);
     socket_list_add(list, tmp);
     signal(SIGINT, forcequit);
-    zappy_loop(list);
+    zappy_loop(list, zarg);
     socket_list_destroy(list);
+    return (0);
 }
