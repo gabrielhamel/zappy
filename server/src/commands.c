@@ -16,7 +16,7 @@ static size_t commands_lenght(void)
     return (ARRAY_SIZE(commands_g));
 }
 
-void exec_command(sock_t *cli, sock_list_t *list, char **arg)
+void exec_command(sock_t *cli, sock_list_t *list, char **arg, zarg_t *zarg)
 {
     for (size_t i = 0; i < commands_lenght() && arg[0]; i++) {
         if (!strcasecmp(commands_g[i].name, arg[0]) && commands_g[i].func) {

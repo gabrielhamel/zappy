@@ -72,11 +72,21 @@ bool check_team(const char *team);
 
 // Fonctions socket
 int launch_zappy(zarg_t *zarg);
-void manage_event(sock_list_t *list, sock_t **evt_socks);
+void manage_event(sock_list_t *list, sock_t **evt_socks, zarg_t *zarg);
 char *read_line(sock_t *socket);
-void exec_command(sock_t *cli, sock_list_t *list, char **arg);
+void exec_command(sock_t *cli, sock_list_t *list, char **arg, zarg_t *zarg);
 
 // Section des commandes de client
 void command_ping(sock_t *cli, sock_list_t *list, char **arg);
+
+// Commandes des IA
+
+typedef struct {
+    const char *name;
+    unsigned int time;
+    void (*func)(sock_t *, sock_list_t *, char **, zarg_t *zarg);
+} ai_cmd_t;
+
+void exec_ia_cmd(sock_t *sock, sock_list_t *list, char **arg, zarg_t *zarg);
 
 #endif
