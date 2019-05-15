@@ -12,6 +12,10 @@
 #include <stdbool.h>
 #include <stdarg.h>
 
+#define ARRAY_SIZE(x) (sizeof(x) / sizeof(*x))
+#define READ_SIZE 1024
+
+char **alloc_array(size_t nbmemb, size_t sizememb);
 char *str_add(int nb, ...);
 char **tokenize(char *str, char *delim);
 size_t array_lenght(char **tab);

@@ -15,6 +15,8 @@ int main(int ac, char **av)
     (void)av;
     size_t w = 10;
     size_t h = 10;
+    arg_t arg = {0};
+    zarg_t zarg = {0};
 
     core_t core;
 
@@ -22,5 +24,8 @@ int main(int ac, char **av)
 
     loop_core(&core);
 
-    return (0);
+    if (parsing(&arg, ac, av) == false)
+        return (84);
+    return (launch_zappy(&zarg));
+
 }

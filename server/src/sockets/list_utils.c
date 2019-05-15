@@ -80,7 +80,7 @@ int socket_list_destroy(sock_list_t *list)
     return (0);
 }
 
-sock_list_t *socket_list_create(void)
+sock_list_t *socket_list_init(void)
 {
     sock_list_t *list = malloc(sizeof(sock_list_t));
 
