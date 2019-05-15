@@ -26,9 +26,14 @@ SRC_SERV =	./server/src/sockets/client.c		\
 			./server/src/parsing/arguments.c	\
 			./server/src/parsing/types.c
 
-INC_DIR =	-I ./server/include
+SRC_AI =	./ai/src/main.cpp
+
+INC_DIR =	-I ./server/include \
+			-I ./ai/include
 
 OBJ_SERV =  $(SRC_SERV:.c=.o)
+
+OBJ_AI =  	$(SRC_AI:.cpp=.o)
 
 CFLAGS +=	$(INC_DIR) -W -Wall -Wextra
 
@@ -57,11 +62,8 @@ titre_ai:
 zappy_server: titre_server $(OBJ_SERV)
 			@gcc -o zappy_server $(OBJ_SERV) && $(ECHO) $(GREEN)✓$(TEAL)" BUILD SUCCESS !"$(TEAL) $(DEFAULT) || $(ECHO) $(SANG)✗$(TEAL)" BUILD FAILED !"$(TEAL) $(DEFAULT)
 
-zappy_ai:	titre_ai
-			@echo "#!/usr/bin/php" > zappy_ai
-			@cat ai/index.php >> zappy_ai
-			@chmod +x zappy_ai
-			@$(ECHO) $(GREEN)✓$(TEAL)" BUILD SUCCESS !"$(TEAL) $(DEFAULT)
+zappy_ai:	titre_ai $(OBJ_AI)
+			@g++ -o zappy_ai $(OBJ_AI) && $(ECHO) $(GREEN)✓$(TEAL)" BUILD SUCCESS !"$(TEAL) $(DEFAULT) || $(ECHO) $(SANG)✗$(TEAL)" BUILD FAILED !"$(TEAL) $(DEFAULT)
 
 clean:
 			@$(ECHO) $(RED)¶ Cleaning$(TEAL):$(DEFAULT)
@@ -76,5 +78,8 @@ re:			fclean all
 
 %.o : %.c
 			@gcc -c -o $@ $^ $(CFLAGS) && $(ECHO) -n $(GREEN)"  [OK] "$(TEAL) || $(ECHO) -n $(SANG)"  [NO] "$(TEAL) && $(ECHO) $< | rev | cut -d'/' -f 1 | rev
+
+%.o : %.cpp
+			@g++ -c -o $@ $^ $(CFLAGS) && $(ECHO) -n $(GREEN)"  [OK] "$(TEAL) || $(ECHO) -n $(SANG)"  [NO] "$(TEAL) && $(ECHO) $< | rev | cut -d'/' -f 1 | rev
 
 .PHONY:		all fclean re clean zappy_ai zappy_server
