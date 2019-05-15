@@ -29,11 +29,6 @@ typedef struct {
 
 extern command_t commands_g[];
 
-void launch_zappy(uint16_t port);
-void manage_event(sock_list_t *list, sock_t **evt_socks);
-char *read_line(sock_t *socket);
-void exec_command(sock_t *cli, sock_list_t *list, char **arg);
-
 // Constructeur et destructeur du client
 void *init_client(const sock_t *cli);
 void end_client(const sock_t *cli, void *data);
@@ -48,6 +43,15 @@ typedef struct {
     char *clients_nb;
     char *freq;
 } arg_t;
+
+typedef struct {
+    uint16_t port;
+    unsigned int width;
+    unsigned int height;
+    char **team_names;
+    unsigned int clients_nb;
+    unsigned int freq;
+} zarg_t;
 
 typedef struct {
     char *flag;
@@ -65,6 +69,12 @@ bool check_dimension(const char *dim);
 bool check_clients_nb(const char *nb);
 bool check_freq(const char *freq);
 bool check_team(const char *team);
+
+// Fonctions socket
+int launch_zappy(zarg_t *zarg);
+void manage_event(sock_list_t *list, sock_t **evt_socks);
+char *read_line(sock_t *socket);
+void exec_command(sock_t *cli, sock_list_t *list, char **arg);
 
 // Section des commandes de client
 void command_ping(sock_t *cli, sock_list_t *list, char **arg);

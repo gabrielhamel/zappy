@@ -37,15 +37,18 @@ static void zappy_loop(sock_list_t *list)
     }
 }
 
-void launch_zappy(uint16_t port)
+int launch_zappy(zarg_t *zarg)
 {
     sock_list_t *list = socket_list_init();
     sock_t *tmp;
 
     list->tab = NULL;
-    tmp = socket_serv_init(port, NULL, NULL);
+    tmp = socket_serv_init(zarg->port, NULL, NULL);
+    if (tmp == NULL)
+        return (84);
     socket_list_add(list, tmp);
     signal(SIGINT, forcequit);
     zappy_loop(list);
     socket_list_destroy(list);
+    return (0);
 }
