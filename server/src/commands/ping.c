@@ -5,7 +5,7 @@
 ** ping
 */
 
-#include "socket.h"
+#include "server.h"
 
 void command_ping(sock_t *cli, sock_list_t *list, char **arg)
 {

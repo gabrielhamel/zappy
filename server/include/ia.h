@@ -12,5 +12,4 @@
 typedef struct ia_s {
     size_t x;
     size_t y;
-    
 } ia_t;

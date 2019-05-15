@@ -7,6 +7,8 @@
 
 #pragma once
 
+#include <stdbool.h>
+
 #include "map.h"
 
 typedef struct core_s {
@@ -14,6 +16,6 @@ typedef struct core_s {
 } core_t;
 
 
-void init_core(core_t *core, size_t w, size_t h);
+bool init_core(core_t *core, size_t w, size_t h);
 
 void core_loop(core_t *core);

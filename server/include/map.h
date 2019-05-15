@@ -8,6 +8,7 @@
 #pragma once
 
 #include <stdlib.h>
+#include <stdbool.h>
 
 #include "item.h"
 
@@ -30,4 +31,8 @@ typedef struct map_s {
 } map_t;
 
 
-void init_map(map_t *map, size_t w, size_t h);
+bool init_map(map_t *map, size_t w, size_t h);
+void link_top(tile_t **graph, size_t w, size_t h);
+void link_right(tile_t **graph, size_t w, size_t h);
+void link_bottom(tile_t **graph, size_t w, size_t h);
+void link_left(tile_t **graph, size_t w, size_t h);
