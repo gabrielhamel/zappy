@@ -7,9 +7,8 @@
 
 #pragma once
 
-typedef struct s_buffer_cmd buffer_cmd_t;
-typedef buffer_cmd_t *list_t;
+#include <sys/queue.h>
 
 typedef struct player_s {
-    list_t list_head;
+    STAILQ_HEAD(, buffer_cmd_s) list_head;
 } player_t;

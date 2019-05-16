@@ -5,29 +5,45 @@
 ** commands
 */
 
+#include <sys/queue.h>
+#include <stdbool.h>
+
 #include "server.h"
 #include "buffer_cmd.h"
 #include "player.h"
 
-static void list_dump(list_t list)
+static void list_dump(void *p_list)
 {
-    while (list != NULL) {
-        printf("%s\n", list->cmd[0]);
-        list = list->next;
+    struct buffer_cmd_s *p;
+    STAILQ_HEAD(, buffer_cmd_s) *list = p_list;
+
+    STAILQ_FOREACH(p, list, next) {
+        printf("%s\n", p->cmd[0]);
     }
 }
 
-static int list_add_elem_at_front(list_t *front_ptr , char **cmd)
+static bool list_add_elem_at_back(void *p_list, char **cmd)
 {
     buffer_cmd_t *new_elem = malloc(sizeof(buffer_cmd_t));
 
+    STAILQ_HEAD(, buffer_cmd_s) *list = p_list;
+
     if (new_elem == NULL)
-        return (1);
+        return (true);
     new_elem->cmd = cmd;
-    new_elem->next = *front_ptr;
-    *front_ptr = new_elem;
+
+    STAILQ_INSERT_TAIL(list, new_elem, next);
     return (0);
 }
+
+
+static buffer_cmd_t* list_get_elem_at_front(void *p_list)
+{
+    STAILQ_HEAD(, buffer_cmd_s) *list = p_list;
+
+    return (STAILQ_FIRST(list));
+}
+
 
 static void test_lists(sock_t *cli)
 {
@@ -36,11 +52,12 @@ static void test_lists(sock_t *cli)
     char *arg_3[1] = { "c" };
     char *arg_4[1] = { "d" };
 
-    list_add_elem_at_front(&(ZAPPY_CLIENT(cli)->client.graphic->list_head), arg_1);
-    list_add_elem_at_front(&(ZAPPY_CLIENT(cli)->client.graphic->list_head), arg_2);
-    list_add_elem_at_front(&(ZAPPY_CLIENT(cli)->client.graphic->list_head), arg_3);
-    list_add_elem_at_front(&(ZAPPY_CLIENT(cli)->client.graphic->list_head), arg_4);
-    list_dump(ZAPPY_CLIENT(cli)->client.graphic->list_head);
+    list_add_elem_at_back(&(ZAPPY_CLIENT(cli)->client.graphic->list_head), arg_1);
+    list_add_elem_at_back(&(ZAPPY_CLIENT(cli)->client.graphic->list_head), arg_2);
+    list_add_elem_at_back(&(ZAPPY_CLIENT(cli)->client.graphic->list_head), arg_3);
+    list_add_elem_at_back(&(ZAPPY_CLIENT(cli)->client.graphic->list_head), arg_4);
+    list_dump(&(ZAPPY_CLIENT(cli)->client.graphic->list_head));
+    printf("------\nfirst one: %s\n", list_get_elem_at_front(&(ZAPPY_CLIENT(cli)->client.graphic->list_head))->cmd[0]);
 }
 
 void exec_command(sock_t *cli, sock_list_t *list, char **arg, zarg_t *zarg)
@@ -53,7 +70,8 @@ void exec_command(sock_t *cli, sock_list_t *list, char **arg, zarg_t *zarg)
     zappy_client_t *test = malloc(sizeof(zappy_client_t));
 
     test->client.graphic = malloc(sizeof(player_t));
-    test->client.graphic->list_head = NULL;
+    // test->client.graphic->list_head = NULL;
+    STAILQ_INIT(&test->client.graphic->list_head);
 
     client.data = test;
     test_lists(&client);

@@ -13,12 +13,10 @@
 #include "ia.h"
 #include "player.h"
 
-typedef struct s_buffer_cmd {
+typedef struct buffer_cmd_s {
     char **cmd;
-    struct s_buffer_cmd *next;
+    STAILQ_ENTRY(buffer_cmd_s) next;
 } buffer_cmd_t;
-
-typedef buffer_cmd_t *list_t;
 
 typedef union {
     ia_t *IA;

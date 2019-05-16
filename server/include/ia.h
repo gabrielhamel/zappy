@@ -9,11 +9,10 @@
 
 #include <stdlib.h>
 
-typedef struct s_buffer_cmd buffer_cmd_t;
-typedef buffer_cmd_t *list_t;
+#include "sys/queue.h"
 
 typedef struct ia_s {
     size_t x;
     size_t y;
-    list_t list_head;
+    STAILQ_HEAD(, buffer_cmd_s) list_head;
 } ia_t;
