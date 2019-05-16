@@ -38,5 +38,4 @@ void link_map(tile_t **graph, size_t w, size_t h)
 void add_random_rock(map_t map)
 {
     (void)map;
-    //TODO 
 }

@@ -9,6 +9,7 @@
 #define BUFFER_CMD_H_
 
 #define ZAPPY_CLIENT(x) ((zappy_client_t *)(x->data))
+#define LIST_CMD(x) &(ZAPPY_CLIENT(x)->client.ia->list_head)
 
 #include "ia.h"
 #include "player.h"
@@ -19,12 +20,14 @@ typedef struct buffer_cmd_s {
 } buffer_cmd_t;
 
 typedef union {
-    ia_t *IA;
+    ia_t *ia;
     player_t *graphic;
 } un_cli_t;
 
-// void list_dump(list_t list);
-// int list_add_elem_at_front(list_t *front_ptr, char **cmd);
-// void test_lists(sock_t *cli);
+void list_dump(void *p_list);
+void list_pop(void *p_list);
+buffer_cmd_t *list_head(void *p_list);
+void list_insert(void *p_list, char **cmd);
+void list_elem_destroy(buffer_cmd_t *elem);
 
-#endif /* !BUFFER_CMD_H_ */
+#endif

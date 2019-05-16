@@ -73,6 +73,7 @@ bool parsing(arg_t *arg, int ac, char **av);
 void *parse_single_arg(int ac, char **av, argument_t *flag, int *i);
 void *parse_infinity_arg(int ac, char **av, argument_t *flag, int *i);
 int count_nb_arg(int ac, char **av, int i);
+void arg_to_zarg(arg_t *arg, zarg_t *zarg);
 bool check_port(const char *port);
 bool check_dimension(const char *dim);
 bool check_clients_nb(const char *nb);
@@ -96,4 +97,4 @@ typedef struct {
     void (*func)(sock_t *, sock_list_t *, char **, zarg_t *zarg);
 } ai_cmd_t;
 
-void exec_ia_cmd(sock_t *sock, sock_list_t *list, char **arg, zarg_t *zarg);
+ai_cmd_t *get_ai_cmd(char **cmd);

@@ -12,7 +12,6 @@ SRC_SERV =	./server/src/sockets/client.c		\
 			./server/src/sockets/list_utils.c	\
 			./server/src/sockets/server.c		\
 			./server/src/core/core.c			\
-			./server/src/game/ia.c				\
 			./server/src/game/link_map.c		\
 			./server/src/game/map.c				\
 			./server/src/loop.c					\
@@ -24,17 +23,18 @@ SRC_SERV =	./server/src/sockets/client.c		\
 			./server/src/utils/read.c			\
 			./server/src/utils/strings.c		\
 			./server/src/fct_cli.c				\
-			./server/src/commands/ping.c		\
 			./server/src/parsing/checking.c		\
 			./server/src/parsing/team_names.c	\
 			./server/src/parsing/arguments.c	\
-			./server/src/parsing/types.c
+			./server/src/parsing/types.c		\
+			./server/src/commands/buffer_cmd/list_fct.c \
+			./server/src/commands/buffer_cmd/list.c \
 
 INC_DIR =	-I ./server/include
 
 OBJ_SERV =  $(SRC_SERV:.c=.o)
 
-CFLAGS +=	$(INC_DIR) -W -Wall -Wextra
+CFLAGS +=	$(INC_DIR) -W -Wall -Wextra -g3
 
 RM =		@rm -rf
 

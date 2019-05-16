@@ -8,11 +8,10 @@
 #pragma once
 
 #include <stdlib.h>
-
 #include "sys/queue.h"
 
 typedef struct ia_s {
+    STAILQ_HEAD(, buffer_cmd_s) list_head;
     size_t x;
     size_t y;
-    STAILQ_HEAD(, buffer_cmd_s) list_head;
 } ia_t;

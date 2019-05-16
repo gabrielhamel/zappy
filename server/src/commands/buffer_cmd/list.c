@@ -7,7 +7,7 @@
 
 #include "server.h"
 
-static const ai_cmd_t cmd_g[] = {
+static ai_cmd_t cmd_g[] = {
     {"Forward", 7, NULL},
     {"Right", 7, NULL},
     {"Left", 7, NULL},
@@ -27,13 +27,10 @@ static size_t commands_lenght(void)
     return (ARRAY_SIZE(cmd_g));
 }
 
-void exec_ia_cmd(sock_t *sock, sock_list_t *list, char **arg, zarg_t *zarg)
+ai_cmd_t *get_ai_cmd(char **cmd)
 {
-    for (size_t i = 0; i < commands_lenght() && arg[0]; i++) {
-        if (!strcasecmp(commands_g[i].name, arg[0]) && commands_g[i].func) {
-            cmd_g[i].func(sock, list, arg, zarg);
-            return;
-        }
-    }
-    dprintf(sock->fd, "Commande ia invalide (a changer)\n");
+    for (size_t i = 0; i < commands_lenght() && cmd[0]; i++)
+        if (!strcasecmp(cmd_g[i].name, cmd[0]))
+            return (&cmd_g[i]);
+    return (NULL);
 }

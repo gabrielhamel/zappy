@@ -11,7 +11,7 @@ void link_top(tile_t **graph, size_t w, size_t h)
 {
     for (size_t x = 0; x < w; x++) {
         for (size_t y = 1; y < h; y++) {
-            graph[x][y].top = &graph[x][y - 1]; // NE FONCTIONNE PEUT ËTRE PAS, PAREIL POUR LES AUTRES EN DESSOUS
+            graph[x][y].top = &graph[x][y - 1];
         }
     }
     for (size_t x = 0; x < w; x++) {
@@ -42,7 +42,6 @@ void link_bottom(tile_t **graph, size_t w, size_t h)
         graph[x][h].bottom = &graph[x][0];
     }
 }
-
 
 void link_left(tile_t **graph, size_t w, size_t h)
 {
