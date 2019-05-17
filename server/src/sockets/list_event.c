@@ -21,10 +21,10 @@ sock_t *socket_list_get_socket(sock_list_t *list, int fd)
     return (NULL);
 }
 
-sock_t **socket_list_get_event(sock_list_t *list)
+sock_t **socket_list_get_event(sock_list_t *list, struct timeval *time)
 {
     fd_set tmp = list->fdlist;
-    int ret = select(FD_SETSIZE, &tmp, NULL, NULL, NULL);
+    int ret = select(FD_SETSIZE, &tmp, NULL, NULL, time);
     sock_t **tab = NULL;
     size_t idx = 0;
 

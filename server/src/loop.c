@@ -28,7 +28,7 @@ static void zappy_loop(sock_list_t *list, zarg_t *zarg)
     sock_t **tab;
 
     while (*loop()) {
-        tab = socket_list_get_event(list);
+        tab = socket_list_get_event(list, NULL);
         list->tab = tab;
         if (tab == NULL)
             continue;

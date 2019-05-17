@@ -14,23 +14,23 @@
 void list_dump(void *p_list)
 {
     struct buffer_cmd_s *p;
-    int i = 0;
     STAILQ_HEAD(, buffer_cmd_s) *list = p_list;
 
     printf("-------------------Command buffer-----------------\n");
     STAILQ_FOREACH(p, list, next) {
-        printf("%d: ", ++i);
+        printf("%d: ", p->time);
         array_dump((const char **)p->cmd, " ");
     }
     printf("--------------------------------------------------\n");
 }
 
-void list_insert(void *p_list, char **cmd)
+void list_insert(void *p_list, char **cmd, int time)
 {
     buffer_cmd_t *new_elem = malloc(sizeof(buffer_cmd_t));
     STAILQ_HEAD(, buffer_cmd_s) *list = p_list;
 
     new_elem->cmd = cmd;
+    new_elem->time = time;
     STAILQ_INSERT_TAIL(list, new_elem, next);
 }
 

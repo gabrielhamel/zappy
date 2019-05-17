@@ -17,7 +17,7 @@ SRC_SERV =	./server/src/sockets/client.c		\
 			./server/src/loop.c					\
 			./server/src/main.c					\
 			./server/src/events.c				\
-			./server/src/commands.c				\
+			./server/src/execution.c				\
 			./server/src/utils/array.c			\
 			./server/src/utils/ioutils.c		\
 			./server/src/utils/read.c			\
@@ -28,13 +28,15 @@ SRC_SERV =	./server/src/sockets/client.c		\
 			./server/src/parsing/arguments.c	\
 			./server/src/parsing/types.c		\
 			./server/src/commands/buffer_cmd/list_fct.c \
-			./server/src/commands/buffer_cmd/list.c \
+			./server/src/commands/ai/list.c \
+			./server/src/commands/graphic/list.c \
+			./server/src/commands/graphic/msz.c
 
 INC_DIR =	-I ./server/include
 
 OBJ_SERV =  $(SRC_SERV:.c=.o)
 
-CFLAGS +=	$(INC_DIR) -W -Wall -Wextra -g3
+CFLAGS +=	$(INC_DIR) -W -Wall -Wextra
 
 RM =		@rm -rf
 

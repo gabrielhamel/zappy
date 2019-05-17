@@ -94,7 +94,12 @@ void command_ping(sock_t *cli, sock_list_t *list, char **arg);
 typedef struct {
     const char *name;
     unsigned int time;
-    void (*func)(sock_t *, sock_list_t *, char **, zarg_t *zarg);
+    void (*func)(sock_t *, sock_list_t *, char **, zarg_t *);
 } ai_cmd_t;
 
-ai_cmd_t *get_ai_cmd(char **cmd);
+// Commandes graphics
+
+typedef struct {
+    const char *name;
+    void (*func)(sock_t *, sock_list_t *, char **, zarg_t *);
+} graph_cmd_t;

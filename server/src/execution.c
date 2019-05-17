@@ -7,12 +7,16 @@
 
 #include <sys/queue.h>
 #include <stdbool.h>
+#include "ia_commands.h"
+#include "graph_commands.h"
 #include "server.h"
 #include "buffer_cmd.h"
 #include "player.h"
 
-bool init_zappy_cli(sock_t *cli, sock_list_t *list, char **arg, zarg_t *zarg)
+static bool init_zappy_cli(sock_t *cli, sock_list_t *list, char **arg, zarg_t *zarg)
 {
+    (void)zarg;
+    (void)list;
     if (!strcasecmp("GRAPHIC", arg[0])) {
         ZAPPY_CLIENT(cli)->cli_type = GRAPHICAL;
         ZAPPY_CLIENT(cli)->client.graphic = malloc(sizeof(player_t));
@@ -27,19 +31,6 @@ bool init_zappy_cli(sock_t *cli, sock_list_t *list, char **arg, zarg_t *zarg)
     return (true);
 }
 
-void add_cmd_to_cli(sock_t *cli, char **arg)
-{
-    ai_cmd_t *cmd = get_ai_cmd(arg);
-
-    if (cmd == NULL) {
-        dprintf(cli->fd, "ko\n");
-        destroy_array(arg);
-        return;
-    }
-    list_insert(LIST_CMD(cli), arg);
-    dprintf(cli->fd, "Time: %d\n", cmd->time);
-}
-
 void exec_command(sock_t *cli, sock_list_t *list, char **arg, zarg_t *zarg)
 {
     if (ZAPPY_CLIENT(cli)->cli_type == UNDEFINED) {
@@ -47,9 +38,9 @@ void exec_command(sock_t *cli, sock_list_t *list, char **arg, zarg_t *zarg)
             socket_list_remove(list, cli);
         destroy_array(arg);
     } else if (ZAPPY_CLIENT(cli)->cli_type == IA) {
-        add_cmd_to_cli(cli, arg);
+        insert_cmd_ia(cli, arg);
     } else {
-        dprintf(cli->fd, "Graphicals commands is not available\n");
+        exec_graph_cmd(cli, list, arg, zarg);
         destroy_array(arg);
     }
 }
