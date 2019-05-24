@@ -6,7 +6,7 @@
 */
 
 #include <signal.h>
-#include "server.h"
+#include "game.h"
 
 static bool *loop(void)
 {
@@ -43,7 +43,8 @@ int launch_zappy(zarg_t *zarg)
     sock_t *tmp;
 
     list->tab = NULL;
-    tmp = socket_serv_init(zarg->port, NULL, NULL);
+    tmp = socket_serv_init(zarg->port, init_game, delete_game);
+    tmp->data = initialize_teams(zarg);
     if (tmp == NULL)
         return (84);
     socket_list_add(list, tmp);

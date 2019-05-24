@@ -6,8 +6,9 @@
 */
 
 #include "game.h"
+#include "buffer_cmd.h"
 
-bool check_team_names(char **arg, zarg_t *zarg)
+bool check_team_names(char **arg, zarg_t *zarg, sock_t *cli)
 {
     size_t i;
 
@@ -16,5 +17,7 @@ bool check_team_names(char **arg, zarg_t *zarg)
             return (true);
         }
     }
+    // ZAPPY_CLIENT(cli)->client.ia->team->nb_clients;
+    // Regarder le nombre de clients (si plein ou non dans la team)
     return (false);
 }

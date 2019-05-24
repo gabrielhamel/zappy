@@ -23,7 +23,7 @@ static bool init_zappy_cli(sock_t *cli, sock_list_t *list, char **arg, zarg_t *z
         memset(ZAPPY_CLIENT(cli)->client.graphic, 0, sizeof(player_t));
         return (true);
     }
-    else if (strcasecmp("GRAPHIC", arg[0]) && check_team_names(arg, zarg)) {
+    else if (strcasecmp("GRAPHIC", arg[0]) && check_team_names(arg, zarg, cli)) {
         ZAPPY_CLIENT(cli)->cli_type = IA;
         ZAPPY_CLIENT(cli)->client.ia = malloc(sizeof(ia_t));
         memset(ZAPPY_CLIENT(cli)->client.ia, 0, sizeof(ia_t));

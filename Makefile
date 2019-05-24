@@ -11,7 +11,6 @@ SRC_SERV =	./server/src/sockets/client.c				\
 			./server/src/sockets/list_event.c			\
 			./server/src/sockets/list_utils.c			\
 			./server/src/sockets/server.c				\
-			./server/src/core/core.c					\
 			./server/src/game/link_map.c				\
 			./server/src/game/map.c						\
 			./server/src/loop.c							\
@@ -31,7 +30,8 @@ SRC_SERV =	./server/src/sockets/client.c				\
 			./server/src/commands/ai/list.c 			\
 			./server/src/commands/graphic/list.c 		\
 			./server/src/commands/graphic/msz.c			\
-			./server/src/teams/check_team_names.c
+			./server/src/teams/check_team_names.c		\
+			./server/src/teams/const_dest_game.c
 
 INC_DIR =	-I ./server/include
 
