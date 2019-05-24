@@ -16,7 +16,7 @@
 
 typedef struct buffer_cmd_s {
     char **cmd;
-    int time;
+    float time;
     STAILQ_ENTRY(buffer_cmd_s) next;
 } buffer_cmd_t;
 
@@ -26,9 +26,9 @@ typedef union {
 } un_cli_t;
 
 void list_dump(void *p_list);
-void list_pop(void *p_list);
+char **list_pop(void *p_list);
 buffer_cmd_t *list_head(void *p_list);
-void list_insert(void *p_list, char **cmd, int time);
+void list_insert(void *p_list, char **cmd, float time);
 void list_elem_destroy(buffer_cmd_t *elem);
 
 #endif

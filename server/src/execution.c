@@ -17,13 +17,13 @@ static bool init_zappy_cli(sock_t *cli, sock_list_t *list, char **arg, zarg_t *z
 {
     (void)zarg;
     (void)list;
-    if (!strcasecmp("GRAPHIC", arg[0])) {
+    if (arg[0] && !strcasecmp("GRAPHIC", arg[0])) {
         ZAPPY_CLIENT(cli)->cli_type = GRAPHICAL;
         ZAPPY_CLIENT(cli)->client.graphic = malloc(sizeof(player_t));
         memset(ZAPPY_CLIENT(cli)->client.graphic, 0, sizeof(player_t));
         return (true);
     }
-    else if (strcasecmp("GRAPHIC", arg[0]) && check_team_names(arg, zarg)) {
+    else if (arg[0] && strcasecmp("GRAPHIC", arg[0]) && check_team_names(arg, zarg)) {
         ZAPPY_CLIENT(cli)->cli_type = IA;
         ZAPPY_CLIENT(cli)->client.ia = malloc(sizeof(ia_t));
         memset(ZAPPY_CLIENT(cli)->client.ia, 0, sizeof(ia_t));
@@ -40,7 +40,7 @@ void exec_command(sock_t *cli, sock_list_t *list, char **arg, zarg_t *zarg)
             socket_list_remove(list, cli);
         destroy_array(arg);
     } else if (ZAPPY_CLIENT(cli)->cli_type == IA) {
-        insert_cmd_ia(cli, arg);
+        insert_cmd_ia(cli, arg, zarg);
     } else {
         exec_graph_cmd(cli, list, arg, zarg);
         destroy_array(arg);

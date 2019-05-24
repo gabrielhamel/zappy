@@ -6,6 +6,8 @@
 */
 
 #include <signal.h>
+#include <time.h>
+#include <sys/timeb.h> 
 #include "server.h"
 
 static bool *loop(void)
@@ -26,14 +28,20 @@ static void forcequit(int sig)
 static void zappy_loop(sock_list_t *list, zarg_t *zarg)
 {
     sock_t **tab;
+    struct timeb start = {0};
+    struct timeb end = {0};
 
     while (*loop()) {
-        tab = socket_list_get_event(list, NULL);
+        ftime(&start);
+        tab = socket_list_get_event(list);
         list->tab = tab;
-        if (tab == NULL)
-            continue;
-        manage_event(list, tab, zarg);
-        free(tab);
+        if (tab != NULL) {
+            manage_event(list, tab, zarg);
+            free(tab);
+        }
+        ftime(&end);
+        refresh_cmd(list, zarg, 1000 * (end.time - start.time) +
+        (end.millitm - start.millitm));
     }
 }
 

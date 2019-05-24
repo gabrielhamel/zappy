@@ -16,6 +16,8 @@
 #include <stdbool.h>
 #include <stdlib.h>
 
+#define REFRESH_USEC 1000000 // One second
+
 #define ARRAY_SIZE(x) (sizeof(x) / sizeof(*x))
 #define BUFF_CMD(x) ((zappy_client_t *)x->data)->cmd_buff
 
@@ -59,7 +61,7 @@ typedef struct {
     unsigned int height;
     char **team_names;
     unsigned int clients_nb;
-    unsigned int freq;
+    float freq;
 } zarg_t;
 
 typedef struct {
@@ -87,13 +89,13 @@ char *read_line(sock_t *socket);
 void exec_command(sock_t *cli, sock_list_t *list, char **arg, zarg_t *zarg);
 
 // Section des commandes de client
-void command_ping(sock_t *cli, sock_list_t *list, char **arg);
+void refresh_cmd(sock_list_t *list, zarg_t *zarg, long int ellapsed);
 
 // Commandes des IA
 
 typedef struct {
     const char *name;
-    unsigned int time;
+    float time;
     void (*func)(sock_t *, sock_list_t *, char **, zarg_t *);
 } ai_cmd_t;
 
