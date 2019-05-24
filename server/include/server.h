@@ -16,7 +16,7 @@
 #include <stdbool.h>
 #include <stdlib.h>
 
-#define REFRESH_USEC 1000000 // One second
+#define REFRESH_USEC 10000
 
 #define ARRAY_SIZE(x) (sizeof(x) / sizeof(*x))
 #define BUFF_CMD(x) ((zappy_client_t *)x->data)->cmd_buff
