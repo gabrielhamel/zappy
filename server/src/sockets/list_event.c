@@ -8,6 +8,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include "socket.h"
+#include "server.h"
 
 sock_t *socket_list_get_socket(sock_list_t *list, int fd)
 {
@@ -21,10 +22,11 @@ sock_t *socket_list_get_socket(sock_list_t *list, int fd)
     return (NULL);
 }
 
-sock_t **socket_list_get_event(sock_list_t *list, struct timeval *time)
+sock_t **socket_list_get_event(sock_list_t *list)
 {
     fd_set tmp = list->fdlist;
-    int ret = select(FD_SETSIZE, &tmp, NULL, NULL, time);
+    struct timeval val = {.tv_sec = 0, .tv_usec = REFRESH_USEC};
+    int ret = select(FD_SETSIZE, &tmp, NULL, NULL, &val);
     sock_t **tab = NULL;
     size_t idx = 0;
 

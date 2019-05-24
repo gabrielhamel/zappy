@@ -11,20 +11,7 @@
 #include "buffer_cmd.h"
 #include "player.h"
 
-void list_dump(void *p_list)
-{
-    struct buffer_cmd_s *p;
-    STAILQ_HEAD(, buffer_cmd_s) *list = p_list;
-
-    printf("-------------------Command buffer-----------------\n");
-    STAILQ_FOREACH(p, list, next) {
-        printf("%d: ", p->time);
-        array_dump((const char **)p->cmd, " ");
-    }
-    printf("--------------------------------------------------\n");
-}
-
-void list_insert(void *p_list, char **cmd, int time)
+void list_insert(void *p_list, char **cmd, float time)
 {
     buffer_cmd_t *new_elem = malloc(sizeof(buffer_cmd_t));
     STAILQ_HEAD(, buffer_cmd_s) *list = p_list;
@@ -42,14 +29,18 @@ buffer_cmd_t *list_head(void *p_list)
     return (first);
 }
 
-void list_pop(void *p_list)
+char **list_pop(void *p_list)
 {
     STAILQ_HEAD(, buffer_cmd_s) *list = p_list;
     buffer_cmd_t *first = STAILQ_FIRST(list);
+    char **tmp;
 
     if (first == NULL)
-        return;
+        return (NULL);
     STAILQ_REMOVE_HEAD(list, next);
+    tmp = first->cmd;
+    free(first);
+    return (tmp);
 }
 
 void list_elem_destroy(buffer_cmd_t *elem)
