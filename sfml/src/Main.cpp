@@ -10,7 +10,7 @@
 
 int main(int ac, char **av)
 {
-    auto app = std::unique_ptr<Zappy::Application>(new Zappy::Application(960, 960, "Zappy"));
+    auto app = std::unique_ptr<Application>(new Application(960, 960, "Zappy", av[1], av[2]));
 
     app->Run();
     return (EXIT_SUCCESS);

@@ -16,7 +16,10 @@ HEA_DIR =	$(realpath include)
 INC_DIR =	-I$(HEA_DIR)
 
 SRC =		$(SRC_DIR)/Main.cpp			\
-			$(SRC_DIR)/Application.cpp
+			$(SRC_DIR)/Application.cpp	\
+			$(SRC_DIR)/Server.cpp		\
+			$(SRC_DIR)/Client.cpp		\
+			$(SRC_DIR)/Utils.cpp		\
 
 NAME =		graphic
 
