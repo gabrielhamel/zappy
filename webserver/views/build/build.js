@@ -3,88 +3,74 @@ function main() {
     var game = new Game(canvas);
 }
 document.addEventListener("DOMContentLoaded", main);
+var BlocCollection = /** @class */ (function () {
+    function BlocCollection(scene) {
+        var _this = this;
+        this.blocs = new Array();
+        this.getInstance = function (type) {
+            var id = BlocCollection.ID_STRING + BlocCollection.createdInstances;
+            var output;
+            BlocCollection.createdInstances++;
+            output = _this.blocs[type].createInstance(id);
+            output.position.y = BlocCollection.HEIGHTS[type];
+            output.isVisible = true;
+            return (output);
+        };
+        var cur;
+        var material;
+        var id;
+        for (var i = 0, len = BlocCollection.TYPE_COLORS.length; i < len; i++) {
+            id = this.blocs.length;
+            cur = BABYLON.MeshBuilder.CreateBox("originalBloc" + id, { size: 1 }, scene);
+            material = new BABYLON.StandardMaterial("blocMaterial" + id, scene);
+            material.diffuseColor = BlocCollection.TYPE_COLORS[i];
+            cur.material = material;
+            cur.isVisible = false;
+            this.blocs.push(cur);
+        }
+    }
+    BlocCollection.ID_STRING = "blocInstance";
+    BlocCollection.TYPE_COLORS = [
+        new BABYLON.Color3(0, 0.6, 0),
+    ];
+    BlocCollection.HEIGHTS = [0.05];
+    BlocCollection.createdInstances = 0;
+    return BlocCollection;
+}());
 var Camera = /** @class */ (function () {
     function Camera(scene) {
-        var _this = this;
         this.focus = true;
         this.shiftingSpeedX = 0;
         this.shiftingSpeedZ = 0;
-        this.managePointerState = function (mouse) {
-            _this.lastMovement = new BABYLON.Vector2(mouse.screenX, mouse.screenY);
-            if (mouse.type == "pointerdown")
-                window.addEventListener("pointermove", _this.moveFromPointer);
-            else
-                window.removeEventListener("pointermove", _this.moveFromPointer);
-        };
-        this.moveFromPointer = function (mouse) {
-            var coeff = Camera.MOUSE_SPEED * _this.camera.position.y / 120;
-            _this.shiftingSpeedX = (mouse.screenY - _this.lastMovement.y) * coeff;
-            _this.shiftingSpeedZ = (mouse.screenX - _this.lastMovement.x) * coeff;
-            _this.lastMovement = new BABYLON.Vector2(mouse.screenX, mouse.screenY);
-        };
-        this.zoom = function (event) {
-            if (!event.deltaY || (_this.camera.position.y <= 10 && event.deltaY < 0))
-                return;
-            _this.camera.position.y += event.deltaY * Camera.ZOOM_SPEED;
-            if (_this.camera.position.y < 10)
-                _this.camera.position.y = 10;
-        };
-        this.isNearFromBorders = function () {
-            if (_this.camera.position.x >= 110) {
-                _this.camera.position.x -= 1;
-                _this.shiftingSpeedX = 0;
-                return (false);
-            }
-            if (_this.camera.position.x <= Camera.TARGET.x) {
-                _this.camera.position.x = Camera.TARGET.x + 1;
-                _this.shiftingSpeedX = 0;
-                return (false);
-            }
-            if (_this.camera.position.z >= 80) {
-                _this.camera.position.z -= 1;
-                _this.shiftingSpeedZ = 0;
-                return (false);
-            }
-            if (_this.camera.position.z <= 20) {
-                _this.camera.position.z = 21;
-                _this.shiftingSpeedZ = 0;
-                return (false);
-            }
-            return (true);
-        };
-        this.render = function (keyboard, elapsedTime) {
-            if (!_this.isNearFromBorders())
-                return;
-            _this.moveFromKeyboard(keyboard, elapsedTime);
-            _this.camera.position.x -= _this.shiftingSpeedX;
-            _this.camera.position.z -= _this.shiftingSpeedZ;
-            if (_this.shiftingSpeedX < 0.01 && _this.shiftingSpeedX > -0.01)
-                _this.shiftingSpeedX = 0;
-            if (_this.shiftingSpeedZ < 0.01 && _this.shiftingSpeedZ > -0.01)
-                _this.shiftingSpeedZ = 0;
-            _this.shiftingSpeedX -= _this.shiftingSpeedX > 0 ? 0.0001 * _this.camera.position.y : 0;
-            _this.shiftingSpeedX += _this.shiftingSpeedX < 0 ? 0.0001 * _this.camera.position.y : 0;
-            _this.shiftingSpeedZ -= _this.shiftingSpeedZ > 0 ? 0.0001 * _this.camera.position.y : 0;
-            _this.shiftingSpeedZ += _this.shiftingSpeedZ < 0 ? 0.0001 * _this.camera.position.y : 0;
-        };
-        this.moveFromKeyboard = function (keyboard, elapsedTime) {
-            var speed = Camera.KEYBOARD_SPEED * (elapsedTime / 1000) * _this.camera.position.y / 100;
-            if (!_this.focus)
-                return;
-            _this.shiftingSpeedZ += keyboard.getKey(Keyboard.LEFT) ? speed : 0;
-            _this.shiftingSpeedZ -= keyboard.getKey(Keyboard.RIGHT) ? speed : 0;
-            _this.shiftingSpeedX += keyboard.getKey(Keyboard.UP) ? speed : 0;
-            _this.shiftingSpeedX -= keyboard.getKey(Keyboard.DOWN) ? speed : 0;
-        };
         var position = new BABYLON.Vector3(50, 30, 50);
         this.camera = new BABYLON.UniversalCamera("mainCamera", position, scene);
+        this.camera.attachControl(scene.getEngine().getRenderingCanvas());
         this.camera.setTarget(Camera.TARGET);
-        window.addEventListener("pointerdown", this.managePointerState);
-        window.addEventListener("pointerup", this.managePointerState);
-        window.addEventListener("wheel", this.zoom);
-        window.addEventListener("mousewheel", this.zoom);
-        window.addEventListener("DOMMouseScroll", this.zoom);
     }
+    /*private isNearFromBorders = ():boolean =>
+    {
+        if (this.camera.position.x >= 110) {
+            this.camera.position.x -= 1;
+            this.shiftingSpeedX = 0;
+            return (false);
+        }
+        if (this.camera.position.x <= Camera.TARGET.x) {
+            this.camera.position.x = Camera.TARGET.x + 1;
+            this.shiftingSpeedX = 0;
+            return (false);
+        }
+        if (this.camera.position.z >= 80) {
+            this.camera.position.z -= 1;
+            this.shiftingSpeedZ = 0;
+            return (false);
+        }
+        if (this.camera.position.z <= 20) {
+            this.camera.position.z = 21;
+            this.shiftingSpeedZ = 0;
+            return (false);
+        }
+        return (true);
+    }*/
     Camera.prototype.setFocus = function (focus) {
         this.focus = focus;
     };
@@ -94,13 +80,15 @@ var Camera = /** @class */ (function () {
     Camera.ZOOM_SPEED = 1 / 10;
     return Camera;
 }());
+/// <reference path="../../node_modules/babylonjs/babylon.module.d.ts" />
+/// <reference path="../../node_modules/babylonjs-gltf2interface/babylon.glTF2Interface.d.ts" />
+/// <reference path="../../node_modules/babylonjs-loaders/babylonjs.loaders.module.d.ts" />
 var Game = /** @class */ (function () {
     function Game(canvas) {
         var _this = this;
         this.keyboard = new Keyboard();
         this.socketManager = new SocketManager(this);
         this.render = function () {
-            _this.camera.render(_this.keyboard, _this.engine.getDeltaTime());
             _this.stage.render();
             _this.scene.render();
         };
@@ -109,6 +97,7 @@ var Game = /** @class */ (function () {
         this.scene = new BABYLON.Scene(this.engine);
         this.stage = new Stage(this.socketManager, this.scene);
         this.camera = new Camera(this.scene);
+        this.stage.createGround(10, 10);
         this.initialiseScene();
         this.engine.runRenderLoop(this.render);
     }
@@ -144,10 +133,25 @@ var Stage = /** @class */ (function () {
         this.scene = scene;
         this.canvas = scene.getEngine().getRenderingCanvas();
         this.socketManager = socketManager;
+        this.blocCollection = new BlocCollection(scene);
         this.light.diffuse = new BABYLON.Color3(1, 1, 1);
         this.light.specular = new BABYLON.Color3(0, 0, 0);
+        BABYLON.SceneLoader.LoadAssetContainer("./assets/", "chungus.glb", scene, function (container) {
+            container.addAllToScene();
+        });
         window.addEventListener("pointerdown", this.onPointerDown);
     }
+    Stage.prototype.createGround = function (width, height) {
+        var cur;
+        for (var i = width - 1; i >= 0; i--) {
+            for (var j = height - 1; j >= 0; j--) {
+                cur = this.blocCollection.getInstance(0);
+                cur.position.x = i;
+                cur.position.z = j;
+                this.blocs.push(cur);
+            }
+        }
+    };
     Stage.prototype.render = function () {
     };
     Stage.GROUND_COLOR = new BABYLON.Color3(0, 0.75, 0);

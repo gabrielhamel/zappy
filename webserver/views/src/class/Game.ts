@@ -1,3 +1,7 @@
+/// <reference path="../../node_modules/babylonjs/babylon.module.d.ts" />
+/// <reference path="../../node_modules/babylonjs-gltf2interface/babylon.glTF2Interface.d.ts" />
+/// <reference path="../../node_modules/babylonjs-loaders/babylonjs.loaders.module.d.ts" />
+
 class Game
 {
 	private canvas:HTMLCanvasElement;
@@ -16,6 +20,7 @@ class Game
 		this.stage = new Stage(this.socketManager, this.scene);
 		this.camera = new Camera(this.scene);
 
+		this.stage.createGround(10, 10);
 		this.initialiseScene();
 		this.engine.runRenderLoop(this.render);
 	}
@@ -29,7 +34,6 @@ class Game
 	}
 	private render = ():void =>
 	{
-		this.camera.render(this.keyboard, this.engine.getDeltaTime());
 		this.stage.render();
 		this.scene.render();
 	}
