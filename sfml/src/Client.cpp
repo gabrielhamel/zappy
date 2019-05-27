@@ -16,9 +16,20 @@ Client::Client(const std::string &hostname, const std::string &port)
     this->_time = 0;
     this->_mapSize[0] = 0;
     this->_mapSize[1] = 0;
-    this->_server.ReadLine();
+    this->_server.WaitData();
+    this->_server.Read();
     this->_server.Write("GRAPHIC\n");
-    // std::cout << this->_server.Read();
+    this->_server.WaitData();
+    this->Refresh();
+}
+
+void Client::Refresh()
+{
+    if (this->_server.HasData() == false)
+        return;
+    auto buff = Utils::extract(this->_server.Read());
+    for (auto &cmd : buff)
+        this->parseCommand(cmd);
 }
 
 void Client::parseCommand(const std::vector<std::string> &toks)
@@ -31,6 +42,11 @@ void Client::parseCommand(const std::vector<std::string> &toks)
         this->parseBct(toks);
     else if (toks[0] == "tna")
         this->parseTna(toks);
+}
+
+const std::array<unsigned int, 2> &Client::getMapSize() const
+{
+    return (this->_mapSize);
 }
 
 void Client::parseMsz(const std::vector<std::string> &toks)
@@ -50,7 +66,7 @@ void Client::parseSgt(const std::vector<std::string> &toks)
 void Client::parseBct(const std::vector<std::string> &toks)
 {
     for (int i = 3; i < 10; i++)
-        this->_map[std::stoi(toks[2]) - 1][std::stoi(toks[1]) - 1][0] = std::stoi(toks[i]);
+        this->_map[std::stoi(toks[2])][std::stoi(toks[1])][i - 3] = std::stoi(toks[i]);
 }
 
 void Client::parseTna(const std::vector<std::string> &toks)

@@ -14,9 +14,11 @@
 #include "Server.hpp"
 
 class Client {
-	public:
-		Client(const std::string &hostname, const std::string &port);
-	private:
+    public:
+        Client(const std::string &hostname, const std::string &port);
+        void Refresh();
+        const std::array<unsigned int, 2> &getMapSize() const;
+    private:
         Server _server;
         std::array<unsigned int, 2> _mapSize;
         unsigned int _time;

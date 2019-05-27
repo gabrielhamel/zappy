@@ -20,6 +20,7 @@ SRC =		$(SRC_DIR)/Main.cpp			\
 			$(SRC_DIR)/Server.cpp		\
 			$(SRC_DIR)/Client.cpp		\
 			$(SRC_DIR)/Utils.cpp		\
+			$(SRC_DIR)/Render.cpp
 
 NAME =		graphic
 

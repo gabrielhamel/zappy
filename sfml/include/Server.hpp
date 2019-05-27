@@ -8,6 +8,8 @@
 #ifndef SERVER_HPP
 #define SERVER_HPP
 
+#define READ_SIZE 100000
+
 #include <netdb.h>
 #include <iostream>
 #include <sys/socket.h>
@@ -24,7 +26,9 @@ class Server {
         Server(const Server &copy);
 		~Server();
         void Write(const std::string &text);
-        std::string ReadLine();
+        std::string Read();
+        bool HasData();
+        void WaitData();
 	private:
         struct sockaddr_in addr;
         int _fd;

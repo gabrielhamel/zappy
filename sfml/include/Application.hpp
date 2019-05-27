@@ -11,6 +11,7 @@
 #include <string>
 #include <SFML/Graphics.hpp>
 #include "Client.hpp"
+#include "Render.hpp"
 
 class Application {
     public:
@@ -25,10 +26,16 @@ class Application {
         bool Event();
         // Fonction appelée au moment où l'on doit dessiner
         void Draw();
+        bool Refresh();
+        bool KeyPress(sf::Keyboard::Key);
         sf::Vector2u _size;
+        float _speed;
         sf::RenderWindow _window;
         sf::Event _event;
         Client _client;
+        Render _render;
+        std::array<bool, sf::Keyboard::KeyCount> _keys;
+        sf::Clock _clock;
 };
 
 #endif
