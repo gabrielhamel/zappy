@@ -69,7 +69,7 @@ bool Server::HasData()
     FD_ZERO(&rfds);
     FD_SET(this->_fd, &rfds);
     tv.tv_usec = 10000;
-    retval = select(8, &rfds, NULL, NULL, &tv);
+    retval = select(FD_SETSIZE, &rfds, NULL, NULL, &tv);
     if (retval)
         return (true);
     return (false);
@@ -82,5 +82,5 @@ void Server::WaitData()
 
     FD_ZERO(&rfds);
     FD_SET(this->_fd, &rfds);
-    retval = select(8, &rfds, NULL, NULL, NULL);
+    retval = select(FD_SETSIZE, &rfds, NULL, NULL, NULL);
 }
