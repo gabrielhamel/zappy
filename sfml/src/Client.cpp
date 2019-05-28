@@ -44,9 +44,14 @@ void Client::parseCommand(const std::vector<std::string> &toks)
         this->parseTna(toks);
 }
 
-const std::array<unsigned int, 2> &Client::getMapSize() const
+const std::array<unsigned int, 2> &Client::GetMapSize() const
 {
     return (this->_mapSize);
+}
+
+std::vector<std::vector<std::array<unsigned int, 7>>> *Client::GetMap()
+{
+    return (&this->_map);
 }
 
 void Client::parseMsz(const std::vector<std::string> &toks)

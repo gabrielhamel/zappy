@@ -17,7 +17,8 @@ class Client {
     public:
         Client(const std::string &hostname, const std::string &port);
         void Refresh();
-        const std::array<unsigned int, 2> &getMapSize() const;
+        const std::array<unsigned int, 2> &GetMapSize() const;
+        std::vector<std::vector<std::array<unsigned int, 7>>> *GetMap();
     private:
         Server _server;
         std::array<unsigned int, 2> _mapSize;

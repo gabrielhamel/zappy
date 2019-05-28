@@ -12,8 +12,9 @@ Application::Application(unsigned int width, unsigned int height, const std::str
 {
     this->_window.setFramerateLimit(60);
     this->_window.setVerticalSyncEnabled(true);
-    auto size = this->_client.getMapSize();
+    auto size = this->_client.GetMapSize();
     this->_render.SetSize(size);
+    this->_render.SetMap(this->_client.GetMap());
     for (auto &i : this->_keys)
         i = false;
 }
