@@ -42,6 +42,8 @@ void Client::parseCommand(const std::vector<std::string> &toks)
         this->parseBct(toks);
     else if (toks[0] == "tna")
         this->parseTna(toks);
+    else if (toks[0] == "pnw")
+        this->parsePnw(toks);
 }
 
 const std::array<unsigned int, 2> &Client::GetMapSize() const
@@ -76,8 +78,17 @@ void Client::parseBct(const std::vector<std::string> &toks)
 
 void Client::parseTna(const std::vector<std::string> &toks)
 {
-    auto it = std::find(this->_teamsNames.begin(), this->_teamsNames.end(), toks[1]);
+    this->_teams.push_back(Team(toks[1]));
+}
 
-    if (it == this->_teamsNames.end())
-        this->_teamsNames.push_back(toks[1]);
+void Client::parsePnw(const std::vector<std::string> &toks)
+{
+    for (auto &i : this->_teams)
+        if (i.getName() == toks[6])
+            i.AddPlayer(std::stoi(toks[1]), std::stoi(toks[2]), std::stoi(toks[3]), (Player::Orientation)std::stoi(toks[4]), std::stoi(toks[5]));
+}
+
+std::vector<Team> &Client::getTeams()
+{
+    return (this->_teams);
 }

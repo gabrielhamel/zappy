@@ -28,7 +28,8 @@ static const std::array<std::string, 7> file_food = {
     "assets/wheat.png"
 };
 
-Render::Render()
+Render::Render(std::vector<Team> &teams)
+: _teams(teams)
 {
     this->_grass.setPosition(0, 0);
     this->_scale = 1;

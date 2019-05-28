@@ -7,12 +7,13 @@
 
 #pragma once
 
+#include "Team.hpp"
 #include <SFML/Graphics.hpp>
 #include <array>
 
 class Render {
 	public:
-        Render();
+        Render(std::vector<Team> &teams);
 		void Draw(sf::RenderWindow &win);
         void SetSize(const std::array<unsigned int, 2> &size);
         void SetScale(float scale);
@@ -31,4 +32,5 @@ class Render {
         std::vector<sf::Texture *> _texfood;
         std::vector<sf::Sprite> _sprfood;
         std::vector<std::vector<std::array<unsigned int, 7>>> *_map;
+        std::vector<Team> &_teams;
 };
