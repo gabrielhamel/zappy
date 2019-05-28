@@ -23,8 +23,10 @@ class Render {
         const sf::Vector2f &GetCamera() const;
         void MoveCamera(const sf::Vector2f &move);
     private:
+        sf::Vector2u _texsize
+;        sf::Texture _tex_grass;
+        sf::Sprite _grass;
         sf::Vector2u _size;
         float _scale;
-        sf::RectangleShape _grass;
         sf::Vector2f _camera;
 };
