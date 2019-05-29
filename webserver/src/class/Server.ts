@@ -1,5 +1,6 @@
 import http = require("http");
 import express = require("express");
+import path = require("path");
 import socketio = require("socket.io");
 import Socket from "./Socket"
 
@@ -14,19 +15,20 @@ class Server
 	constructor(port:number)
 	{
 		this.port = port;
-		this.server = this.app.listen(this.initialise);
+		this.server = this.app.listen(port, this.initialise);
 		this.io = socketio(this.server);
+		this.io.on("connection", this.handleSocketConnection);
 	}
 
-	private initialise = (err:string):void =>
+	private initialise = ():void =>
 	{
-		if (err) {
-			console.error(err);
-			return;
-		}
-		console.log(`Server is listening on port ${this.port}.`)
+		console.log(`Server is listening on port ${this.port}.`);
+		this.app.use(express.static("views"));
+		this.app.get("/", (req, res):void => {
+			res.sendFile(path.resolve(__dirname + "/../views/index.html"));
+		});
 	}
-	private handleSocketConnection(socket:socketio.Socket)
+	private handleSocketConnection(socket:socketio.Socket):void
 	{
 		this.sockets.push(new Socket(socket));
 	}

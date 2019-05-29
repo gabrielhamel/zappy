@@ -17,6 +17,7 @@ var Socket = /** @class */ (function () {
         var _this = this;
         this.tcpSocket.connect(port, ip, function () {
             _this.tcpSocket.on("data", _this.receiveServerDatas);
+            _this.ioSocket.on("data", _this.sendDatasToServer);
         });
     };
     return Socket;

@@ -1,4 +1,7 @@
 import Server from "./class/Server"
 
-const PORT:number = 8080;
-let server:Server = new Server(PORT);
+const PORT:number = parseInt(process.argv[2]);
+let server:Server;
+
+if (!isNaN(PORT) && PORT > 1024)
+	server = new Server(PORT);

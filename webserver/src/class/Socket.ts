@@ -25,6 +25,7 @@ class Socket
 	{
 		this.tcpSocket.connect(port, ip, ():void => {
 			this.tcpSocket.on("data", this.receiveServerDatas);
+			this.ioSocket.on("data", this.sendDatasToServer);
 		});
 	}
 }
