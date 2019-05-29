@@ -89,17 +89,17 @@ void Render::Draw(sf::RenderWindow &win)
                     this->_rendtex.draw(this->_sprfood[i]);
                 }
             }
-            for (auto &team : this->_teams) {
-                auto players = team->getPlayers();
-                for (auto &player : players) {
-                    auto pos = player.getPosition();
-                    team->_spr.setPosition(SPR_SIZE * pos[0] * this->_scale + this->_camera.x, SPR_SIZE * pos[1] * this->_scale + this->_camera.y);
-                    int ori = player.getOrientation() - 1;
-                    team->_spr.setRotation(ori * 90 + 180);
-                    this->_rendtex.draw(team->_spr);
-                }
-            }
         }
+    for (auto &team : this->_teams) {
+        auto players = team->getPlayers();
+        for (auto &player : players) {
+            auto pos = player.getPosition();
+            team->_spr.setPosition(SPR_SIZE * pos[0] * this->_scale + this->_camera.x, SPR_SIZE * pos[1] * this->_scale + this->_camera.y);
+            int ori = player.getOrientation() - 1;
+            team->_spr.setRotation(ori * 90 + 180);
+            this->_rendtex.draw(team->_spr);
+        }
+    }
     this->_rendtex.display();
     win.draw(this->_rendspr);
 }
