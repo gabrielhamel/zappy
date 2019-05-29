@@ -34,4 +34,6 @@ class Render {
         std::vector<std::vector<std::array<unsigned int, 7>>> *_map;
         std::vector<Team *> &_teams;
         sf::Texture _tex;
+        sf::RenderTexture _rendtex;
+        sf::Sprite _rendspr;
 };

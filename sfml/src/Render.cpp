@@ -52,6 +52,10 @@ Render::Render(std::vector<Team *> &teams)
         team->setTexture(&this->_tex);
         team->setScale(this->_scale);
     }
+    this->_rendtex.create(960, 960);
+    this->_rendspr.setPosition(0, 0);
+    this->_rendtex.clear();
+    this->_rendspr.setTexture(this->_rendtex.getTexture(), true);
 }
 
 void Render::SetMap(std::vector<std::vector<std::array<unsigned int, 7>>> *map)
@@ -72,16 +76,17 @@ void Render::SetSize(const std::array<unsigned int, 2> &size)
 
 void Render::Draw(sf::RenderWindow &win)
 {
+    _rendtex.clear();
     for (unsigned int y = 0; y < this->_size.y; y++)
         for (unsigned int x = 0; x < this->_size.x; x++) {
             this->_grass.setPosition(SPR_SIZE * x * this->_scale + this->_camera.x, SPR_SIZE * y * this->_scale + this->_camera.y);
-            win.draw(this->_grass);
+            this->_rendtex.draw(this->_grass);
             for (int i = 0; i < 7; i++) {
                 auto &map = *this->_map;
                 if (map[y][x][i]) {
                     this->_sprfood[i].setPosition(SPR_SIZE * x * this->_scale + this->_camera.x + SPR_SIZE * hept[i].x * this->_scale / 1.7f,
                     SPR_SIZE * y * this->_scale + this->_camera.y + SPR_SIZE * hept[i].y * this->_scale / 1.7f);
-                    win.draw(this->_sprfood[i]);
+                    this->_rendtex.draw(this->_sprfood[i]);
                 }
             }
             for (auto &team : this->_teams) {
@@ -91,10 +96,12 @@ void Render::Draw(sf::RenderWindow &win)
                     team->_spr.setPosition(SPR_SIZE * pos[0] * this->_scale + this->_camera.x, SPR_SIZE * pos[1] * this->_scale + this->_camera.y);
                     int ori = player.getOrientation() - 1;
                     team->_spr.setRotation(ori * 90 + 180);
-                    win.draw(team->_spr);
+                    this->_rendtex.draw(team->_spr);
                 }
             }
         }
+    this->_rendtex.display();
+    win.draw(this->_rendspr);
 }
 
 void Render::SetScale(float scale)

@@ -78,9 +78,8 @@ bool Server::HasData()
 void Server::WaitData()
 {
     fd_set rfds;
-    int retval;
 
     FD_ZERO(&rfds);
     FD_SET(this->_fd, &rfds);
-    retval = select(FD_SETSIZE, &rfds, NULL, NULL, NULL);
+    select(FD_SETSIZE, &rfds, NULL, NULL, NULL);
 }
