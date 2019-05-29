@@ -13,3 +13,18 @@ Player::Player(int id, int pos_x, int pos_y, Player::Orientation ori, int level)
 {
 
 }
+
+Player::Orientation Player::getOrientation() const
+{
+    return (this->_ori);
+}
+
+const std::array<int, 2> &Player::getPosition() const
+{
+    return (this->_pos);
+}
+
+int Player::getId() const
+{
+    return (this->_id);
+}

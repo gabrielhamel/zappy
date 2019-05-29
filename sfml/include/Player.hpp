@@ -18,6 +18,9 @@ class Player {
             W
         };
         Player(int id, int pos_x, int pos_y, Player::Orientation ori, int level);
+        Player::Orientation getOrientation() const;
+        const std::array<int, 2> &getPosition() const;
+        int getId() const;
     private:
         int _id;
         std::array<int, 2> _pos;

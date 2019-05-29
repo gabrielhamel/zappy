@@ -78,17 +78,17 @@ void Client::parseBct(const std::vector<std::string> &toks)
 
 void Client::parseTna(const std::vector<std::string> &toks)
 {
-    this->_teams.push_back(Team(toks[1]));
+    this->_teams.push_back(new Team(toks[1]));
 }
 
 void Client::parsePnw(const std::vector<std::string> &toks)
 {
     for (auto &i : this->_teams)
-        if (i.getName() == toks[6])
-            i.AddPlayer(std::stoi(toks[1]), std::stoi(toks[2]), std::stoi(toks[3]), (Player::Orientation)std::stoi(toks[4]), std::stoi(toks[5]));
+        if (i->getName() == toks[6])
+            i->AddPlayer(std::stoi(toks[1]), std::stoi(toks[2]), std::stoi(toks[3]), (Player::Orientation)std::stoi(toks[4]), std::stoi(toks[5]));
 }
 
-std::vector<Team> &Client::getTeams()
+std::vector<Team *> &Client::getTeams()
 {
     return (this->_teams);
 }
