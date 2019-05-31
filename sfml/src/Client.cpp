@@ -44,6 +44,10 @@ void Client::parseCommand(const std::vector<std::string> &toks)
         this->parseTna(toks);
     else if (toks[0] == "pnw")
         this->parsePnw(toks);
+    else if (toks[0] == "pex")
+        this->parsePex(toks);
+    else if (toks[0] == "pdi")
+        this->parsePex(toks);
 }
 
 const std::array<unsigned int, 2> &Client::GetMapSize() const
@@ -54,6 +58,11 @@ const std::array<unsigned int, 2> &Client::GetMapSize() const
 std::vector<std::vector<std::array<unsigned int, 6>>> *Client::GetMap()
 {
     return (&this->_map);
+}
+
+std::vector<Team *> &Client::getTeams()
+{
+    return (this->_teams);
 }
 
 void Client::parseMsz(const std::vector<std::string> &toks)
@@ -88,7 +97,30 @@ void Client::parsePnw(const std::vector<std::string> &toks)
             i->AddPlayer(std::stoi(toks[1]), std::stoi(toks[2]), std::stoi(toks[3]), (Player::Orientation)std::stoi(toks[4]), std::stoi(toks[5]));
 }
 
-std::vector<Team *> &Client::getTeams()
+void Client::parsePex(const std::vector<std::string> &toks)
 {
-    return (this->_teams);
+    auto id = std::stoi(toks[1]);
+
+    for (auto &i : this->_teams) {
+        auto &players = i->getPlayers();
+        for (auto player = players.begin(); player != players.end(); player++)
+            if (player->getId() == id) {
+                players.erase(player);
+                return;
+            }
+    }
+}
+
+void Client::parsePdi(const std::vector<std::string> &toks)
+{
+    auto id = std::stoi(toks[1]);
+
+    for (auto &i : this->_teams) {
+        auto &players = i->getPlayers();
+        for (auto player = players.begin(); player != players.end(); player++)
+            if (player->getId() == id) {
+                players.erase(player);
+                return;
+            }
+    }
 }

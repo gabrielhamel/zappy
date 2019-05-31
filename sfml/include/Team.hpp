@@ -18,7 +18,7 @@ class Team {
         ~Team();
         void AddPlayer(int id, int pos_x, int pos_y, Player::Orientation ori, int level);
         const std::string &getName();
-        const std::vector<Player> &getPlayers();
+        std::vector<Player> &getPlayers();
         const sf::Color &getColor() const;
         void setScale(float scale);
         sf::Sprite _spr;

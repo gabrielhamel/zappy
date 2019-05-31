@@ -35,7 +35,7 @@ const std::string &Team::getName()
     return (this->_name);
 }
 
-const std::vector<Player> &Team::getPlayers()
+std::vector<Player> &Team::getPlayers()
 {
     return (this->_players);
 }
