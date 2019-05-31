@@ -28,3 +28,14 @@ int Player::getId() const
 {
     return (this->_id);
 }
+
+void Player::setPosition(int x, int y)
+{
+    this->_pos[0] = x;
+    this->_pos[1] = y;
+}
+
+void Player::setLevel(int level)
+{
+    this->_level = level;
+}

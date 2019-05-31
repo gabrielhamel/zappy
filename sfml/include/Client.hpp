@@ -35,4 +35,6 @@ class Client {
         void parsePnw(const std::vector<std::string> &toks);
         void parsePex(const std::vector<std::string> &toks);
         void parsePdi(const std::vector<std::string> &toks);
+        void parsePpo(const std::vector<std::string> &toks);
+        void parsePlv(const std::vector<std::string> &toks);
 };

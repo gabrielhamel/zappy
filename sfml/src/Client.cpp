@@ -47,7 +47,11 @@ void Client::parseCommand(const std::vector<std::string> &toks)
     else if (toks[0] == "pex")
         this->parsePex(toks);
     else if (toks[0] == "pdi")
-        this->parsePex(toks);
+        this->parsePdi(toks);
+    else if (toks[0] == "ppo")
+        this->parsePpo(toks);
+    else if (toks[0] == "plv")
+        this->parsePlv(toks);
 }
 
 const std::array<unsigned int, 2> &Client::GetMapSize() const
@@ -120,6 +124,34 @@ void Client::parsePdi(const std::vector<std::string> &toks)
         for (auto player = players.begin(); player != players.end(); player++)
             if (player->getId() == id) {
                 players.erase(player);
+                return;
+            }
+    }
+}
+
+void Client::parsePpo(const std::vector<std::string> &toks)
+{
+    auto id = std::stoi(toks[1]);
+
+    for (auto &i : this->_teams) {
+        auto &players = i->getPlayers();
+        for (auto player = players.begin(); player != players.end(); player++)
+            if (player->getId() == id) {
+                player->setPosition(std::stoi(toks[2]), std::stoi(toks[3]));
+                return;
+            }
+    }
+}
+
+void Client::parsePlv(const std::vector<std::string> &toks)
+{
+    auto id = std::stoi(toks[1]);
+
+    for (auto &i : this->_teams) {
+        auto &players = i->getPlayers();
+        for (auto player = players.begin(); player != players.end(); player++)
+            if (player->getId() == id) {
+                player->setLevel(std::stoi(toks[2]));
                 return;
             }
     }
