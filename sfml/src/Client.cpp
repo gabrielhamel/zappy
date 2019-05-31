@@ -51,7 +51,7 @@ const std::array<unsigned int, 2> &Client::GetMapSize() const
     return (this->_mapSize);
 }
 
-std::vector<std::vector<std::array<unsigned int, 7>>> *Client::GetMap()
+std::vector<std::vector<std::array<unsigned int, 6>>> *Client::GetMap()
 {
     return (&this->_map);
 }
@@ -60,9 +60,9 @@ void Client::parseMsz(const std::vector<std::string> &toks)
 {
     this->_mapSize[0] = std::stoi(toks[1]);
     this->_mapSize[1] = std::stoi(toks[2]);
-    this->_map = std::vector<std::vector<std::array<unsigned int, 7>>>(this->_mapSize[1]);
+    this->_map = std::vector<std::vector<std::array<unsigned int, 6>>>(this->_mapSize[1]);
     for (unsigned int i = 0; i < this->_mapSize[1]; i++)
-        this->_map[i] = std::vector<std::array<unsigned int, 7>>(this->_mapSize[0]);
+        this->_map[i] = std::vector<std::array<unsigned int, 6>>(this->_mapSize[0]);
 }
 
 void Client::parseSgt(const std::vector<std::string> &toks)
@@ -72,8 +72,8 @@ void Client::parseSgt(const std::vector<std::string> &toks)
 
 void Client::parseBct(const std::vector<std::string> &toks)
 {
-    for (int i = 3; i < 10; i++)
-        this->_map[std::stoi(toks[2])][std::stoi(toks[1])][i - 3] = std::stoi(toks[i]);
+    for (int i = 4; i < 10; i++)
+        this->_map[std::stoi(toks[2])][std::stoi(toks[1])][i - 4] = std::stoi(toks[i]);
 }
 
 void Client::parseTna(const std::vector<std::string> &toks)

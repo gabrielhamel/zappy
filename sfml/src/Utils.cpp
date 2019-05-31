@@ -5,6 +5,7 @@
 ** Utils
 */
 
+#include <iostream>
 #include "Utils.hpp"
 
 std::vector<std::string> Utils::split(std::string str, const std::string &delimiter)
@@ -26,6 +27,7 @@ std::vector<std::string> Utils::split(std::string str, const std::string &delimi
 
 std::vector<std::vector<std::string>> Utils::extract(const std::string &str)
 {
+    std::cout << str;
     auto first = split(str, "\n");
     std::vector<std::vector<std::string>> second;
 
