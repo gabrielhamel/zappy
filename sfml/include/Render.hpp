@@ -23,7 +23,7 @@ class Render {
         void SetCamera(const sf::Vector2f &pos);
         const sf::Vector2f &GetCamera() const;
         void MoveCamera(const sf::Vector2f &move);
-        void SetMap(std::vector<std::vector<std::array<unsigned int, 6>>> *map);
+        void SetMap(std::vector<std::vector<std::array<unsigned int, 7>>> *map);
     private:
         sf::Vector2u _texsize;
         sf::Sprite _grass;
@@ -31,7 +31,7 @@ class Render {
         float _scale;
         sf::Vector2f _camera;
         std::vector<sf::Sprite> _sprfood;
-        std::vector<std::vector<std::array<unsigned int, 6>>> *_map;
+        std::vector<std::vector<std::array<unsigned int, 7>>> *_map;
         std::vector<Team *> &_teams;
         sf::Texture _tex;
         sf::RenderTexture _rendtex;

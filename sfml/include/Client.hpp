@@ -19,13 +19,13 @@ class Client {
         Client(const std::string &hostname, const std::string &port);
         void Refresh();
         const std::array<unsigned int, 2> &GetMapSize() const;
-        std::vector<std::vector<std::array<unsigned int, 6>>> *GetMap();
+        std::vector<std::vector<std::array<unsigned int, 7>>> *GetMap();
         std::vector<Team *> &getTeams();
     private:
         Server _server;
         std::array<unsigned int, 2> _mapSize;
         unsigned int _time;
-        std::vector<std::vector<std::array<unsigned int, 6>>> _map;
+        std::vector<std::vector<std::array<unsigned int, 7>>> _map;
         std::vector<Team *> _teams;
         void parseCommand(const std::vector<std::string> &toks);
         void parseMsz(const std::vector<std::string> &toks);
