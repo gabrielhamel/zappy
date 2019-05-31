@@ -8,7 +8,7 @@
 #pragma once
 
 typedef enum ITEM_E {
-    FOOD,
+    LINEMATE,
     DERAUMERE,
     SIBUR,
     MENDIANE,

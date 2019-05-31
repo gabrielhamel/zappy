@@ -35,5 +35,6 @@ void *init_game(const sock_t *cli)
 void delete_game(const sock_t *cli, void *data)
 {
     (void)cli;
+    (void)data;
     // destroy_array();
 }

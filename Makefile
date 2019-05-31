@@ -23,7 +23,7 @@ SRC_SERV =	./server/src/sockets/client.c				\
 			./server/src/utils/strings.c				\
 			./server/src/fct_cli.c						\
 			./server/src/parsing/checking.c				\
-			./server/src/parsing/team_names.c			\
+			./server/src/parsing/team_name.c			\
 			./server/src/parsing/arguments.c			\
 			./server/src/parsing/types.c				\
 			./server/src/commands/buffer_cmd/list_fct.c \

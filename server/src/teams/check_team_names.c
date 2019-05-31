@@ -12,6 +12,7 @@ bool check_team_names(char **arg, zarg_t *zarg, sock_t *cli)
 {
     size_t i;
 
+    (void)cli;
     for (i = 0; zarg->team_names[i] != NULL; i++) {
         if (!strcmp(arg[0], zarg->team_names[i])) {
             return (true);

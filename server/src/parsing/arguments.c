@@ -5,7 +5,7 @@
 ** arguments
 */
 
-#include "server.h"
+#include "parser.h"
 
 static argument_t flags[] = {
     {"-p", false, offsetof(arg_t, port), check_port},

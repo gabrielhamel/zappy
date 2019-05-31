@@ -80,7 +80,6 @@ bool check_port(const char *port);
 bool check_dimension(const char *dim);
 bool check_clients_nb(const char *nb);
 bool check_freq(const char *freq);
-bool check_team(const char *team);
 
 // Fonctions socket
 int launch_zappy(zarg_t *zarg);
