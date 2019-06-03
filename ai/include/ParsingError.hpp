@@ -2,7 +2,7 @@
 ** EPITECH PROJECT, 2019
 ** PSU_zappy_2018
 ** File description:
-** SocketError
+** ParsingError
 */
 
 #pragma once
@@ -12,10 +12,10 @@
 
 namespace zpy {
 
-    class SocketError : public std::exception {
+    class ParsingError : public std::exception {
         public:
-            SocketError(const char *msg) : _msg(msg) {};
-            SocketError(const std::string &msg) : _msg(msg.c_str()) {};
+            ParsingError(const char *msg) : _msg(msg) {};
+            ParsingError(const std::string &msg) : _msg(msg.c_str()) {};
             const char *what() const throw () { return (_msg); }
         private:
             const char *_msg;

@@ -5,8 +5,9 @@
 ** Server
 */
 
-#ifndef SERVER_HPP
-#define SERVER_HPP
+#pragma once
+
+#define READ_SIZE 100000
 
 #include <netdb.h>
 #include <iostream>
@@ -15,19 +16,22 @@
 #include <netinet/in.h>
 #include <string.h>
 #include <arpa/inet.h>
-#include "SocketError.hpp"
 #include <string>
+#include "SocketError.hpp"
 
-class Server {
-	public:
-		Server(const std::string &hostname, const std::string &port);
-        Server(const Server &copy);
-		~Server();
-        void Write(const std::string &text);
-        std::string Read();
-	private:
-        struct sockaddr_in addr;
-        int _fd;
-};
+namespace zpy {
 
-#endif
+    class Server {
+        public:
+            Server(const std::string &hostname, const std::string &port);
+            ~Server();
+            void Write(const std::string &text);
+            std::string Read();
+            bool HasData();
+            void WaitData();
+        private:
+            struct sockaddr_in addr;
+            int _fd;
+    };
+
+}

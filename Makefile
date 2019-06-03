@@ -31,11 +31,14 @@ SRC_SERV =	./server/src/sockets/client.c				\
 			./server/src/commands/graphic/list.c 		\
 			./server/src/commands/graphic/msz.c			\
 			./server/src/teams/check_team_names.c		\
-			./server/src/game/const_dest_game.c		\
+			./server/src/game/const_dest_game.c			\
 			./server/src/time_manage.c
 
-SRC_AI =	./ai/src/main.cpp					\
-			./ai/src/Server.cpp
+SRC_AI =	./ai/src/Main.cpp							\
+			./ai/src/Server.cpp							\
+			./ai/src/Client.cpp							\
+			./ai/src/Application.cpp					\
+			./ai/src/Parser.cpp
 
 INC_DIR =	-I ./server/include \
 			-I ./ai/include
@@ -88,11 +91,7 @@ re:			fclean all
 %.o : %.c
 			@gcc -c -o $@ $^ $(CFLAGS) && $(ECHO) -n $(GREEN)"  [OK] "$(TEAL) || $(ECHO) -n $(SANG)"  [NO] "$(TEAL) && $(ECHO) $< | rev | cut -d'/' -f 1 | rev
 
-<<<<<<< HEAD
 %.o : %.cpp
 			@g++ -c -o $@ $^ $(CFLAGS) && $(ECHO) -n $(GREEN)"  [OK] "$(TEAL) || $(ECHO) -n $(SANG)"  [NO] "$(TEAL) && $(ECHO) $< | rev | cut -d'/' -f 1 | rev
 
 .PHONY:		all fclean re clean zappy_ai zappy_server
-=======
-.PHONY:		all fclean re clean zappy_ai zappy_server
->>>>>>> master
