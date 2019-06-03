@@ -1,0 +1,17 @@
+{ 
+    "compilerOptions": { 
+        "noImplicitAny": true, 
+        "target": "es5", 
+        "module": "commonjs", 
+        "outDir": "./build"
+    }, 
+    "awesomeTypescriptLoaderOptions": {
+        "useCache": true,
+        "transpileOnly": true
+    },
+    "exclude" : [ 
+        "./build", 
+        "./node_modules",
+        "./views"
+    ] 
+}

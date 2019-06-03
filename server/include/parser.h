@@ -2,30 +2,20 @@
 ** EPITECH PROJECT, 2019
 ** PSU_zappy_2018
 ** File description:
-** server
+** parser
 */
 
 #pragma once
 
 #include "socket.h"
 #include "utils.h"
-#include "buffer_cmd.h"
-
 #include <stdio.h>
 #include <string.h>
 #include <stdbool.h>
 #include <stdlib.h>
 
-#define REFRESH_USEC 10000
-
 #define ARRAY_SIZE(x) (sizeof(x) / sizeof(*x))
 #define BUFF_CMD(x) ((zappy_client_t *)x->data)->cmd_buff
-
-typedef enum {
-    IA,
-    GRAPHICAL,
-    UNDEFINED
-} client_type_t;
 
 typedef struct {
     const char *name;
@@ -34,8 +24,6 @@ typedef struct {
 
 typedef struct {
     char *cmd_buff;
-    client_type_t cli_type;
-    un_cli_t client;
 } zappy_client_t;
 
 extern command_t commands_g[];
@@ -61,7 +49,7 @@ typedef struct {
     unsigned int height;
     char **team_names;
     unsigned int clients_nb;
-    float freq;
+    unsigned int freq;
 } zarg_t;
 
 typedef struct {
@@ -75,11 +63,11 @@ bool parsing(arg_t *arg, int ac, char **av);
 void *parse_single_arg(int ac, char **av, argument_t *flag, int *i);
 void *parse_infinity_arg(int ac, char **av, argument_t *flag, int *i);
 int count_nb_arg(int ac, char **av, int i);
-void arg_to_zarg(arg_t *arg, zarg_t *zarg);
 bool check_port(const char *port);
 bool check_dimension(const char *dim);
 bool check_clients_nb(const char *nb);
 bool check_freq(const char *freq);
+bool check_team(const char *dim);
 
 // Fonctions socket
 int launch_zappy(zarg_t *zarg);
@@ -88,19 +76,14 @@ char *read_line(sock_t *socket);
 void exec_command(sock_t *cli, sock_list_t *list, char **arg, zarg_t *zarg);
 
 // Section des commandes de client
-void refresh_cmd(sock_list_t *list, zarg_t *zarg, long int ellapsed);
+void command_ping(sock_t *cli, sock_list_t *list, char **arg);
 
 // Commandes des IA
 
 typedef struct {
     const char *name;
-    float time;
-    void (*func)(sock_t *, sock_list_t *, char **, zarg_t *);
+    unsigned int time;
+    void (*func)(sock_t *, sock_list_t *, char **, zarg_t *zarg);
 } ai_cmd_t;
 
-// Commandes graphics
-
-typedef struct {
-    const char *name;
-    void (*func)(sock_t *, sock_list_t *, char **, zarg_t *);
-} graph_cmd_t;
+void exec_ia_cmd(sock_t *sock, sock_list_t *list, char **arg, zarg_t *zarg);

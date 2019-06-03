@@ -1,0 +1,12 @@
+{ 
+    "compilerOptions": {
+    	"module": "system",
+        "noImplicitAny": true, 
+        "target": "es5", 
+        "outFile": "build/build.js"
+    }, 
+    "exclude" : [ 
+        "./build", 
+        "./css"
+    ]
+}

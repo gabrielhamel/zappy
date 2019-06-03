@@ -7,3 +7,6 @@ zappy_server
 zappy_ai
 vgcore.*
 serv_ref
+webserver/views/node_modules/
+webserver/node_modules/
+sfml

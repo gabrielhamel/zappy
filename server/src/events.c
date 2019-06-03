@@ -11,6 +11,7 @@ static void server_event(sock_list_t *list, sock_t *server, zarg_t *zarg)
 {
     sock_t *tmp = socket_serv_accept_cli(server, init_client, end_client);
 
+    (void)zarg;
     if (tmp != NULL)
         socket_list_add(list, tmp);
 }
@@ -34,6 +35,8 @@ static void client_event(sock_list_t *list, sock_t *client, zarg_t *zarg)
         free(buff);
         if (toks != NULL && len)
             exec_command(client, list, toks, zarg);
+        else if (toks)
+            destroy_array(toks);
     }
 }
 

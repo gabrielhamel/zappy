@@ -20,5 +20,6 @@ char *str_add(int nb, ...);
 char **tokenize(char *str, char *delim);
 size_t array_lenght(char **tab);
 void destroy_array(char **tab);
+void array_dump(const char **tab, const char *delim);
 
 #endif
