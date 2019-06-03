@@ -21,9 +21,9 @@ Server::Server(const std::string &hostname, const std::string &port)
     this->addr.sin_port = htons(strtol(port.c_str(), nullptr, 10));
     this->_fd = socket(AF_INET, SOCK_STREAM, 0);
     if (this->_fd == -1)
-        throw(SocketError("Cannot create socket"));
+        throw SocketError("Cannot create socket");
     if (connect(this->_fd, (struct sockaddr *)&this->addr, (socklen_t)sizeof(struct sockaddr_in)) == -1)
-        throw(SocketError("Cannot connect"));
+        throw SocketError("Cannot connect");
 }
 
 Server::Server(const Server &copy)
@@ -31,9 +31,9 @@ Server::Server(const Server &copy)
     memcpy(&this->addr, &copy.addr, sizeof(struct sockaddr_in));
     this->_fd = socket(AF_INET, SOCK_STREAM, 0);
     if (this->_fd == -1)
-        throw(SocketError("Cannot create socket"));
+        throw SocketError("Cannot create socket");
     if (connect(this->_fd, (struct sockaddr *)&this->addr, (socklen_t)sizeof(struct sockaddr_in)) == -1)
-        throw(SocketError("Cannot connect"));
+        throw SocketError("Cannot connect");
 }
 
 Server::~Server()
