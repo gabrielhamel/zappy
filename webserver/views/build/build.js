@@ -1,3 +1,6 @@
+/// <reference path="../node_modules/babylonjs/babylon.module.d.ts" />
+/// <reference path="../node_modules/babylonjs-gltf2interface/babylon.glTF2Interface.d.ts" />
+/// <reference path="../node_modules/babylonjs-loaders/babylonjs.loaders.module.d.ts" />
 function main() {
     var canvas = document.getElementsByTagName("canvas")[0];
     var game = new Game(canvas);
@@ -80,9 +83,6 @@ var Camera = /** @class */ (function () {
     Camera.ZOOM_SPEED = 1 / 10;
     return Camera;
 }());
-/// <reference path="../../node_modules/babylonjs/babylon.module.d.ts" />
-/// <reference path="../../node_modules/babylonjs-gltf2interface/babylon.glTF2Interface.d.ts" />
-/// <reference path="../../node_modules/babylonjs-loaders/babylonjs.loaders.module.d.ts" />
 var Game = /** @class */ (function () {
     function Game(canvas) {
         var _this = this;
@@ -115,10 +115,10 @@ var Game = /** @class */ (function () {
 }());
 var SocketManager = /** @class */ (function () {
     function SocketManager(game) {
+        this.socket = io();
         this.game = game;
+        this.socket.emit("data", "GRAPHICAL");
     }
-    SocketManager.ADDRESS = "127.0.0.1";
-    SocketManager.PORT = 5555;
     return SocketManager;
 }());
 var Stage = /** @class */ (function () {
@@ -136,7 +136,10 @@ var Stage = /** @class */ (function () {
         this.blocCollection = new BlocCollection(scene);
         this.light.diffuse = new BABYLON.Color3(1, 1, 1);
         this.light.specular = new BABYLON.Color3(0, 0, 0);
-        BABYLON.SceneLoader.LoadAssetContainer("./assets/", "chungus.glb", scene, function (container) {
+        BABYLON.SceneLoader.LoadAssetContainer("/assets/", "chungus.glb", scene, function (container) {
+            _this.model = container.meshes[0];
+            _this.model.scaling = new BABYLON.Vector3(0.35, 0.35, 0.35);
+            _this.model.position.y = 0.5;
             container.addAllToScene();
         });
         window.addEventListener("pointerdown", this.onPointerDown);

@@ -6,9 +6,11 @@ var Socket = /** @class */ (function () {
         var _this = this;
         this.receiveServerDatas = function (datas) {
             _this.ioSocket.emit("datas", datas);
+            console.log("data received from server:" + datas);
         };
         this.sendDatasToServer = function (datas) {
             _this.tcpSocket.write(datas);
+            console.log("data sent to server: " + datas);
         };
         this.ioSocket = socket;
         this.tcpSocket = new net.Socket();

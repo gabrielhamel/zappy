@@ -15,10 +15,12 @@ class Socket
 	private receiveServerDatas = (datas:string):void =>
 	{
 		this.ioSocket.emit("datas", datas);
+		console.log("data received from server:" + datas);
 	}
 	private sendDatasToServer = (datas:string):void =>
 	{
 		this.tcpSocket.write(datas);
+		console.log("data sent to server: " + datas);
 	}
 
 	public connectToServer(ip:string, port:number):void

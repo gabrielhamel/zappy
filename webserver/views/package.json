@@ -9,7 +9,9 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "@types/socket.io": "^2.1.2",
     "babylonjs": "^4.0.3",
-    "babylonjs-loaders": "^4.0.3"
+    "babylonjs-loaders": "^4.0.3",
+    "socket.io": "^2.2.0"
   }
 }

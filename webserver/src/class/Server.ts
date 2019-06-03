@@ -10,11 +10,13 @@ class Server
 	private app = express();
 	private io:socketio.Server;
 	private port:number;
+	private serverPort:number;
 	private sockets:Array<Socket> = new Array<Socket>();
-	
-	constructor(port:number)
+
+	constructor(port:number, serverPort:number)
 	{
 		this.port = port;
+		this.serverPort = serverPort;
 		this.server = this.app.listen(port, this.initialise);
 		this.io = socketio(this.server);
 		this.io.on("connection", this.handleSocketConnection);
@@ -28,9 +30,12 @@ class Server
 			res.sendFile(path.resolve(__dirname + "/../views/index.html"));
 		});
 	}
-	private handleSocketConnection(socket:socketio.Socket):void
+	private handleSocketConnection = (socket:socketio.Socket):void =>
 	{
-		this.sockets.push(new Socket(socket));
+		let sock:Socket = new Socket(socket);
+
+		sock.connectToServer("127.0.0.1", this.serverPort);
+		this.sockets.push(sock);
 	}
 }
 
