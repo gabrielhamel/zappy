@@ -39,5 +39,7 @@ std::string zpy::Application::usage(const std::string &progName)
 
 void zpy::Application::run()
 {
-
+    while (1) {
+        this->_client->forward();
+    }
 }

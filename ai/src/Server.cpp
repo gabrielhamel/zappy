@@ -7,9 +7,11 @@
 
 #include <sys/select.h>
 #include <unistd.h>
+#include <sys/timeb.h>
 #include "Server.hpp"
 
 zpy::Server::Server(const std::string &hostname, const std::string &port)
+: _refreshTime(1000), _ellapsed(0)
 {
     auto hosts = gethostbyname(hostname.c_str());
 
@@ -51,26 +53,43 @@ std::string zpy::Server::readData()
     return str;
 }
 
+void zpy::Server::setRefreshTime(float millisec)
+{
+    this->_refreshTime = millisec * 1000.0f;
+}
+
 bool zpy::Server::hasData()
 {
+    struct timeb start = {0, 0, 0, 0};
+    ftime(&start);
+    struct timeb end = {0, 0, 0, 0};
     fd_set rfds;
-    struct timeval tv = {0, 0};
+    struct timeval tv = {0, this->_refreshTime};
     int retval;
-
     FD_ZERO(&rfds);
     FD_SET(this->_fd, &rfds);
-    tv.tv_usec = 10000;
     retval = select(FD_SETSIZE, &rfds, NULL, NULL, &tv);
+    ftime(&end);
+    this->_ellapsed = 1000 * (end.time - start.time) + (end.millitm - start.millitm);
     if (retval)
         return true;
     return false;
 }
 
+unsigned int zpy::Server::getEllapsedTime() const
+{
+    return this->_ellapsed;
+}
+
 void zpy::Server::waitData()
 {
+    struct timeb start = {0, 0, 0, 0};
+    ftime(&start);
     fd_set rfds;
-
+    struct timeb end = {0, 0, 0, 0};
     FD_ZERO(&rfds);
     FD_SET(this->_fd, &rfds);
     select(FD_SETSIZE, &rfds, NULL, NULL, NULL);
+    ftime(&end);
+    this->_ellapsed = 1000 * (end.time - start.time) + (end.millitm - start.millitm);
 }

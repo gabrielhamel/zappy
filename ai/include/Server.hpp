@@ -25,6 +25,8 @@ namespace zpy {
         public:
             Server(const std::string &hostname, const std::string &port);
             ~Server();
+            void setRefreshTime(float millisec);
+            unsigned int getEllapsedTime() const;
             void writeData(const std::string &text);
             std::string readData();
             bool hasData();
@@ -32,6 +34,8 @@ namespace zpy {
         private:
             struct sockaddr_in addr;
             int _fd;
+            unsigned int _refreshTime;
+            unsigned int _ellapsed;
     };
 
 }

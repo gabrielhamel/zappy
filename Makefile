@@ -81,11 +81,11 @@ zappy_ai:	titre_ai $(OBJ_AI)
 clean:
 			@$(ECHO) $(RED)¶ Cleaning$(TEAL):$(DEFAULT)
 			@$(ECHO) $(GREEN)  " [OK]" $(TEAL)"Clean obj"$(TEAL)
-			$(RM) $(OBJ_SERV) zappy_ai zappy_server
+			$(RM) $(OBJ_SERV) $(OBJ_AI)
 			@($(ECHO) $(GREEN)✓$(TEAL)" CLEAN SUCCESS !"$(TEAL))
 
 fclean:		clean
-			$(RM) $(NAME)
+			$(RM) zappy_ai zappy_server
 
 re:			fclean all
 
