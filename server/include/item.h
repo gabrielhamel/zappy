@@ -9,6 +9,7 @@
 
 typedef enum ITEM_E {
     FOOD,
+    LINEA,
     DERAUMERE,
     SIBUR,
     MENDIANE,
@@ -16,4 +17,4 @@ typedef enum ITEM_E {
     THYSTAME
 } ITEM_T;
 
-#define N_ITEMS 6
+#define N_ITEMS 7

@@ -11,6 +11,8 @@
 #include "server.h"
 #include "map.h"
 
+#define GET_GAME(x) ((game_t *)(x->start->socket->data))
+
 typedef struct s_team {
     sock_t *sock;
     size_t nb_clients;

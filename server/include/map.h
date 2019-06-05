@@ -12,6 +12,8 @@
 
 #include "item.h"
 
+#define GET_TILE(game, x, y) (&game->map.graph[y][x])
+
 typedef struct tile_s tile_t;
 
 typedef struct tile_s {
@@ -21,7 +23,7 @@ typedef struct tile_s {
     tile_t *right;
     tile_t *bottom;
     tile_t *left;
-    unsigned short items[6];
+    unsigned short items[10];
 } tile_t;
 
 typedef struct map_s {
