@@ -21,7 +21,7 @@ typedef struct tile_s {
     tile_t *right;
     tile_t *bottom;
     tile_t *left;
-    ITEM_T items[];
+    unsigned short items[6];
 } tile_t;
 
 typedef struct map_s {

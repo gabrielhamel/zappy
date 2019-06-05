@@ -15,3 +15,5 @@ typedef enum ITEM_E {
     PHIRAS,
     THYSTAME
 } ITEM_T;
+
+#define N_ITEMS 6

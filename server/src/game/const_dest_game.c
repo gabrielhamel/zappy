@@ -7,19 +7,18 @@
 
 #include "game.h"
 
-void *initialize_teams(zarg_t *zarg)
+void *initialize_game_args(game_t* game, zarg_t *zarg)
 {
     size_t i;
-    team_t **teams;
-    size_t nb_teams = array_lenght(zarg->team_names);
 
-    teams = malloc(sizeof(team_t *));
-    for (i = 0; i < nb_teams; i++) {
-        teams[i] = malloc(sizeof(team_t));
-        teams[i]->sock = NULL;
-        teams[i]->nb_clients = zarg->clients_nb;
+    game->nb_teams = array_lenght(zarg->team_names);
+    game->teams = malloc(sizeof(team_t *));
+    for (i = 0; i < game->nb_teams; i++) {
+        game->teams[i] = malloc(sizeof(team_t));
+        game->teams[i]->sock = NULL;
+        game->teams[i]->nb_clients = zarg->clients_nb;
     }
-    return (teams);
+    init_map(&game->map, zarg->width, zarg->height);
 }
 
 void *init_game(const sock_t *cli)
@@ -28,7 +27,6 @@ void *init_game(const sock_t *cli)
 
     (void)cli;
     memset(data, 0, sizeof(game_t));
-    // init_map(&core->map, w, h);
     return (data);
 }
 
