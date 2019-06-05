@@ -6,6 +6,7 @@
 */
 
 #include <sys/select.h>
+#include <unistd.h>
 #include "Server.hpp"
 
 zpy::Server::Server(const std::string &hostname, const std::string &port)
@@ -32,12 +33,12 @@ zpy::Server::~Server()
     close(this->_fd);
 }
 
-void zpy::Server::Write(const std::string &text)
+void zpy::Server::writeData(const std::string &text)
 {
     write(this->_fd, text.c_str(), text.length());
 }
 
-std::string zpy::Server::Read()
+std::string zpy::Server::readData()
 {
     std::string str;
     ssize_t res;
@@ -50,7 +51,7 @@ std::string zpy::Server::Read()
     return str;
 }
 
-bool zpy::Server::HasData()
+bool zpy::Server::hasData()
 {
     fd_set rfds;
     struct timeval tv = {0, 0};
@@ -65,7 +66,7 @@ bool zpy::Server::HasData()
     return false;
 }
 
-void zpy::Server::WaitData()
+void zpy::Server::waitData()
 {
     fd_set rfds;
 

@@ -25,10 +25,10 @@ namespace zpy {
         public:
             Server(const std::string &hostname, const std::string &port);
             ~Server();
-            void Write(const std::string &text);
-            std::string Read();
-            bool HasData();
-            void WaitData();
+            void writeData(const std::string &text);
+            std::string readData();
+            bool hasData();
+            void waitData();
         private:
             struct sockaddr_in addr;
             int _fd;

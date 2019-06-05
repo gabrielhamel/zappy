@@ -9,6 +9,7 @@
 
 #include <string>
 #include <memory>
+#include <vector>
 #include "Server.hpp"
 
 namespace zpy {
@@ -18,7 +19,7 @@ namespace zpy {
             Client(const std::string &hostname, const std::string &port, const std::string &team);
             ~Client();
         private:
-            void init();
+            void login() const;
             std::string _hostname;
             std::string _port;
             std::string _team;
