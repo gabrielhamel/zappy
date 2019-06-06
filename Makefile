@@ -31,14 +31,24 @@ SRC_SERV =	./server/src/sockets/client.c				\
 			./server/src/commands/graphic/list.c 		\
 			./server/src/commands/graphic/msz.c			\
 			./server/src/teams/check_team_names.c		\
-			./server/src/game/const_dest_game.c		\
+			./server/src/game/const_dest_game.c			\
 			./server/src/time_manage.c
 
-INC_DIR =	-I ./server/include
+SRC_AI =	./ai/src/Main.cpp							\
+			./ai/src/Server.cpp							\
+			./ai/src/Client.cpp							\
+			./ai/src/Application.cpp					\
+			./ai/src/Parser.cpp							\
+			./ai/src/Utils.cpp
+
+INC_DIR =	-I ./server/include \
+			-I ./ai/include
 
 OBJ_SERV =  $(SRC_SERV:.c=.o)
 
-CFLAGS +=	$(INC_DIR) -W -Wall -Wextra -g
+OBJ_AI =  	$(SRC_AI:.cpp=.o)
+
+CFLAGS +=	$(INC_DIR) -W -Wall -Wextra
 
 RM =		@rm -rf
 
@@ -65,24 +75,24 @@ titre_ai:
 zappy_server: titre_server $(OBJ_SERV)
 			@gcc -o zappy_server $(OBJ_SERV) && $(ECHO) $(GREEN)✓$(TEAL)" BUILD SUCCESS !"$(TEAL) $(DEFAULT) || $(ECHO) $(SANG)✗$(TEAL)" BUILD FAILED !"$(TEAL) $(DEFAULT)
 
-zappy_ai:	titre_ai
-			@echo "#!/usr/bin/php" > zappy_ai
-			@cat ai/index.php >> zappy_ai
-			@chmod +x zappy_ai
-			@$(ECHO) $(GREEN)✓$(TEAL)" BUILD SUCCESS !"$(TEAL) $(DEFAULT)
+zappy_ai:	titre_ai $(OBJ_AI)
+			@g++ -o zappy_ai $(OBJ_AI) && $(ECHO) $(GREEN)✓$(TEAL)" BUILD SUCCESS !"$(TEAL) $(DEFAULT) || $(ECHO) $(SANG)✗$(TEAL)" BUILD FAILED !"$(TEAL) $(DEFAULT)
 
 clean:
 			@$(ECHO) $(RED)¶ Cleaning$(TEAL):$(DEFAULT)
 			@$(ECHO) $(GREEN)  " [OK]" $(TEAL)"Clean obj"$(TEAL)
-			$(RM) $(OBJ_SERV) zappy_ai zappy_server
+			$(RM) $(OBJ_SERV) $(OBJ_AI)
 			@($(ECHO) $(GREEN)✓$(TEAL)" CLEAN SUCCESS !"$(TEAL))
 
 fclean:		clean
-			$(RM) $(NAME)
+			$(RM) zappy_ai zappy_server
 
 re:			fclean all
 
 %.o : %.c
 			@gcc -c -o $@ $^ $(CFLAGS) && $(ECHO) -n $(GREEN)"  [OK] "$(TEAL) || $(ECHO) -n $(SANG)"  [NO] "$(TEAL) && $(ECHO) $< | rev | cut -d'/' -f 1 | rev
+
+%.o : %.cpp
+			@g++ -c -o $@ $^ $(CFLAGS) && $(ECHO) -n $(GREEN)"  [OK] "$(TEAL) || $(ECHO) -n $(SANG)"  [NO] "$(TEAL) && $(ECHO) $< | rev | cut -d'/' -f 1 | rev
 
 .PHONY:		all fclean re clean zappy_ai zappy_server
