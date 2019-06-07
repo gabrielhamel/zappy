@@ -36,4 +36,7 @@ class Render {
         sf::Texture _tex;
         sf::RenderTexture _rendtex;
         sf::Sprite _rendspr;
+        sf::RectangleShape _background;
+        sf::Font _font;
+        sf::Text _teamName;
 };

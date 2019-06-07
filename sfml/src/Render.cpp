@@ -33,9 +33,10 @@ static const std::array<sf::Vector2i, 9> file_food = {
 Render::Render(std::vector<Team *> &teams)
 : _teams(teams)
 {
+    this->_font.loadFromFile("assets/font.ttf");
     this->_grass.setPosition(0, 0);
     this->_scale = 1;
-    this->_camera.x = 0;
+    this->_camera.x = 270;
     this->_camera.y = 0;
     this->_tex.loadFromFile("assets/all.png");
     this->_grass.setTexture(this->_tex);
@@ -52,10 +53,17 @@ Render::Render(std::vector<Team *> &teams)
         team->setTexture(&this->_tex);
         team->setScale(this->_scale);
     }
-    this->_rendtex.create(960, 960);
+    this->_background.setPosition(0, 0);
+    this->_background.setSize(sf::Vector2f(270, 960));
+    this->_background.setFillColor(sf::Color(80, 80, 80));
+    this->_rendtex.create(1500, 960);
     this->_rendspr.setPosition(0, 0);
     this->_rendtex.clear();
     this->_rendspr.setTexture(this->_rendtex.getTexture(), true);
+    this->_teamName.setPosition(0, 0);
+    this->_teamName.setFillColor(sf::Color::White);
+    this->_teamName.setFont(this->_font);
+    this->_teamName.setCharacterSize(20);
 }
 
 void Render::SetMap(std::vector<std::vector<std::array<unsigned int, 7>>> *map)
@@ -67,6 +75,11 @@ void Render::SetSize(const std::array<unsigned int, 2> &size)
 {
     this->_size.x = size[0];
     this->_size.y = size[1];
+    this->_scale = 960.f / ((this->_size.x > this->_size.y ? this->_size.x : this->_size.y) * SPR_SIZE);
+    this->_camera.x += (960.f - this->_size.x * SPR_SIZE * this->_scale) / 2.0f;
+    this->_camera.y -= (SPR_SIZE * this->_scale) * 2;
+    this->_camera.y += this->_size.y * SPR_SIZE * this->_scale;
+    this->_camera.y += (960.f - this->_camera.y) / 2;
     this->_grass.setScale(this->_scale, this->_scale);
     for (int i = 0; i < 7; i++)
         this->_sprfood[i].setScale(this->_scale / 3.5f, this->_scale / 3.5f);
@@ -102,6 +115,33 @@ void Render::Draw(sf::RenderWindow &win)
             this->_rendtex.draw(team->_spr);
         }
     }
+    // UI
+    this->_background.setPosition(0, 0);
+    this->_rendtex.draw(this->_background);
+    this->_background.setPosition(1230, 0);
+    this->_rendtex.draw(this->_background);
+    
+    this->_teamName.setPosition(90, 20);
+    for (auto &team : this->_teams) {
+        auto saveScale = team->_spr.getScale();
+        auto saveRot = team->_spr.getRotation();
+        team->_spr.setRotation(0);
+        team->_spr.setScale(3, 3);
+        team->_spr.setPosition(this->_teamName.getPosition());
+        team->_spr.move(-50, 10);
+        this->_rendtex.draw(team->_spr);
+        auto &str = team->getName();
+        this->_teamName.setFillColor(team->getColor());
+        this->_teamName.setString(str.substr(0, 8));
+        this->_rendtex.draw(this->_teamName);
+        this->_teamName.setString(std::to_string(team->getPlayers().size()));
+        this->_teamName.move(140, 0);
+        this->_rendtex.draw(this->_teamName);
+        this->_teamName.move(-140, 75);
+        team->_spr.setRotation(saveRot);
+        team->_spr.setScale(saveScale);
+    }
+
     this->_rendtex.display();
     win.draw(this->_rendspr);
 }
