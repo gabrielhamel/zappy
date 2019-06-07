@@ -19,6 +19,11 @@ Player::Orientation Player::getOrientation() const
     return (this->_ori);
 }
 
+void Player::setOrientation(Player::Orientation ori)
+{
+    this->_ori = ori;
+}
+
 const std::array<int, 2> &Player::getPosition() const
 {
     return (this->_pos);

@@ -138,6 +138,7 @@ void Client::parsePpo(const std::vector<std::string> &toks)
         for (auto player = players.begin(); player != players.end(); player++)
             if (player->getId() == id) {
                 player->setPosition(std::stoi(toks[2]), std::stoi(toks[3]));
+                player->setOrientation((Player::Orientation)std::stoi(toks[4]));
                 return;
             }
     }

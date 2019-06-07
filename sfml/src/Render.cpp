@@ -79,13 +79,14 @@ void Render::Draw(sf::RenderWindow &win)
     _rendtex.clear();
     for (unsigned int y = 0; y < this->_size.y; y++)
         for (unsigned int x = 0; x < this->_size.x; x++) {
-            this->_grass.setPosition(SPR_SIZE * x * this->_scale + this->_camera.x, SPR_SIZE * y * this->_scale + this->_camera.y);
+            this->_grass.setPosition(SPR_SIZE * x * this->_scale + this->_camera.x,
+            SPR_SIZE * -1 * y * this->_scale + this->_camera.y);
             this->_rendtex.draw(this->_grass);
             for (int i = 0; i < 7; i++) {
                 auto &map = *this->_map;
                 if (map[y][x][i]) {
                     this->_sprfood[i].setPosition(SPR_SIZE * x * this->_scale + this->_camera.x + SPR_SIZE * hept[i].x * this->_scale / 1.7f,
-                    SPR_SIZE * y * this->_scale + this->_camera.y + SPR_SIZE * hept[i].y * this->_scale / 1.7f);
+                    SPR_SIZE * -1 * y * this->_scale + this->_camera.y + SPR_SIZE * hept[i].y * this->_scale / 1.7f);
                     this->_rendtex.draw(this->_sprfood[i]);
                 }
             }
@@ -94,7 +95,8 @@ void Render::Draw(sf::RenderWindow &win)
         auto players = team->getPlayers();
         for (auto &player : players) {
             auto pos = player.getPosition();
-            team->_spr.setPosition((SPR_SIZE * pos[0] + 8) * this->_scale + this->_camera.x, (SPR_SIZE * pos[1] + 8) * this->_scale + this->_camera.y);
+            team->_spr.setPosition((SPR_SIZE * pos[0] + 8) * this->_scale + this->_camera.x,
+            (SPR_SIZE * -1 * pos[1] + 8) * this->_scale + this->_camera.y);
             int ori = player.getOrientation() - 1;
             team->_spr.setRotation(ori * 90 + 180);
             this->_rendtex.draw(team->_spr);

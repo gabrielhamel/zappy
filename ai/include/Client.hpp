@@ -30,6 +30,9 @@ namespace zpy {
             ** Get the ellapsed time in milliseconds of the last command
             */
             unsigned int getEllapsedTime() const;
+            /*
+            ** All commands of client
+            */
             void forward();
             void right();
             void left();

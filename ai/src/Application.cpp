@@ -41,5 +41,8 @@ void zpy::Application::run()
 {
     while (1) {
         this->_client->forward();
+        this->_client->left();
+        this->_client->forward();
+        this->_client->right();
     }
 }

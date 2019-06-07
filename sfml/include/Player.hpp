@@ -19,6 +19,7 @@ class Player {
         };
         Player(int id, int pos_x, int pos_y, Player::Orientation ori, int level);
         Player::Orientation getOrientation() const;
+        void setOrientation(Player::Orientation ori);
         const std::array<int, 2> &getPosition() const;
         int getId() const;
         void setPosition(int x, int y);
