@@ -23,11 +23,11 @@ static const std::array<sf::Vector2i, 9> file_food = {
     sf::Vector2i(16, 0),
     sf::Vector2i(32, 0),
     sf::Vector2i(48, 0),
+    sf::Vector2i(64, 0),
+    sf::Vector2i(80, 0),
     sf::Vector2i(96, 0),
     sf::Vector2i(112, 0),
-    sf::Vector2i(128, 0),
-    sf::Vector2i(64, 0),
-    sf::Vector2i(80, 0)
+    sf::Vector2i(128, 0)
 };
 
 Render::Render(std::vector<Team *> &teams)

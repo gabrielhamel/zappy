@@ -50,7 +50,7 @@ void Team::setTexture(sf::Texture *tex)
     this->_tex = tex;
     this->_color = sf::Color(rand() % 256, rand() % 256, rand() % 256);
     this->_spr.setTexture(*this->_tex, true);
-    this->_spr.setTextureRect(sf::IntRect(sf::Vector2i(80, 0), sf::Vector2i(16, 16)));
+    this->_spr.setTextureRect(sf::IntRect(sf::Vector2i(128, 0), sf::Vector2i(16, 16)));
     this->_spr.setScale(1.f / 1.5f, 1.f / 1.5f);
     this->_spr.setColor(this->_color);
     this->_spr.setOrigin(8, 8);
