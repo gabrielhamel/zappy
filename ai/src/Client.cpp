@@ -115,3 +115,35 @@ void zpy::Client::left()
     this->_server->writeData(command);
     auto buff = this->commandEnd();
 }
+
+zpy::Client::Response zpy::Client::take(const zpy::Client::Object &object)
+{
+    auto command = "Take " + object.str() + "\n";
+    std::cout << "client: " << command;
+
+    this->commandStart();
+    this->_server->writeData(command);
+    auto buff = this->commandEnd();
+    if (buff[0][0] == "ok")
+        return zpy::Client::Response::OK;
+    return zpy::Client::Response::KO;
+}
+
+zpy::Client::Inventory zpy::Client::inventory()
+{
+    auto command = "Inventory\n";
+    std::cout << "client: " << command;
+
+    this->commandStart();
+    this->_server->writeData(command);
+    auto buff = this->commandEnd();
+    zpy::Client::Inventory inv(
+        std::stoi(buff[0][2]),
+        std::stoi(buff[0][4]),
+        std::stoi(buff[0][6]),
+        std::stoi(buff[0][8]),
+        std::stoi(buff[0][10]),
+        std::stoi(buff[0][12]),
+        std::stoi(buff[0][14]));
+    return inv;
+}
