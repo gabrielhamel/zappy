@@ -10,4 +10,8 @@ serv_ref
 webserver/views/node_modules/
 webserver/node_modules/
 refs
-sfml/graphic
+sfml/CMakeCache.txt
+sfml/CMakeFiles/
+sfml/Makefile
+sfml/cmake_install.cmake
+sfml/zappy_graphic
