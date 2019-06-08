@@ -6,6 +6,7 @@
 */
 
 #include "Render.hpp"
+#include <algorithm>
 #include <iostream>
 
 static const std::array<sf::Vector2f, 7> hept = {
@@ -31,7 +32,7 @@ static const std::array<sf::Vector2i, 9> file_food = {
 };
 
 Render::Render(std::vector<Team *> &teams)
-: _teams(teams)
+: _teams(teams), _focus(nullptr), _scrollTeam(0)
 {
     this->_font.loadFromFile("assets/font.ttf");
     this->_grass.setPosition(0, 0);
@@ -121,27 +122,39 @@ void Render::Draw(sf::RenderWindow &win)
     this->_background.setPosition(1230, 0);
     this->_rendtex.draw(this->_background);
     
-    this->_teamName.setPosition(90, 20);
+    this->_teamName.setPosition(60, 20 + this->_scrollTeam);
     for (auto &team : this->_teams) {
         auto saveScale = team->_spr.getScale();
         auto saveRot = team->_spr.getRotation();
         team->_spr.setRotation(0);
         team->_spr.setScale(3, 3);
         team->_spr.setPosition(this->_teamName.getPosition());
-        team->_spr.move(-50, 10);
+        team->_spr.move(-31, 10);
         this->_rendtex.draw(team->_spr);
+        auto &players = team->getPlayers();
+        if (this->_focus) {
+            if (std::find(players.begin(), players.end(), *this->_focus) != players.end()) {
+                team->_spr.setPosition(1365, 30);
+                this->_rendtex.draw(team->_spr);
+            }
+        }
         auto &str = team->getName();
         this->_teamName.setFillColor(team->getColor());
         this->_teamName.setString(str.substr(0, 8));
         this->_rendtex.draw(this->_teamName);
-        this->_teamName.setString(std::to_string(team->getPlayers().size()));
-        this->_teamName.move(140, 0);
+        this->_teamName.setString(std::to_string(players.size()));
+        this->_teamName.move(170, 0);
         this->_rendtex.draw(this->_teamName);
-        this->_teamName.move(-140, 75);
+        this->_teamName.move(-170, 75);
         team->_spr.setRotation(saveRot);
         team->_spr.setScale(saveScale);
     }
-
+    // // Information about focused
+    // if (this->_focus != nullptr) {
+    //     this->_teamName.setPosition(500, 20);
+    //     std::cout <<"lol\n";
+    //     this->_rendtex.draw(_teamName);
+    // }
     this->_rendtex.display();
     win.draw(this->_rendspr);
 }
@@ -179,4 +192,53 @@ void Render::MoveCamera(const sf::Vector2f &move)
 {
     this->_camera.x = this->_camera.x + move.x;
     this->_camera.y = this->_camera.y + move.y;
+}
+
+Player *Render::getPlayerFocus()
+{
+    return this->_focus;
+}
+
+void Render::setPlayerFocus(Player *player)
+{
+    this->_focus = player;
+}
+
+void Render::testFocus(sf::Vector2i pos)
+{
+    if (pos.x >= this->_camera.x
+        && pos.y < this->_camera.y + SPR_SIZE * this->_scale
+        && pos.x < SPR_SIZE * this->_size.x * this->_scale + this->_camera.x
+        && pos.y >= SPR_SIZE * -1 * (this->_size.y - 1) * this->_scale + this->_camera.y) {
+            auto x = pos.x - this->_camera.x;
+            auto y = (SPR_SIZE * -1 * (this->_size.y - 1) * this->_scale + this->_camera.y) - pos.y + 960;
+            x = (int)(x / (SPR_SIZE * this->_scale));
+            y = (int)(y / (SPR_SIZE * this->_scale));
+            for (auto &team : this->_teams) {
+                auto &players = team->getPlayers();
+                for (auto &player : players) {
+                    auto &pos = player.getPosition();
+                    if (pos[0] == x && pos[1] == y) {
+                        this->setPlayerFocus(&player);
+                        return;
+                    }
+                }
+            }
+        }
+}
+
+void Render::scrollTeam(float value)
+{
+    auto test = this->_scrollTeam + value;
+
+    if (this->_teams.size() <= 13)
+        return;
+    if (test > 0) {
+        test = 0;
+        return;
+    }
+    auto limit = -1.f * (20.f + 75.f * (float)(this->_teams.size())) + 960;
+    if (test < limit)
+        test = limit;
+    this->_scrollTeam = test;
 }

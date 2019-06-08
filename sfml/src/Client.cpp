@@ -10,8 +10,8 @@
 #include "Client.hpp"
 #include "Utils.hpp"
 
-Client::Client(const std::string &hostname, const std::string &port)
-: _server(hostname, port)
+Client::Client(const std::string &hostname, const std::string &port, Render &render)
+: _server(hostname, port), _render(render)
 {
     this->_time = 0;
     this->_mapSize[0] = 0;
@@ -96,9 +96,13 @@ void Client::parseTna(const std::vector<std::string> &toks)
 
 void Client::parsePnw(const std::vector<std::string> &toks)
 {
+    auto nb = 0;
+
+    for (auto &i : this->_teams)
+        nb += i->getPlayers().size();
     for (auto &i : this->_teams)
         if (i->getName() == toks[6])
-            i->AddPlayer(std::stoi(toks[1]), std::stoi(toks[2]), std::stoi(toks[3]), (Player::Orientation)std::stoi(toks[4]), std::stoi(toks[5]));
+            auto &player = i->AddPlayer(std::stoi(toks[1]), std::stoi(toks[2]), std::stoi(toks[3]), (Player::Orientation)std::stoi(toks[4]), std::stoi(toks[5]));
 }
 
 void Client::parsePex(const std::vector<std::string> &toks) // Pas sûr du comportement
@@ -109,6 +113,9 @@ void Client::parsePex(const std::vector<std::string> &toks) // Pas sûr du compo
         auto &players = i->getPlayers();
         for (auto player = players.begin(); player != players.end(); player++)
             if (player->getId() == id) {
+                if (this->_render.getPlayerFocus() && this->_render.getPlayerFocus()->getId() == id) {
+                    this->_render.setPlayerFocus(nullptr);
+                }
                 players.erase(player);
                 return;
             }
@@ -123,6 +130,9 @@ void Client::parsePdi(const std::vector<std::string> &toks)
         auto &players = i->getPlayers();
         for (auto player = players.begin(); player != players.end(); player++)
             if (player->getId() == id) {
+                if (this->_render.getPlayerFocus() && this->_render.getPlayerFocus()->getId() == id) {
+                    this->_render.setPlayerFocus(nullptr);
+                }
                 players.erase(player);
                 return;
             }

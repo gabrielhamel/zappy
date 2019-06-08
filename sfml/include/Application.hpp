@@ -35,6 +35,7 @@ class Application {
         Client _client;
         Render _render;
         std::array<bool, sf::Keyboard::KeyCount> _keys;
+        bool _mousePressed;
         sf::Clock _clock;
 };
 

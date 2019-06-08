@@ -44,3 +44,8 @@ void Player::setLevel(int level)
 {
     this->_level = level;
 }
+
+bool operator==(const Player &a, const Player &b)
+{
+    return a.getId() == b.getId();
+}

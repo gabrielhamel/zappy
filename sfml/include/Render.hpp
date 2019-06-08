@@ -24,6 +24,10 @@ class Render {
         const sf::Vector2f &GetCamera() const;
         void MoveCamera(const sf::Vector2f &move);
         void SetMap(std::vector<std::vector<std::array<unsigned int, 7>>> *map);
+        void setPlayerFocus(Player *player);
+        Player *getPlayerFocus();
+        void testFocus(sf::Vector2i pos);
+        void scrollTeam(float value);
     private:
         sf::Vector2u _texsize;
         sf::Sprite _grass;
@@ -39,4 +43,6 @@ class Render {
         sf::RectangleShape _background;
         sf::Font _font;
         sf::Text _teamName;
+        Player *_focus;
+        float _scrollTeam;
 };

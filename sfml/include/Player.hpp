@@ -30,3 +30,5 @@ class Player {
         Player::Orientation _ori;
         int _level;
 };
+
+bool operator==(const Player &a, const Player &b);

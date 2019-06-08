@@ -16,7 +16,7 @@ class Team {
     public:
         Team(const std::string &name);
         ~Team();
-        void AddPlayer(int id, int pos_x, int pos_y, Player::Orientation ori, int level);
+        Player &AddPlayer(int id, int pos_x, int pos_y, Player::Orientation ori, int level);
         const std::string &getName();
         std::vector<Player> &getPlayers();
         const sf::Color &getColor() const;

@@ -20,9 +20,10 @@ Team::~Team()
     std::cout << "Team destroy or copied" << std::endl;
 }
 
-void Team::AddPlayer(int id, int pos_x, int pos_y, Player::Orientation ori, int level)
+Player &Team::AddPlayer(int id, int pos_x, int pos_y, Player::Orientation ori, int level)
 {
     this->_players.push_back(Player(id, pos_x, pos_y, ori, level));
+    return this->_players.back();
 }
 
 void Team::setScale(float scale)
