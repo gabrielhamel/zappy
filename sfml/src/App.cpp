@@ -5,7 +5,7 @@
 ** Application
 */
 
-#include "Application.hpp"
+#include "App.hpp"
 
 Application::Application(unsigned int width, unsigned int height, const std::string &name, const std::string &hostname, const std::string &port)
 : _size(width, height), _window(sf::VideoMode(width, height), name, sf::Style::Close), _client(hostname, port, this->_render), _render(this->_client.getTeams())

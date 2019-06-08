@@ -43,13 +43,6 @@ void zpy::Application::run()
         this->_client->forward();
         this->_client->left();
         this->_client->forward();
-        this->_client->take(zpy::Client::Food());
-        this->_client->take(zpy::Client::Linemate());
-        this->_client->take(zpy::Client::Deraumere());
-        this->_client->take(zpy::Client::Sibur());
-        this->_client->take(zpy::Client::Mendiane());
-        this->_client->take(zpy::Client::Phiras());
-        this->_client->take(zpy::Client::Thystame());
         this->_client->right();
     }
 }

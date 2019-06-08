@@ -10,7 +10,7 @@
 
 #include <string>
 #include <SFML/Graphics.hpp>
-#include "Client.hpp"
+#include "Cli.hpp"
 #include "Render.hpp"
 
 class Application {

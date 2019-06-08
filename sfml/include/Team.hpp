@@ -10,7 +10,7 @@
 #include <string>
 #include <vector>
 #include <SFML/Graphics.hpp>
-#include "Player.hpp"
+#include "Ia.hpp"
 
 class Team {
     public:

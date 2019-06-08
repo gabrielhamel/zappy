@@ -6,7 +6,7 @@
 */
 
 #include <memory>
-#include "Application.hpp"
+#include "App.hpp"
 
 std::string usage(const std::string &progName)
 {

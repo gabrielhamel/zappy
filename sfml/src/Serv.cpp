@@ -6,7 +6,7 @@
 */
 
 #include <sys/select.h>
-#include "Server.hpp"
+#include "Serv.hpp"
 
 Server::Server(const std::string &hostname, const std::string &port)
 {

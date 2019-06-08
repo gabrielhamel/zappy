@@ -7,8 +7,8 @@
 
 #include <algorithm>
 #include <iostream>
-#include "Client.hpp"
-#include "Utils.hpp"
+#include "Cli.hpp"
+#include "Tools.hpp"
 
 Client::Client(const std::string &hostname, const std::string &port, Render &render)
 : _server(hostname, port), _render(render)

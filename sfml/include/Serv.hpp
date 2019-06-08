@@ -17,7 +17,7 @@
 #include <netinet/in.h>
 #include <string.h>
 #include <arpa/inet.h>
-#include "SocketError.hpp"
+#include "Error.hpp"
 #include <string>
 
 class Server {
