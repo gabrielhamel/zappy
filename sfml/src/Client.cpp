@@ -44,14 +44,14 @@ void Client::parseCommand(const std::vector<std::string> &toks)
         this->parseTna(toks);
     else if (toks[0] == "pnw")
         this->parsePnw(toks);
-    else if (toks[0] == "pex")
-        this->parsePex(toks);
     else if (toks[0] == "pdi")
         this->parsePdi(toks);
     else if (toks[0] == "ppo")
         this->parsePpo(toks);
     else if (toks[0] == "plv")
         this->parsePlv(toks);
+    else if (toks[0] == "pin")
+        this->parsePin(toks);
 }
 
 const std::array<unsigned int, 2> &Client::GetMapSize() const
@@ -105,23 +105,6 @@ void Client::parsePnw(const std::vector<std::string> &toks)
             auto &player = i->AddPlayer(std::stoi(toks[1]), std::stoi(toks[2]), std::stoi(toks[3]), (Player::Orientation)std::stoi(toks[4]), std::stoi(toks[5]));
 }
 
-void Client::parsePex(const std::vector<std::string> &toks) // Pas sûr du comportement
-{
-    auto id = std::stoi(toks[1]);
-
-    for (auto &i : this->_teams) {
-        auto &players = i->getPlayers();
-        for (auto player = players.begin(); player != players.end(); player++)
-            if (player->getId() == id) {
-                if (this->_render.getPlayerFocus() && this->_render.getPlayerFocus()->getId() == id) {
-                    this->_render.setPlayerFocus(nullptr);
-                }
-                players.erase(player);
-                return;
-            }
-    }
-}
-
 void Client::parsePdi(const std::vector<std::string> &toks)
 {
     auto id = std::stoi(toks[1]);
@@ -163,6 +146,26 @@ void Client::parsePlv(const std::vector<std::string> &toks)
         for (auto player = players.begin(); player != players.end(); player++)
             if (player->getId() == id) {
                 player->setLevel(std::stoi(toks[2]));
+                return;
+            }
+    }
+}
+
+void Client::parsePin(const std::vector<std::string> &toks)
+{
+    auto id = std::stoi(toks[1]);
+
+    for (auto &i : this->_teams) {
+        auto &players = i->getPlayers();
+        for (auto player = players.begin(); player != players.end(); player++)
+            if (player->getId() == id) {
+                player->_inventory[0] = std::stoi(toks[4]);
+                player->_inventory[1] = std::stoi(toks[5]);
+                player->_inventory[2] = std::stoi(toks[6]);
+                player->_inventory[3] = std::stoi(toks[7]);
+                player->_inventory[4] = std::stoi(toks[8]);
+                player->_inventory[5] = std::stoi(toks[9]);
+                player->_inventory[6] = std::stoi(toks[10]);
                 return;
             }
     }

@@ -28,6 +28,7 @@ class Render {
         Player *getPlayerFocus();
         void testFocus(sf::Vector2i pos);
         void scrollTeam(float value);
+        void unsetTileFocus();
     private:
         sf::Vector2u _texsize;
         sf::Sprite _grass;
@@ -45,4 +46,5 @@ class Render {
         sf::Text _teamName;
         Player *_focus;
         float _scrollTeam;
+        sf::Vector2i _tileFocus;
 };

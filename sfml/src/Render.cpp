@@ -31,8 +31,18 @@ static const std::array<sf::Vector2i, 9> file_food = {
     sf::Vector2i(128, 0)
 };
 
+static const std::array<std::string, 7> food_name = {
+    "Food",
+    "linemate",
+    "deraumere",
+    "sibur",
+    "mendiane",
+    "phiras",
+    "thystame"
+};
+
 Render::Render(std::vector<Team *> &teams)
-: _teams(teams), _focus(nullptr), _scrollTeam(0)
+: _teams(teams), _focus(nullptr), _scrollTeam(0), _tileFocus(-1, -1)
 {
     this->_font.loadFromFile("assets/font.ttf");
     this->_grass.setPosition(0, 0);
@@ -132,16 +142,20 @@ void Render::Draw(sf::RenderWindow &win)
         team->_spr.move(-31, 10);
         this->_rendtex.draw(team->_spr);
         auto &players = team->getPlayers();
-        if (this->_focus) {
-            if (std::find(players.begin(), players.end(), *this->_focus) != players.end()) {
-                team->_spr.setPosition(1365, 30);
-                this->_rendtex.draw(team->_spr);
-            }
-        }
         auto &str = team->getName();
         this->_teamName.setFillColor(team->getColor());
         this->_teamName.setString(str.substr(0, 8));
         this->_rendtex.draw(this->_teamName);
+        if (this->_focus) {
+            if (std::find(players.begin(), players.end(), *this->_focus) != players.end()) {
+                team->_spr.setPosition(1365, 30);
+                auto save = this->_teamName.getPosition();
+                this->_teamName.setPosition(1350, 100);
+                this->_rendtex.draw(this->_teamName);
+                this->_teamName.setPosition(save);
+                this->_rendtex.draw(team->_spr);
+            }
+        }
         this->_teamName.setString(std::to_string(players.size()));
         this->_teamName.move(170, 0);
         this->_rendtex.draw(this->_teamName);
@@ -149,12 +163,124 @@ void Render::Draw(sf::RenderWindow &win)
         team->_spr.setRotation(saveRot);
         team->_spr.setScale(saveScale);
     }
-    // // Information about focused
-    // if (this->_focus != nullptr) {
-    //     this->_teamName.setPosition(500, 20);
-    //     std::cout <<"lol\n";
-    //     this->_rendtex.draw(_teamName);
-    // }
+    // Information about focused
+    if (this->_focus != nullptr) {
+        this->_teamName.setString("ID:");
+        this->_teamName.setFillColor(sf::Color::White);
+        this->_teamName.setPosition(1255, 70);
+        this->_rendtex.draw(_teamName);
+        this->_teamName.setString(std::to_string(this->_focus->getId()));
+        this->_teamName.move(95, 0);
+        this->_rendtex.draw(this->_teamName);
+        this->_teamName.setString("TEAM:");
+        this->_teamName.move(-95, 30);
+        this->_rendtex.draw(this->_teamName);
+
+        this->_teamName.move(0, 30);
+        this->_teamName.setString("LVL:");
+        this->_rendtex.draw(this->_teamName);
+
+        this->_teamName.move(0, 30);
+        this->_teamName.setString("X:");
+        this->_rendtex.draw(this->_teamName);
+
+        this->_teamName.move(0, 30);
+        this->_teamName.setString("Y:");
+        this->_rendtex.draw(this->_teamName);
+
+        this->_teamName.move(0, 30);
+        this->_teamName.setString("ORI:");
+        this->_rendtex.draw(this->_teamName);
+
+        this->_teamName.move(95, -90);
+        this->_teamName.setString(std::to_string(this->_focus->getLevel()));
+        this->_rendtex.draw(this->_teamName);
+
+        this->_teamName.move(0, 30);
+        this->_teamName.setString(std::to_string(this->_focus->getPosition()[0]));
+        this->_rendtex.draw(this->_teamName);
+
+        this->_teamName.move(0, 30);
+        this->_teamName.setString(std::to_string(this->_focus->getPosition()[1]));
+        this->_rendtex.draw(this->_teamName);
+
+        this->_teamName.move(0, 30);
+        this->_teamName.setString(this->_focus->getStrOrientation());
+        this->_rendtex.draw(this->_teamName);
+
+        // FOOD
+        auto scale = this->_sprfood[0].getScale();
+        for (int i = 0; i < 7; i++) {
+            this->_sprfood[i].setPosition(1270, 240);
+            this->_sprfood[i].move(hept[i].x * 150.f, hept[i].y * 150.f);
+            this->_sprfood[i].setScale(2, 2);
+            this->_rendtex.draw(this->_sprfood[i]);
+            this->_sprfood[i].setScale(scale);
+
+            // Texte
+            this->_teamName.setFillColor(sf::Color::White);
+            this->_teamName.setString(std::to_string(this->_focus->_inventory[i]));
+            this->_teamName.setPosition(1270, 240);
+            this->_teamName.move(hept[i].x * 150.f + 20, hept[i].y * 150.f + 16);
+            this->_teamName.setCharacterSize(15);
+            this->_rendtex.draw(this->_teamName);
+            this->_teamName.setCharacterSize(20);
+        }
+    }
+
+    // Tile focus
+    if (this->_tileFocus.x != -1 && this->_tileFocus.y != -1) {
+        auto saveScale = this->_grass.getScale();
+        this->_grass.setPosition(1270, 510);
+        this->_grass.setScale(11.5f, 11.5f);
+        this->_rendtex.draw(this->_grass);
+        this->_grass.setScale(saveScale);
+        this->_teamName.setFillColor(sf::Color::White);
+        this->_teamName.setPosition(1325, 480);
+        this->_teamName.setString("TILE");
+        this->_rendtex.draw(this->_teamName);
+
+        // FOOD
+        auto scale = this->_sprfood[0].getScale();
+        for (int i = 0; i < 7; i++) {
+            auto &map = *this->_map;
+            if (map[this->_tileFocus.y][this->_tileFocus.x][i]) {
+                this->_sprfood[i].setPosition(1270, 510);
+                this->_sprfood[i].move(hept[i].x * 150.f, hept[i].y * 150.f);
+                this->_sprfood[i].setScale(2, 2);
+                this->_rendtex.draw(this->_sprfood[i]);
+                this->_sprfood[i].setScale(scale);
+
+                // Texte
+                
+                this->_teamName.setString(std::to_string(map[this->_tileFocus.y][this->_tileFocus.x][i]));
+                this->_teamName.setPosition(1270, 510);
+                this->_teamName.move(hept[i].x * 150.f + 20, hept[i].y * 150.f + 16);
+                this->_teamName.setCharacterSize(15);
+                this->_rendtex.draw(this->_teamName);
+                this->_teamName.setCharacterSize(20);
+            }
+        }
+    }
+
+    auto scale = this->_sprfood[0].getScale();
+    for (int i = 0; i < 7; i++) {
+        this->_sprfood[i].setPosition(1270, 730);
+        this->_sprfood[i].move(0, 30 * i);
+        this->_sprfood[i].setScale(2, 2);
+        this->_rendtex.draw(this->_sprfood[i]);
+        this->_sprfood[i].setScale(scale);
+
+        // Texte
+        this->_teamName.setFillColor(sf::Color::White);
+        this->_teamName.setString(food_name[i]);
+        this->_teamName.setPosition(1310, 738);
+        this->_teamName.move(0, 30 * i);
+        this->_teamName.setCharacterSize(16);
+        this->_rendtex.draw(this->_teamName);
+        this->_teamName.setCharacterSize(20);
+    }
+
     this->_rendtex.display();
     win.draw(this->_rendspr);
 }
@@ -204,6 +330,12 @@ void Render::setPlayerFocus(Player *player)
     this->_focus = player;
 }
 
+void Render::unsetTileFocus()
+{
+    this->_tileFocus.x = -1;
+    this->_tileFocus.y = -1;
+}
+
 void Render::testFocus(sf::Vector2i pos)
 {
     if (pos.x >= this->_camera.x
@@ -214,6 +346,8 @@ void Render::testFocus(sf::Vector2i pos)
             auto y = (SPR_SIZE * -1 * (this->_size.y - 1) * this->_scale + this->_camera.y) - pos.y + 960;
             x = (int)(x / (SPR_SIZE * this->_scale));
             y = (int)(y / (SPR_SIZE * this->_scale));
+            this->_tileFocus.x = x;
+            this->_tileFocus.y = y;
             for (auto &team : this->_teams) {
                 auto &players = team->getPlayers();
                 for (auto &player : players) {

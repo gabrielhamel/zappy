@@ -45,18 +45,22 @@ bool Application::Refresh()
     this->_client.Refresh();
     if (this->KeyPress(sf::Keyboard::Escape))
         return (false);
-    if (this->KeyPress(sf::Keyboard::Equal))
-        this->_render.SetScale(this->_render.GetScale() + 0.035f * this->_speed);
-    if (this->KeyPress(sf::Keyboard::Hyphen))
-        this->_render.SetScale(this->_render.GetScale() - 0.035f * this->_speed);
-    if (this->KeyPress(sf::Keyboard::Q) || this->KeyPress(sf::Keyboard::Left))
-        this->_render.MoveCamera(sf::Vector2f(-8.f * this->_speed, 0));
-    if (this->KeyPress(sf::Keyboard::D) || this->KeyPress(sf::Keyboard::Right))
-        this->_render.MoveCamera(sf::Vector2f(8.f * this->_speed, 0));
-    if (this->KeyPress(sf::Keyboard::Z) || this->KeyPress(sf::Keyboard::Up))
-        this->_render.MoveCamera(sf::Vector2f(0, -8.f * this->_speed));
-    if (this->KeyPress(sf::Keyboard::S) || this->KeyPress(sf::Keyboard::Down))
-        this->_render.MoveCamera(sf::Vector2f(0, 8.f * this->_speed));
+    // if (this->KeyPress(sf::Keyboard::Equal))
+    //     this->_render.SetScale(this->_render.GetScale() + 0.035f * this->_speed);
+    // if (this->KeyPress(sf::Keyboard::Hyphen))
+    //     this->_render.SetScale(this->_render.GetScale() - 0.035f * this->_speed);
+    // if (this->KeyPress(sf::Keyboard::Q) || this->KeyPress(sf::Keyboard::Left))
+    //     this->_render.MoveCamera(sf::Vector2f(-8.f * this->_speed, 0));
+    // if (this->KeyPress(sf::Keyboard::D) || this->KeyPress(sf::Keyboard::Right))
+    //     this->_render.MoveCamera(sf::Vector2f(8.f * this->_speed, 0));
+    // if (this->KeyPress(sf::Keyboard::Z) || this->KeyPress(sf::Keyboard::Up))
+    //     this->_render.MoveCamera(sf::Vector2f(0, -8.f * this->_speed));
+    // if (this->KeyPress(sf::Keyboard::S) || this->KeyPress(sf::Keyboard::Down))
+    //     this->_render.MoveCamera(sf::Vector2f(0, 8.f * this->_speed));
+    if (this->KeyPress(sf::Keyboard::P))
+        this->_render.setPlayerFocus(nullptr);
+    if (this->KeyPress(sf::Keyboard::T))
+        this->_render.unsetTileFocus();
     if (this->_mousePressed) {
         this->_render.testFocus(sf::Mouse::getPosition(this->_window));
         this->_mousePressed = false;
