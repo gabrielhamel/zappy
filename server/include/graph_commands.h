@@ -14,5 +14,6 @@ void exec_graph_cmd(sock_t *cli, sock_list_t *list, char **arg, zarg_t *zarg);
 
 // Liste des commandes graphiques
 void cmd_graph_msz(sock_t *cli, sock_list_t *list, char **arg, zarg_t *zarg);
+void cmd_graph_bct(sock_t *cli, sock_list_t *list, char **arg, zarg_t *zarg);
 
 #endif

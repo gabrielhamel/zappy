@@ -15,7 +15,7 @@ void link_top(tile_t **graph, size_t w, size_t h)
         }
     }
     for (size_t x = 0; x < w; x++) {
-        graph[x][0].top = &graph[x][h];
+        graph[x][0].top = &graph[x][h - 1];
     }
 }
 
@@ -27,7 +27,7 @@ void link_right(tile_t **graph, size_t w, size_t h)
         }
     }
     for (size_t y = 0; y < h; y++) {
-        graph[w][y].right = &graph[0][y];
+        graph[w - 1][y].right = &graph[0][y];
     }
 }
 
@@ -39,7 +39,7 @@ void link_bottom(tile_t **graph, size_t w, size_t h)
         }
     }
     for (size_t x = 0; x < w; x++) {
-        graph[x][h].bottom = &graph[x][0];
+        graph[x][h - 1].bottom = &graph[x][0];
     }
 }
 
@@ -51,6 +51,6 @@ void link_left(tile_t **graph, size_t w, size_t h)
         }
     }
     for (size_t y = 0; y < h; y++) {
-        graph[0][y].left = &graph[w][y];
+        graph[0][y].left = &graph[w - 1][y];
     }
 }

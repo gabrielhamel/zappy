@@ -11,6 +11,8 @@
 #include "server.h"
 #include "map.h"
 
+#define GET_GAME(x) ((game_t *)(x->start->socket->data))
+
 typedef struct s_team {
     sock_t *sock;
     size_t nb_clients;
@@ -25,7 +27,7 @@ typedef struct s_game {
 // Constructeur et destructeur du game
 void *init_game(const sock_t *cli);
 void delete_game(const sock_t *cli, void *data);
-void *initialize_teams(zarg_t *zarg);
+void *initialize_game_args(game_t* game, zarg_t *zarg);
 
 bool check_team_names(char **arg, zarg_t *zarg, sock_t *cli);
 
