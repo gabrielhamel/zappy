@@ -8,7 +8,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-
+#include "utils.h"
 #include "map.h"
 
 void init_tile(tile_t* tile)
@@ -41,7 +41,7 @@ void link_map(tile_t **graph, size_t w, size_t h)
         }
     }
     link_top(graph, w, h);
-    // link_right(graph, w, h);
+    link_right(graph, w, h);
     link_bottom(graph, w, h);
     link_left(graph, w, h);
 }
@@ -53,13 +53,12 @@ void add_random_rock(map_t map)
 
 char *tile_to_string(tile_t *tile)
 {
-    char *res;
+    char *res = "";
     char temp[12];
 
     memset(temp, 0, 12);
     sprintf(temp, "%d", tile->items[FOOD]);
     str_add(2, res, temp);
-
     for (size_t i = 0; i < N_ITEMS; i ++) {
         memset(temp, 0, 12);
         sprintf(temp, "%d", tile->items[FOOD]);
