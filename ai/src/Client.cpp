@@ -39,6 +39,8 @@ void zpy::Client::parseCommand(const std::vector<std::string> &toks)
         this->parseRemainingClient(toks);
     else if (this->_line == 3)
         this->parseMapSize(toks);
+    else if (toks[0] == "message")
+        this->_broadcast.push_back(Message(toks[2], std::stoi(toks[1])));
 }
 
 void zpy::Client::parseRemainingClient(const std::vector<std::string> &toks)
@@ -61,19 +63,23 @@ void zpy::Client::commandStart()
         this->parseCommand(cmd);
 }
 
-std::vector<std::vector<std::string>> zpy::Client::commandEnd()
+std::vector<std::string> zpy::Client::commandEnd()
 {
-    this->_server->waitData();
-    auto data = this->_server->readData();
-    auto buff = Utils::extract(data);
-    for (auto &cmd : buff) {
-        this->parseCommand(cmd);
-        std::cout << "server:";
-        for (auto &i : cmd)
-            std::cout << " " << i;
-        std::cout << std::endl;
-    }
-    return buff;
+    std::vector<std::string> res;
+    do {
+        this->_server->waitData();
+        auto data = this->_server->readData();
+        auto buff = Utils::extract(data);
+        for (auto &cmd : buff) {
+            this->parseCommand(cmd);
+            std::cout << "server:";
+            for (auto &i : cmd)
+                std::cout << " " << i;
+            std::cout << std::endl;
+        }
+        res = this->selectGoodAnswer(buff);
+    } while (res.size() == 0);
+    return res;
 }
 
 void zpy::Client::setRefreshTime(float millisec)
@@ -86,6 +92,14 @@ unsigned int zpy::Client::getEllapsedTime() const
     return this->_server->getEllapsedTime();
 }
 
+std::vector<std::string> zpy::Client::selectGoodAnswer(const std::vector<std::vector<std::string>> &cmd)
+{
+    for (auto line : cmd)
+        if (line[0] != "message" && line[0] != "dead")
+            return line;
+    return std::vector<std::string>();
+}
+
 void zpy::Client::forward()
 {
     auto command = "Forward\n";
@@ -93,7 +107,7 @@ void zpy::Client::forward()
 
     this->commandStart();
     this->_server->writeData(command);
-    auto buff = this->commandEnd();
+    this->commandEnd();
 }
 
 void zpy::Client::right()
@@ -103,7 +117,7 @@ void zpy::Client::right()
 
     this->commandStart();
     this->_server->writeData(command);
-    auto buff = this->commandEnd();
+    this->commandEnd();
 }
 
 void zpy::Client::left()
@@ -113,7 +127,7 @@ void zpy::Client::left()
 
     this->commandStart();
     this->_server->writeData(command);
-    auto buff = this->commandEnd();
+    this->commandEnd();
 }
 
 zpy::Client::Response zpy::Client::take(const zpy::Client::Object &object)
@@ -124,7 +138,7 @@ zpy::Client::Response zpy::Client::take(const zpy::Client::Object &object)
     this->commandStart();
     this->_server->writeData(command);
     auto buff = this->commandEnd();
-    if (buff[0][0] == "ok")
+    if (buff[0] == "ok")
         return zpy::Client::Response::OK;
     return zpy::Client::Response::KO;
 }
@@ -138,12 +152,42 @@ zpy::Client::Inventory zpy::Client::inventory()
     this->_server->writeData(command);
     auto buff = this->commandEnd();
     zpy::Client::Inventory inv(
-        std::stoi(buff[0][2]),
-        std::stoi(buff[0][4]),
-        std::stoi(buff[0][6]),
-        std::stoi(buff[0][8]),
-        std::stoi(buff[0][10]),
-        std::stoi(buff[0][12]),
-        std::stoi(buff[0][14]));
+        std::stoi(buff[2]),
+        std::stoi(buff[4]),
+        std::stoi(buff[6]),
+        std::stoi(buff[8]),
+        std::stoi(buff[10]),
+        std::stoi(buff[12]),
+        std::stoi(buff[14]));
     return inv;
+}
+
+void zpy::Client::broadcast(const std::string &msg)
+{
+    auto command = "Broadcast " + msg + "\n";
+    std::cout << "client: " << command;
+
+    this->commandStart();
+    this->_server->writeData(command);
+    this->commandEnd();
+}
+
+bool zpy::Client::haveBroadcast()
+{
+    if (this->_broadcast.size() != 0)
+        return true;
+    return false;
+}
+
+zpy::Client::Message zpy::Client::getBroadcast()
+{
+    auto msg = this->_broadcast.front();
+
+    this->_broadcast.pop_front();
+    return msg;
+}
+
+void zpy::Client::resfresh()
+{
+    this->commandStart();
 }

@@ -39,10 +39,12 @@ std::string zpy::Application::usage(const std::string &progName)
 
 void zpy::Application::run()
 {
+    this->_client->broadcast("salut");
     while (1) {
-        this->_client->forward();
-        this->_client->left();
-        this->_client->forward();
-        this->_client->right();
+        this->_client->resfresh();
+        if (this->_client->haveBroadcast()) {
+            auto msg = this->_client->getBroadcast();
+            std::cout << msg.msg << " " << msg.direction << std::endl;
+        }
     }
 }

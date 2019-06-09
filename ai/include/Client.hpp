@@ -8,6 +8,7 @@
 #pragma once
 
 #include <memory>
+#include <list>
 #include "Utils.hpp"
 #include "Server.hpp"
 
@@ -21,6 +22,17 @@ namespace zpy {
             enum Response {
                 KO,
                 OK
+            };
+            /*
+            ** Broadcast message
+            */
+            class Message {
+                public:
+                    Message(const std::string &msg, unsigned int direction);
+                    Message(const zpy::Client::Message &copy);
+                    zpy::Client::Message &operator=(const zpy::Client::Message &src);
+                    std::string msg;
+                    unsigned int direction;
             };
             /*
             ** Inventory
@@ -113,11 +125,16 @@ namespace zpy {
             void forward();
             void right();
             void left();
+            void resfresh();
             zpy::Client::Response take(const zpy::Client::Object &object);
             zpy::Client::Inventory inventory();
+            void broadcast(const std::string &msg);
+            bool haveBroadcast();
+            zpy::Client::Message getBroadcast();
         private:
+            std::vector<std::string> selectGoodAnswer(const std::vector<std::vector<std::string>> &cmd);
             void commandStart();
-            std::vector<std::vector<std::string>> commandEnd();
+            std::vector<std::string> commandEnd();
             void parseCommand(const std::vector<std::string> &toks);
             void parseRemainingClient(const std::vector<std::string> &toks);
             void parseMapSize(const std::vector<std::string> &toks);
@@ -128,6 +145,7 @@ namespace zpy {
             std::array<unsigned int, 2> _mapSize;
             unsigned int _line;
             unsigned int _remainingPlayer;
+            std::list<zpy::Client::Message> _broadcast;
     };
 
 }
