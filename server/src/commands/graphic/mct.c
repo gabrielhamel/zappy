@@ -13,6 +13,9 @@ void cmd_graph_mct(sock_t *cli, sock_list_t *list, char **arg, zarg_t *zarg)
     game_t *game = GET_GAME(list);
     tile_t *tile;
 
+    (void)arg;
+    (void)zarg;
+
     for (size_t y = 0; y < game->map.h; y++) {
         for (size_t x = 0; x < game->map.w; x++) {
             tile = GET_TILE(game, 1, 1);

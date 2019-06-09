@@ -12,7 +12,7 @@
 #define LIST_CMD(x) &(ZAPPY_CLIENT(x)->client.ia->list_head)
 
 #include "ia.h"
-#include "player.h"
+#include "graphic.h"
 
 typedef struct buffer_cmd_s {
     char **cmd;
@@ -22,7 +22,7 @@ typedef struct buffer_cmd_s {
 
 typedef union {
     ia_t *ia;
-    player_t *graphic;
+    graphic_t *graphic;
 } un_cli_t;
 
 void list_dump(void *p_list);

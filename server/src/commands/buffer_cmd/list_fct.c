@@ -9,7 +9,6 @@
 #include <stdbool.h>
 #include "server.h"
 #include "buffer_cmd.h"
-#include "player.h"
 
 void list_insert(void *p_list, char **cmd, float time)
 {

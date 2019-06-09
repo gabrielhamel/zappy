@@ -11,7 +11,7 @@
 #include "graph_commands.h"
 #include "game.h"
 #include "buffer_cmd.h"
-#include "player.h"
+#include "graphic.h"
 
 static bool init_zappy_cli(sock_t *cli, sock_list_t *list, char **arg, zarg_t *zarg)
 {
@@ -19,8 +19,8 @@ static bool init_zappy_cli(sock_t *cli, sock_list_t *list, char **arg, zarg_t *z
     (void)list;
     if (arg[0] && !strcasecmp("GRAPHIC", arg[0])) {
         ZAPPY_CLIENT(cli)->cli_type = GRAPHICAL;
-        ZAPPY_CLIENT(cli)->client.graphic = malloc(sizeof(player_t));
-        memset(ZAPPY_CLIENT(cli)->client.graphic, 0, sizeof(player_t));
+        ZAPPY_CLIENT(cli)->client.graphic = malloc(sizeof(graphic_t));
+        memset(ZAPPY_CLIENT(cli)->client.graphic, 0, sizeof(graphic_t));
         return (true);
     }
     else if (strcasecmp("GRAPHIC", arg[0]) && check_team_names(arg, zarg, cli)) {
