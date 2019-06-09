@@ -26,6 +26,7 @@ bool init_map(map_t *map, size_t w, size_t h)
         if (!(map->graph[i] = malloc(sizeof(tile_t) * w)))
             return (false);
     }
+    link_map(map->graph, w, h);
     return (true);
 }
 
@@ -39,7 +40,7 @@ void link_map(tile_t **graph, size_t w, size_t h)
         }
     }
     link_top(graph, w, h);
-    link_right(graph, w, h);
+    // link_right(graph, w, h);
     link_bottom(graph, w, h);
     link_left(graph, w, h);
 }

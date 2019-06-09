@@ -32,8 +32,10 @@ typedef struct map_s {
     tile_t **graph;
 } map_t;
 
-
 bool init_map(map_t *map, size_t w, size_t h);
+
+void link_map(tile_t **graph, size_t w, size_t h);
+
 void link_top(tile_t **graph, size_t w, size_t h);
 void link_right(tile_t **graph, size_t w, size_t h);
 void link_bottom(tile_t **graph, size_t w, size_t h);
