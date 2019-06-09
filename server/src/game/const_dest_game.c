@@ -7,7 +7,7 @@
 
 #include "game.h"
 
-void *initialize_game_args(game_t* game, zarg_t *zarg)
+void initialize_game_args(game_t* game, zarg_t *zarg)
 {
     size_t i;
 

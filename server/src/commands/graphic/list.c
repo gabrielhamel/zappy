@@ -11,10 +11,13 @@ static graph_cmd_t cmd_g[] = {
     {"msz", cmd_graph_msz},
     {"bct", cmd_graph_bct},
     {"mct", cmd_graph_mct},
-    {"tna", NULL},
+    {"tna", cmd_graph_tna},
     {"ppo", NULL},
     {"plv", NULL},
-    {"pin", NULL}
+    {"pin", NULL},
+    {"sgt", cmd_graph_sgt},
+    {"sst", cmd_graph_sst}
+
 };
 
 void exec_graph_cmd(sock_t *cli, sock_list_t *list, char **arg, zarg_t *zarg)
