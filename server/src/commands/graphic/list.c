@@ -10,7 +10,7 @@
 static graph_cmd_t cmd_g[] = {
     {"msz", cmd_graph_msz},
     {"bct", cmd_graph_bct},
-    {"mct", NULL},
+    {"mct", cmd_graph_mct},
     {"tna", NULL},
     {"ppo", NULL},
     {"plv", NULL},
