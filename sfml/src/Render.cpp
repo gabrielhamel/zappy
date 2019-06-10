@@ -7,6 +7,7 @@
 
 #include "Render.hpp"
 #include <algorithm>
+#include <cmath>
 #include <iostream>
 
 static const std::array<sf::Vector2f, 7> hept = {
@@ -343,9 +344,9 @@ void Render::testFocus(sf::Vector2i pos)
         && pos.x < SPR_SIZE * this->_size.x * this->_scale + this->_camera.x
         && pos.y >= SPR_SIZE * -1 * (this->_size.y - 1) * this->_scale + this->_camera.y) {
             auto x = pos.x - this->_camera.x;
-            auto y = (SPR_SIZE * -1 * (this->_size.y - 1) * this->_scale + this->_camera.y) - pos.y + 960;
+            auto y = pos.y - this->_camera.y;
             x = (int)(x / (SPR_SIZE * this->_scale));
-            y = (int)(y / (SPR_SIZE * this->_scale));
+            y = (int)(1 - (y / (SPR_SIZE * this->_scale)));
             this->_tileFocus.x = x;
             this->_tileFocus.y = y;
             for (auto &team : this->_teams) {
