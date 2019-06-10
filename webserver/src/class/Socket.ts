@@ -12,9 +12,9 @@ class Socket
 		this.tcpSocket = new net.Socket();
 	}
 
-	private receiveServerDatas = (datas:string):void =>
+	private receiveServerDatas = (datas:ArrayBuffer):void =>
 	{
-		this.ioSocket.emit("datas", datas);
+		this.ioSocket.emit("data", String.fromCharCode.apply(null, datas));
 		console.log("data received from server:" + datas);
 	}
 	private sendDatasToServer = (datas:string):void =>

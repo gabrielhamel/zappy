@@ -45,39 +45,13 @@ var Camera = /** @class */ (function () {
         this.focus = true;
         this.shiftingSpeedX = 0;
         this.shiftingSpeedZ = 0;
-        var position = new BABYLON.Vector3(50, 30, 50);
-        this.camera = new BABYLON.UniversalCamera("mainCamera", position, scene);
+        var target = BABYLON.Vector3.Zero();
+        this.camera = new BABYLON.ArcRotateCamera("mainCamera", Math.PI / 2, Math.PI / 4, 30, target, scene);
         this.camera.attachControl(scene.getEngine().getRenderingCanvas());
-        this.camera.setTarget(Camera.TARGET);
     }
-    /*private isNearFromBorders = ():boolean =>
-    {
-        if (this.camera.position.x >= 110) {
-            this.camera.position.x -= 1;
-            this.shiftingSpeedX = 0;
-            return (false);
-        }
-        if (this.camera.position.x <= Camera.TARGET.x) {
-            this.camera.position.x = Camera.TARGET.x + 1;
-            this.shiftingSpeedX = 0;
-            return (false);
-        }
-        if (this.camera.position.z >= 80) {
-            this.camera.position.z -= 1;
-            this.shiftingSpeedZ = 0;
-            return (false);
-        }
-        if (this.camera.position.z <= 20) {
-            this.camera.position.z = 21;
-            this.shiftingSpeedZ = 0;
-            return (false);
-        }
-        return (true);
-    }*/
-    Camera.prototype.setFocus = function (focus) {
-        this.focus = focus;
+    Camera.prototype.setTarget = function (target) {
+        this.camera.setTarget(target);
     };
-    Camera.TARGET = new BABYLON.Vector3(30, 0, 50);
     Camera.KEYBOARD_SPEED = 10;
     Camera.MOUSE_SPEED = 1 / 20;
     Camera.ZOOM_SPEED = 1 / 10;
@@ -97,7 +71,6 @@ var Game = /** @class */ (function () {
         this.scene = new BABYLON.Scene(this.engine);
         this.stage = new Stage(this.socketManager, this.scene);
         this.camera = new Camera(this.scene);
-        this.stage.createGround(10, 10);
         this.initialiseScene();
         this.engine.runRenderLoop(this.render);
     }
@@ -111,14 +84,41 @@ var Game = /** @class */ (function () {
     Game.prototype.getStage = function () {
         return (this.stage);
     };
+    Game.prototype.setSize = function (size) {
+        this.stage.createGround(size.x, size.y);
+        this.camera.setTarget(new BABYLON.Vector3(size.x / 2, 0, size.y / 2));
+    };
     return Game;
 }());
 var SocketManager = /** @class */ (function () {
     function SocketManager(game) {
+        var _this = this;
         this.socket = io();
+        this.commands = new Map();
+        this.getDatas = function (datas) {
+            var array = datas.split("\n");
+            var len = array.length;
+            var cur;
+            for (var i = 0; i < len; i++) {
+                cur = array[i].split(" ");
+                if (_this.commands.get(cur[i]))
+                    _this.commands.get(cur[i])(cur);
+            }
+        };
+        this.msz = function (datas) {
+            var vector = new BABYLON.Vector2(0, 0);
+            vector.x = parseInt(datas[1]);
+            vector.y = parseInt(datas[2]);
+            _this.game.setSize(vector);
+        };
         this.game = game;
-        this.socket.emit("data", "GRAPHICAL");
+        this.initialise();
+        this.socket.emit("data", "GRAPHIC\n");
+        this.socket.on("data", this.getDatas);
     }
+    SocketManager.prototype.initialise = function () {
+        this.commands.set("msz", this.msz);
+    };
     return SocketManager;
 }());
 var Stage = /** @class */ (function () {
@@ -157,9 +157,6 @@ var Stage = /** @class */ (function () {
     };
     Stage.prototype.render = function () {
     };
-    Stage.GROUND_COLOR = new BABYLON.Color3(0, 0.75, 0);
-    Stage.SELECTION_ELEVATION = 0.2;
-    Stage.SIZE = 100;
     return Stage;
 }());
 var Key = /** @class */ (function () {

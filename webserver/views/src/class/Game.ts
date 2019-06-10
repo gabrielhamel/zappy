@@ -16,7 +16,6 @@ class Game
 		this.stage = new Stage(this.socketManager, this.scene);
 		this.camera = new Camera(this.scene);
 
-		this.stage.createGround(10, 10);
 		this.initialiseScene();
 		this.engine.runRenderLoop(this.render);
 	}
@@ -34,6 +33,11 @@ class Game
 		this.scene.render();
 	}
 	
+	public setup(size:BABYLON.Vector2)
+	{
+		this.stage.createGround(size.x, size.y);
+		this.camera.setTarget(new BABYLON.Vector3(size.x / 2, 0, size.y / 2));
+	}
 	public getStage():Stage
 	{
 		return (this.stage);

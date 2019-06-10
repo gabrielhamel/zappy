@@ -22,7 +22,8 @@ class Stage
 		this.light.diffuse = new BABYLON.Color3(1, 1, 1);
 		this.light.specular = new BABYLON.Color3(0, 0, 0);
 
-		BABYLON.SceneLoader.LoadAssetContainer("/assets/", "chungus.glb", scene, (container:BABYLON.AssetContainer) => {
+		BABYLON.SceneLoader.LoadAssetContainer("/assets/", "chungus.glb", scene, (container:BABYLON.AssetContainer) =>
+		{
 			this.model = container.meshes[0];
 			this.model.scaling = new BABYLON.Vector3(0.35, 0.35, 0.35);
 			this.model.position.y = 0.5;
@@ -39,7 +40,7 @@ class Stage
 	public createGround(width:number, height:number):void
 	{
 		let cur:BABYLON.InstancedMesh;
-		
+
 		for (let i:number = width - 1; i >= 0; i--) {
 			for (let j:number = height - 1; j >= 0; j--) {
 				cur = this.blocCollection.getInstance(0);

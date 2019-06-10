@@ -5,7 +5,7 @@ var Socket = /** @class */ (function () {
     function Socket(socket) {
         var _this = this;
         this.receiveServerDatas = function (datas) {
-            _this.ioSocket.emit("datas", datas);
+            _this.ioSocket.emit("data", String.fromCharCode.apply(null, datas));
             console.log("data received from server:" + datas);
         };
         this.sendDatasToServer = function (datas) {
