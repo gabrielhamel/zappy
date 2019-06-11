@@ -69,7 +69,7 @@ var Game = /** @class */ (function () {
         this.canvas = canvas;
         this.engine = new BABYLON.Engine(this.canvas, true);
         this.scene = new BABYLON.Scene(this.engine);
-        this.stage = new Stage(this.socketManager, this.scene);
+        this.stage = new Stage(this.scene);
         this.camera = new Camera(this.scene);
         this.initialiseScene();
         this.engine.runRenderLoop(this.render);
@@ -90,6 +90,28 @@ var Game = /** @class */ (function () {
         return (this.stage);
     };
     return Game;
+}());
+var MeshBuilder = /** @class */ (function () {
+    function MeshBuilder(modelName, scene) {
+        var _this = this;
+        this.nbClones = 0;
+        this.load = function (meshes) {
+            _this.mesh = meshes[0];
+            _this.mesh.scaling = new BABYLON.Vector3(0.35, 0.35, 0.35);
+            _this.mesh.position.y = 0.5;
+            _this.mesh.isVisible = false;
+        };
+        this.ID = modelName;
+        BABYLON.SceneLoader.ImportMesh("", "/assets/", modelName, scene, this.load);
+    }
+    MeshBuilder.prototype.getInstance = function () {
+        var output;
+        output = this.mesh.createInstance(this.ID + this.nbClones);
+        output.isVisible = true;
+        this.nbClones++;
+        return (output);
+    };
+    return MeshBuilder;
 }());
 var SocketManager = /** @class */ (function () {
     function SocketManager(game) {
@@ -127,27 +149,27 @@ var SocketManager = /** @class */ (function () {
     return SocketManager;
 }());
 var Stage = /** @class */ (function () {
-    function Stage(socketManager, scene) {
+    function Stage(scene) {
         var _this = this;
         this.blocs = new Array();
         this.tiles = new Array();
         this.onPointerDown = function (event) {
-            var picked = _this.scene.pick(event.clientX, event.clientY);
+            var picked = _this.SCENE.pick(event.clientX, event.clientY);
+            if (!picked || !picked.hit)
+                return;
+            picked.pickedMesh.position.y -= 0.1;
+            if (_this.selected)
+                _this.selected.position.y += 0.1;
+            _this.selected = picked.pickedMesh;
         };
         var lightDir = new BABYLON.Vector3(0, 1, 0);
-        this.light = new BABYLON.HemisphericLight("light", lightDir, scene);
-        this.scene = scene;
-        this.canvas = scene.getEngine().getRenderingCanvas();
-        this.socketManager = socketManager;
+        this.CHUNGUS = new MeshBuilder("chungus.glb", scene);
+        this.CANVAS = scene.getEngine().getRenderingCanvas();
+        this.SCENE = scene;
         this.blocCollection = new BlocCollection(scene);
+        this.light = new BABYLON.HemisphericLight("light", lightDir, scene);
         this.light.diffuse = new BABYLON.Color3(1, 1, 1);
         this.light.specular = new BABYLON.Color3(0, 0, 0);
-        BABYLON.SceneLoader.LoadAssetContainer("/assets/", "chungus.glb", scene, function (container) {
-            _this.model = container.meshes[0];
-            _this.model.scaling = new BABYLON.Vector3(0.35, 0.35, 0.35);
-            _this.model.position.y = 0.5;
-            container.addAllToScene();
-        });
         window.addEventListener("pointerdown", this.onPointerDown);
     }
     Stage.prototype.addTile = function (datas) {
@@ -157,8 +179,9 @@ var Stage = /** @class */ (function () {
         for (var i = 3; i < datas.length; i++) {
             stats.push(parseInt(datas[i]));
         }
-        tile = new Tile(stats[0], stats[1], stats[2], stats[3], stats[4], stats[5], stats[6], this.scene);
-        tile.initialise(cur % Game.size.x, ~~(cur / Game.size.x));
+        tile = new Tile(stats[0], stats[1], stats[2], stats[3], stats[4], stats[5], stats[6], this.SCENE);
+        tile.initialise(parseInt(datas[1]), parseInt(datas[2]));
+        tile.startAnimations(this.SCENE);
         this.tiles.push(tile);
     };
     Stage.prototype.createGround = function (width, height) {
@@ -179,6 +202,8 @@ var Stage = /** @class */ (function () {
 var Tile = /** @class */ (function () {
     function Tile(food, linemate, deraumere, sibur, mendiane, phiras, thystame, scene) {
         this.stats = new Map();
+        this.sprites = new Array();
+        var size = Game.size.x * Game.size.y * 7;
         this.stats.set("food", food);
         this.stats.set("linemate", linemate);
         this.stats.set("deraumere", deraumere);
@@ -186,10 +211,29 @@ var Tile = /** @class */ (function () {
         this.stats.set("mendiane", mendiane);
         this.stats.set("phiras", phiras);
         this.stats.set("thystame", thystame);
+        this.createAnimation();
         if (!Tile.spriteManager)
-            Tile.spriteManager = new BABYLON.SpriteManager("spriteManager" + Tile.nb, "/assets/resources.png", 5000, 16, scene);
+            Tile.spriteManager = new BABYLON.SpriteManager("spriteManager" + Tile.nb, "/assets/resources.png", size, 16, scene);
         Tile.nb++;
     }
+    Tile.prototype.createAnimation = function () {
+        var keys = new Array();
+        var rnd = Math.random() * Tile.ANIMATION_BUMP;
+        this.animation = new BABYLON.Animation("tileAnimation" + Tile.nb, "position.y", Tile.ANIMATION_FPS, BABYLON.Animation.ANIMATIONTYPE_FLOAT, BABYLON.Animation.ANIMATIONLOOPMODE_CYCLE);
+        keys.push({
+            frame: 0,
+            value: Tile.Y
+        });
+        keys.push({
+            frame: Tile.ANIMATION_FPS,
+            value: Tile.Y - Tile.ANIMATION_BUMP / 2 + rnd
+        });
+        keys.push({
+            frame: Tile.ANIMATION_FPS * 2,
+            value: Tile.Y
+        });
+        this.animation.setKeys(keys);
+    };
     Tile.prototype.generate = function (nb, type) {
         var ID = "tile" + Tile.nb + "-" + type;
         var sprite;
@@ -198,9 +242,12 @@ var Tile = /** @class */ (function () {
             sprite.cellIndex = type;
             sprite.isPickable = false;
             sprite.position.x = this.position.x + Math.random();
-            sprite.position.y = 0.75;
+            sprite.position.y = Tile.Y;
             sprite.position.z = this.position.y + Math.random();
             sprite.size = 0.5;
+            sprite.animations = [];
+            sprite.animations.push(this.animation);
+            this.sprites.push(sprite);
         }
     };
     Tile.prototype.initialise = function (x, y) {
@@ -210,6 +257,14 @@ var Tile = /** @class */ (function () {
             this.generate(this.stats.get(ENTRIES[i]), i);
         }
     };
+    Tile.prototype.startAnimations = function (scene) {
+        for (var i = this.sprites.length - 1; i >= 0; i--) {
+            scene.beginAnimation(this.sprites[i], 0, Tile.ANIMATION_FPS * 2, true);
+        }
+    };
+    Tile.Y = 0.75;
+    Tile.ANIMATION_BUMP = 0.15;
+    Tile.ANIMATION_FPS = 10;
     Tile.nb = 0;
     Tile.spriteManager = null;
     return Tile;

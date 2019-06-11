@@ -14,7 +14,7 @@ class Game
 		this.canvas = canvas;
 		this.engine = new BABYLON.Engine(this.canvas, true);
 		this.scene = new BABYLON.Scene(this.engine);
-		this.stage = new Stage(this.socketManager, this.scene);
+		this.stage = new Stage(this.scene);
 		this.camera = new Camera(this.scene);
 
 		this.initialiseScene();

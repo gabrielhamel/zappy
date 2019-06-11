@@ -1,41 +1,40 @@
 class Stage
 {
-	private selectedObject:BABYLON.AbstractMesh;
-	private canvas:HTMLCanvasElement;
-	private light:BABYLON.HemisphericLight;
-	private scene:BABYLON.Scene;
+	private readonly CANVAS:HTMLCanvasElement;
+	private readonly CHUNGUS:MeshBuilder;
+	private readonly SCENE:BABYLON.Scene;
 	private blocs:Array<BABYLON.InstancedMesh> = new Array<BABYLON.InstancedMesh>();
-	private socketManager:SocketManager;
 	private blocCollection:BlocCollection;
-	private model:BABYLON.AbstractMesh;
+	private light:BABYLON.HemisphericLight;
+	private selected:BABYLON.AbstractMesh;
 	private tiles:Array<Tile> = new Array<Tile>();
 
-	constructor(socketManager:SocketManager, scene:BABYLON.Scene)
+	constructor(scene:BABYLON.Scene)
 	{
 		let lightDir = new BABYLON.Vector3(0, 1, 0);
 
-		this.light = new BABYLON.HemisphericLight("light", lightDir, scene);
-		this.scene = scene;
-		this.canvas = scene.getEngine().getRenderingCanvas();
-		this.socketManager = socketManager;
+		this.CHUNGUS = new MeshBuilder("chungus.glb", scene);
+		this.CANVAS = scene.getEngine().getRenderingCanvas();
+		this.SCENE = scene;
 		this.blocCollection = new BlocCollection(scene);
 
+		this.light = new BABYLON.HemisphericLight("light", lightDir, scene);
 		this.light.diffuse = new BABYLON.Color3(1, 1, 1);
 		this.light.specular = new BABYLON.Color3(0, 0, 0);
 
-		BABYLON.SceneLoader.LoadAssetContainer("/assets/", "chungus.glb", scene, (container:BABYLON.AssetContainer) =>
-		{
-			this.model = container.meshes[0];
-			this.model.scaling = new BABYLON.Vector3(0.35, 0.35, 0.35);
-			this.model.position.y = 0.5;
-			container.addAllToScene();
-		});
 		window.addEventListener("pointerdown", this.onPointerDown);
 	}
 
 	private onPointerDown = (event:PointerEvent):void =>
 	{
-		let picked:BABYLON.PickingInfo = this.scene.pick(event.clientX, event.clientY);
+		let picked:BABYLON.PickingInfo = this.SCENE.pick(event.clientX, event.clientY);
+
+		if (!picked || !picked.hit)
+			return;
+		picked.pickedMesh.position.y -= 0.1;
+		if (this.selected)
+			this.selected.position.y += 0.1;
+		this.selected = picked.pickedMesh;
 	}
 
 	public addTile(datas:Array<string>)
@@ -47,8 +46,9 @@ class Stage
 		for (let i:number = 3; i < datas.length; i++) {
 			stats.push(parseInt(datas[i]));
 		}
-		tile = new Tile(stats[0], stats[1], stats[2], stats[3], stats[4], stats[5], stats[6], this.scene);
-		tile.initialise(cur % Game.size.x, ~~(cur / Game.size.x));
+		tile = new Tile(stats[0], stats[1], stats[2], stats[3], stats[4], stats[5], stats[6], this.SCENE);
+		tile.initialise(parseInt(datas[1]), parseInt(datas[2]));
+		tile.startAnimations(this.SCENE);
 		this.tiles.push(tile);
 	}
 	public createGround(width:number, height:number):void
