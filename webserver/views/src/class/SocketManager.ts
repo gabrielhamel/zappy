@@ -15,6 +15,7 @@ class SocketManager
 	private initialise():void
 	{
 		this.commands.set("msz", this.msz);
+		this.commands.set("bct", this.bct);
 	}
 	private getDatas = (datas:any):void =>
 	{
@@ -24,8 +25,8 @@ class SocketManager
 
 		for (let i:number = 0; i < len; i++) {
 			cur = array[i].split(" ");
-			if (this.commands.get(cur[i]))
-				this.commands.get(cur[i])(cur);
+			if (this.commands.get(cur[0]))
+				this.commands.get(cur[0])(cur);
 		}
 	}
 	private msz = (datas:Array<string>) =>
@@ -35,5 +36,9 @@ class SocketManager
 		vector.x = parseInt(datas[1]);
 		vector.y = parseInt(datas[2]);
 		this.game.setup(vector);
+	}
+	private bct = (datas:Array<string>) =>
+	{
+		this.game.getStage().addTile(datas);
 	}
 }

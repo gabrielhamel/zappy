@@ -1,5 +1,6 @@
 class Game
 {
+	public static size:BABYLON.Vector2;
 	private canvas:HTMLCanvasElement;
 	private engine:BABYLON.Engine;
 	private scene:BABYLON.Scene;
@@ -35,6 +36,7 @@ class Game
 	
 	public setup(size:BABYLON.Vector2)
 	{
+		Game.size = size;
 		this.stage.createGround(size.x, size.y);
 		this.camera.setTarget(new BABYLON.Vector3(size.x / 2, 0, size.y / 2));
 	}

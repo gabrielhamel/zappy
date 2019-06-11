@@ -22,19 +22,19 @@ var BlocCollection = /** @class */ (function () {
         var cur;
         var material;
         var id;
-        for (var i = 0, len = BlocCollection.TYPE_COLORS.length; i < len; i++) {
+        for (var i = 0, len = BlocCollection.PATHS.length; i < len; i++) {
             id = this.blocs.length;
             cur = BABYLON.MeshBuilder.CreateBox("originalBloc" + id, { size: 1 }, scene);
             material = new BABYLON.StandardMaterial("blocMaterial" + id, scene);
-            material.diffuseColor = BlocCollection.TYPE_COLORS[i];
+            material.diffuseTexture = new BABYLON.Texture(BlocCollection.PATHS[i], scene);
             cur.material = material;
             cur.isVisible = false;
             this.blocs.push(cur);
         }
     }
     BlocCollection.ID_STRING = "blocInstance";
-    BlocCollection.TYPE_COLORS = [
-        new BABYLON.Color3(0, 0.6, 0),
+    BlocCollection.PATHS = [
+        "/assets/texture.png"
     ];
     BlocCollection.HEIGHTS = [0.05];
     BlocCollection.createdInstances = 0;
@@ -81,12 +81,13 @@ var Game = /** @class */ (function () {
             _this.engine.resize();
         });
     };
-    Game.prototype.getStage = function () {
-        return (this.stage);
-    };
-    Game.prototype.setSize = function (size) {
+    Game.prototype.setup = function (size) {
+        Game.size = size;
         this.stage.createGround(size.x, size.y);
         this.camera.setTarget(new BABYLON.Vector3(size.x / 2, 0, size.y / 2));
+    };
+    Game.prototype.getStage = function () {
+        return (this.stage);
     };
     return Game;
 }());
@@ -101,15 +102,18 @@ var SocketManager = /** @class */ (function () {
             var cur;
             for (var i = 0; i < len; i++) {
                 cur = array[i].split(" ");
-                if (_this.commands.get(cur[i]))
-                    _this.commands.get(cur[i])(cur);
+                if (_this.commands.get(cur[0]))
+                    _this.commands.get(cur[0])(cur);
             }
         };
         this.msz = function (datas) {
             var vector = new BABYLON.Vector2(0, 0);
             vector.x = parseInt(datas[1]);
             vector.y = parseInt(datas[2]);
-            _this.game.setSize(vector);
+            _this.game.setup(vector);
+        };
+        this.bct = function (datas) {
+            _this.game.getStage().addTile(datas);
         };
         this.game = game;
         this.initialise();
@@ -118,6 +122,7 @@ var SocketManager = /** @class */ (function () {
     }
     SocketManager.prototype.initialise = function () {
         this.commands.set("msz", this.msz);
+        this.commands.set("bct", this.bct);
     };
     return SocketManager;
 }());
@@ -125,6 +130,7 @@ var Stage = /** @class */ (function () {
     function Stage(socketManager, scene) {
         var _this = this;
         this.blocs = new Array();
+        this.tiles = new Array();
         this.onPointerDown = function (event) {
             var picked = _this.scene.pick(event.clientX, event.clientY);
         };
@@ -144,10 +150,21 @@ var Stage = /** @class */ (function () {
         });
         window.addEventListener("pointerdown", this.onPointerDown);
     }
+    Stage.prototype.addTile = function (datas) {
+        var cur = this.tiles.length;
+        var tile;
+        var stats = new Array();
+        for (var i = 3; i < datas.length; i++) {
+            stats.push(parseInt(datas[i]));
+        }
+        tile = new Tile(stats[0], stats[1], stats[2], stats[3], stats[4], stats[5], stats[6], this.scene);
+        tile.initialise(cur % Game.size.x, ~~(cur / Game.size.x));
+        this.tiles.push(tile);
+    };
     Stage.prototype.createGround = function (width, height) {
         var cur;
-        for (var i = width - 1; i >= 0; i--) {
-            for (var j = height - 1; j >= 0; j--) {
+        for (var i = width; i >= 0; i--) {
+            for (var j = height; j >= 0; j--) {
                 cur = this.blocCollection.getInstance(0);
                 cur.position.x = i;
                 cur.position.z = j;
@@ -158,6 +175,44 @@ var Stage = /** @class */ (function () {
     Stage.prototype.render = function () {
     };
     return Stage;
+}());
+var Tile = /** @class */ (function () {
+    function Tile(food, linemate, deraumere, sibur, mendiane, phiras, thystame, scene) {
+        this.stats = new Map();
+        this.stats.set("food", food);
+        this.stats.set("linemate", linemate);
+        this.stats.set("deraumere", deraumere);
+        this.stats.set("sibur", sibur);
+        this.stats.set("mendiane", mendiane);
+        this.stats.set("phiras", phiras);
+        this.stats.set("thystame", thystame);
+        if (!Tile.spriteManager)
+            Tile.spriteManager = new BABYLON.SpriteManager("spriteManager" + Tile.nb, "/assets/resources.png", 5000, 16, scene);
+        Tile.nb++;
+    }
+    Tile.prototype.generate = function (nb, type) {
+        var ID = "tile" + Tile.nb + "-" + type;
+        var sprite;
+        for (var i = 0; i < nb; i++) {
+            sprite = new BABYLON.Sprite(ID, Tile.spriteManager);
+            sprite.cellIndex = type;
+            sprite.isPickable = false;
+            sprite.position.x = this.position.x + Math.random();
+            sprite.position.y = 0.75;
+            sprite.position.z = this.position.y + Math.random();
+            sprite.size = 0.5;
+        }
+    };
+    Tile.prototype.initialise = function (x, y) {
+        var ENTRIES = new Array("food", "linemate", "deraumere", "sibur", "mendiane", "phiras", "thystame");
+        this.position = new BABYLON.Vector2(x, y);
+        for (var i = ENTRIES.length - 1; i >= 0; i--) {
+            this.generate(this.stats.get(ENTRIES[i]), i);
+        }
+    };
+    Tile.nb = 0;
+    Tile.spriteManager = null;
+    return Tile;
 }());
 var Key = /** @class */ (function () {
     function Key(codes) {

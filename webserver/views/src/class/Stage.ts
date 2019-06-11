@@ -8,6 +8,7 @@ class Stage
 	private socketManager:SocketManager;
 	private blocCollection:BlocCollection;
 	private model:BABYLON.AbstractMesh;
+	private tiles:Array<Tile> = new Array<Tile>();
 
 	constructor(socketManager:SocketManager, scene:BABYLON.Scene)
 	{
@@ -37,12 +38,25 @@ class Stage
 		let picked:BABYLON.PickingInfo = this.scene.pick(event.clientX, event.clientY);
 	}
 
+	public addTile(datas:Array<string>)
+	{
+		const cur:number = this.tiles.length;
+		let tile:Tile;
+		let stats:Array<number> = new Array<number>();
+
+		for (let i:number = 3; i < datas.length; i++) {
+			stats.push(parseInt(datas[i]));
+		}
+		tile = new Tile(stats[0], stats[1], stats[2], stats[3], stats[4], stats[5], stats[6], this.scene);
+		tile.initialise(cur % Game.size.x, ~~(cur / Game.size.x));
+		this.tiles.push(tile);
+	}
 	public createGround(width:number, height:number):void
 	{
 		let cur:BABYLON.InstancedMesh;
 
-		for (let i:number = width - 1; i >= 0; i--) {
-			for (let j:number = height - 1; j >= 0; j--) {
+		for (let i:number = width; i >= 0; i--) {
+			for (let j:number = height; j >= 0; j--) {
 				cur = this.blocCollection.getInstance(0);
 				cur.position.x = i;
 				cur.position.z = j;
@@ -50,7 +64,6 @@ class Stage
 			}
 		}
 	}
-
 	public render():void
 	{
 
