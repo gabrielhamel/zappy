@@ -46,7 +46,8 @@ SRC_AI =	./ai/src/Main.cpp							\
 			./ai/src/Parser.cpp							\
 			./ai/src/Utils.cpp							\
 			./ai/src/Inventory.cpp						\
-			./ai/src/Message.cpp
+			./ai/src/Message.cpp						\
+			./ai/src/Ia.cpp
 
 INC_DIR =	-I ./server/include \
 			-I ./ai/include

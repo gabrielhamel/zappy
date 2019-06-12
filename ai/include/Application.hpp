@@ -21,7 +21,7 @@ namespace zpy {
         private:
             void run();
             std::unique_ptr<zpy::Parser> _parser;
-            std::unique_ptr<zpy::Client> _client;
+            std::shared_ptr<zpy::Client> _client;
     };
 
 }

@@ -6,6 +6,7 @@
 */
 
 #include <iostream>
+#include "Ia.hpp"
 #include "Application.hpp"
 
 zpy::Application::Application(int ac, char **av)
@@ -14,7 +15,7 @@ zpy::Application::Application(int ac, char **av)
     if (this->_parser->hasHelp() == true)
         std::cout << zpy::Application::usage(av[0]) << std::endl;
     else {
-        this->_client = std::unique_ptr<zpy::Client>(new zpy::Client(this->_parser->getHostname(),
+        this->_client = std::shared_ptr<zpy::Client>(new zpy::Client(this->_parser->getHostname(),
                                                                 this->_parser->getPort(),
                                                                 this->_parser->getTeam()));
         this->run();
@@ -39,12 +40,5 @@ std::string zpy::Application::usage(const std::string &progName)
 
 void zpy::Application::run()
 {
-    this->_client->broadcast("salut");
-    while (1) {
-        this->_client->resfresh();
-        if (this->_client->haveBroadcast()) {
-            auto msg = this->_client->getBroadcast();
-            std::cout << msg.msg << " " << msg.direction << std::endl;
-        }
-    }
+    auto ia = zpy::Ia(this->_client);
 }

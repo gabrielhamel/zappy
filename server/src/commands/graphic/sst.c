@@ -12,5 +12,5 @@ void cmd_graph_sst(sock_t *cli, sock_list_t *list, char **arg, zarg_t *zarg)
 {
     (void)list;
     (void)arg;
-    dprintf(cli->fd, "sst %f", zarg->freq);
+    dprintf(cli->fd, "sst %.0f\n", zarg->freq);
 }

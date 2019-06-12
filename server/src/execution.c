@@ -13,6 +13,14 @@
 #include "buffer_cmd.h"
 #include "graphic.h"
 
+static void send_graphics_informations(sock_t *cli, sock_list_t *list, zarg_t *zarg)
+{
+    cmd_graph_msz(cli, list, NULL, zarg);
+    cmd_send_sgt(cli, zarg);
+    cmd_graph_bct_all(cli, list);
+    cmd_tna_all_team(cli, zarg);
+}
+
 static bool init_zappy_cli(sock_t *cli, sock_list_t *list, char **arg, zarg_t *zarg)
 {
     (void)zarg;
@@ -21,6 +29,7 @@ static bool init_zappy_cli(sock_t *cli, sock_list_t *list, char **arg, zarg_t *z
         ZAPPY_CLIENT(cli)->cli_type = GRAPHICAL;
         ZAPPY_CLIENT(cli)->client.graphic = malloc(sizeof(graphic_t));
         memset(ZAPPY_CLIENT(cli)->client.graphic, 0, sizeof(graphic_t));
+        send_graphics_informations(cli, list, zarg);
         return (true);
     }
     else if (strcasecmp("GRAPHIC", arg[0]) && check_team_names(arg, zarg, cli)) {
