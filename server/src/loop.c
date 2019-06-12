@@ -53,8 +53,11 @@ int launch_zappy(zarg_t *zarg)
 
     list->tab = NULL;
     tmp = socket_serv_init(zarg->port, init_game, delete_game);
+    if (tmp == NULL) {
+        socket_list_destroy(list);
+        return 84;
+    }
     initialize_game_args(tmp->data, zarg);
-
     if (tmp == NULL)
         return (84);
     socket_list_add(list, tmp);

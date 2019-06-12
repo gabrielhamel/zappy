@@ -47,13 +47,16 @@ sock_t *socket_serv_init(uint16_t port, ctor_t ctor, dtor_t dtor)
     socket->info.sin_family = AF_INET;
     socket->info.sin_addr.s_addr = INADDR_ANY;
     if (bind(socket->fd, (struct sockaddr *)&socket->info,
-    sizeof(struct sockaddr_in)) == -1)
+    sizeof(struct sockaddr_in)) == -1) {
+        socket_destroy(socket);
         return (NULL);
-    if (listen(socket->fd, SOMAXCONN) == -1)
+    }
+    if (listen(socket->fd, SOMAXCONN) == -1) {
+        socket_destroy(socket);
         return (NULL);
+    }
     socket->type = SERVER;
-    getsockname(socket->fd, (struct sockaddr *)&socket->info,
-    &len);
+    getsockname(socket->fd, (struct sockaddr *)&socket->info, &len);
     return (socket);
 }
 

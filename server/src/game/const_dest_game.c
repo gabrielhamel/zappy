@@ -7,6 +7,13 @@
 
 #include "game.h"
 
+static void destroy_map(map_t *map)
+{
+    for (size_t y = 0; y < map->h; y++)
+        free(map->graph[y]);
+    free(map->graph);
+}
+
 void initialize_game_args(game_t* game, zarg_t *zarg)
 {
     size_t i;
@@ -32,7 +39,14 @@ void *init_game(const sock_t *cli)
 
 void delete_game(const sock_t *cli, void *data)
 {
+    game_t *game = data;
     (void)cli;
-    (void)data;
-    // destroy_array();
+
+    if (game->teams) {
+        for (size_t i = 0; i < game->nb_teams; i++)
+            free(game->teams[i]);
+        free(game->teams);
+    }
+    destroy_map(&game->map);
+    free(data);
 }
