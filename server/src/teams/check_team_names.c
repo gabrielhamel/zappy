@@ -23,8 +23,7 @@ bool check_team_names(char **arg, game_t *game, sock_t *cli, zarg_t *zarg)
     nb_ia = team->nb_clients;
     if ((unsigned int)nb_ia == zarg->clients_nb)
         return false;
-    for (i = 0; team->sock[i] != NULL; i++)
-        i++;
+    for (i = 0; team->sock[i] != NULL; i++);
     team->sock[i] = cli;
     team->nb_clients++;
     printf("New IA %d\n", cli->fd);

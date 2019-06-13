@@ -25,5 +25,6 @@ void cmd_graph_bct_all(sock_t *cli, sock_list_t *list);
 void cmd_send_sgt(sock_t *cli, zarg_t *zarg);
 void cmd_tna_all_team(sock_t *cli, zarg_t *zarg);
 void send_all_graphics(sock_list_t *list, const char *s);
+void send_all_players(sock_t *graph, sock_list_t *list);
 
 #endif

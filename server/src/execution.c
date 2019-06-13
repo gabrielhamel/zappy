@@ -20,10 +20,12 @@ static void send_graphics_informations(sock_t *cli, sock_list_t *list, zarg_t *z
     cmd_send_sgt(cli, zarg);
     cmd_graph_bct_all(cli, list);
     cmd_tna_all_team(cli, zarg);
+    send_all_players(cli, list);
 }
 
-static void new_player_connection(sock_t *cli, char *team, game_t *game, sock_list_t *list)
+static void new_player_connection(sock_t *cli, char *team, zarg_t *zarg, sock_list_t *list)
 {
+    game_t *game = GET_GAME(list);
     ia_t *ia = ZAPPY_CLIENT(cli)->client.ia;
     char buff[4096] = {0};
     size_t i = 0;
@@ -35,6 +37,7 @@ static void new_player_connection(sock_t *cli, char *team, game_t *game, sock_li
     ia->y = rand() % game->map.h;
     ia->ori = rand() % 4 + 1;
     ia->level = 1;
+    dprintf(cli->fd, "%ld\n%d %d\n", zarg->clients_nb - ia->team->nb_clients, zarg->width, zarg->height);
     sprintf(buff, "pnw %d %ld %ld %d %d %s\n", ia->id, ia->x, ia->y, ia->ori, ia->level, team);
     send_all_graphics(list, buff);
 }
@@ -43,20 +46,20 @@ static bool init_zappy_cli(sock_t *cli, sock_list_t *list, char **arg, zarg_t *z
 {
     (void)zarg;
     (void)list;
-    if (arg[0] && !strcasecmp("GRAPHIC", arg[0])) {
+    if (arg[0] && !strcmp("GRAPHIC", arg[0])) {
         ZAPPY_CLIENT(cli)->cli_type = GRAPHICAL;
         ZAPPY_CLIENT(cli)->client.graphic = malloc(sizeof(graphic_t));
         memset(ZAPPY_CLIENT(cli)->client.graphic, 0, sizeof(graphic_t));
         send_graphics_informations(cli, list, zarg);
         return (true);
     }
-    else if (strcasecmp("GRAPHIC", arg[0]) && check_team_names(arg,
+    else if (arg[0] && strcmp("GRAPHIC", arg[0]) && check_team_names(arg,
         GET_GAME(list), cli, zarg)) {
         ZAPPY_CLIENT(cli)->cli_type = IA;
         ZAPPY_CLIENT(cli)->client.ia = malloc(sizeof(ia_t));
         memset(ZAPPY_CLIENT(cli)->client.ia, 0, sizeof(ia_t));
         STAILQ_INIT(LIST_CMD(cli));
-        new_player_connection(cli, arg[0], GET_GAME(list), list);
+        new_player_connection(cli, arg[0], zarg, list);
         return (true);
     }
     return (false);
@@ -66,7 +69,7 @@ void exec_command(sock_t *cli, sock_list_t *list, char **arg, zarg_t *zarg)
 {
     if (ZAPPY_CLIENT(cli)->cli_type == UNDEFINED) {
         if (init_zappy_cli(cli, list, arg, zarg) == false)
-            socket_list_remove(list, cli);
+            dprintf(cli->fd, "ko\n");
         destroy_array(arg);
     }
     else if (ZAPPY_CLIENT(cli)->cli_type == IA)

@@ -22,11 +22,10 @@ void initialize_game_args(game_t* game, zarg_t *zarg)
     game->teams = malloc(sizeof(team_t *) * game->nb_teams);
     for (i = 0; i < game->nb_teams; i++) {
         game->teams[i] = malloc(sizeof(team_t));
-        game->teams[i]->sock = NULL;
         game->teams[i]->nb_clients = 0;
         game->teams[i]->name = zarg->team_names[i];
-        game->teams[i]->sock = malloc(sizeof(team_t *) * zarg->clients_nb);
-        memset(game->teams[i]->sock, 0, sizeof(team_t *) * zarg->clients_nb);
+        game->teams[i]->sock = malloc(sizeof(sock_t *) * zarg->clients_nb);
+        memset(game->teams[i]->sock, 0, sizeof(sock_t *) * zarg->clients_nb);
     }
     init_map(&game->map, zarg->width, zarg->height);
 }
