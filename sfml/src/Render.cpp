@@ -117,6 +117,10 @@ void Render::Draw(sf::RenderWindow &win)
             }
         }
     for (auto &team : this->_teams) {
+        if (team->set == false) {
+            team->setTexture(&this->_tex);
+            team->setScale(this->_scale);
+        }
         auto players = team->getPlayers();
         for (auto &player : players) {
             auto pos = player.getPosition();

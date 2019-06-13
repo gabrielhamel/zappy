@@ -6,6 +6,7 @@
 */
 
 #include <stdlib.h>
+#include <time.h>
 #include "server.h"
 
 int main(int ac, char **av)
@@ -14,6 +15,7 @@ int main(int ac, char **av)
     zarg_t zarg = {0};
     int ret;
 
+    srand(time(NULL));
     if (parsing(&arg, ac, av) == false)
         return (84);
     arg_to_zarg(&arg, &zarg);

@@ -6,6 +6,7 @@
 */
 
 #include "server.h"
+#include "ia_commands.h"
 
 static void server_event(sock_list_t *list, sock_t *server, zarg_t *zarg)
 {
@@ -18,6 +19,8 @@ static void server_event(sock_list_t *list, sock_t *server, zarg_t *zarg)
 
 static void destroy_ftp_sock(sock_list_t *list, sock_t *cli)
 {
+    if (cli->type == CLIENT && ZAPPY_CLIENT(cli)->cli_type == IA)
+        disconnect_player(cli, list);
     socket_list_remove(list, cli);
 }
 

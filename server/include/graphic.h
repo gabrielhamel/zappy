@@ -10,4 +10,5 @@
 #include <sys/queue.h>
 
 typedef struct graphic_s {
+
 } graphic_t;

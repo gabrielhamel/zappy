@@ -17,7 +17,6 @@ static graph_cmd_t cmd_g[] = {
     {"pin", NULL},
     {"sgt", cmd_graph_sgt},
     {"sst", cmd_graph_sst}
-
 };
 
 void exec_graph_cmd(sock_t *cli, sock_list_t *list, char **arg, zarg_t *zarg)

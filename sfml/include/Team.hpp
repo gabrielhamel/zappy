@@ -23,9 +23,11 @@ class Team {
         void setScale(float scale);
         sf::Sprite _spr;
         void setTexture(sf::Texture *tex);
+        bool set;
     private:
         sf::Color _color;
         std::string _name;
         std::vector<Player> _players;
         sf::Texture *_tex;
+
 };

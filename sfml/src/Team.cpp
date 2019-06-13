@@ -12,7 +12,7 @@
 Team::Team(const std::string &name)
 : _name(name)
 {
-
+    this->set = false;
 }
 
 Team::~Team()
@@ -55,4 +55,5 @@ void Team::setTexture(sf::Texture *tex)
     this->_spr.setScale(1.f / 1.5f, 1.f / 1.5f);
     this->_spr.setColor(this->_color);
     this->_spr.setOrigin(8, 8);
+    this->set = true;
 }

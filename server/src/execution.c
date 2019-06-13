@@ -7,6 +7,7 @@
 
 #include <sys/queue.h>
 #include <stdbool.h>
+#include <stdio.h>
 #include "ia_commands.h"
 #include "graph_commands.h"
 #include "game.h"
@@ -21,6 +22,23 @@ static void send_graphics_informations(sock_t *cli, sock_list_t *list, zarg_t *z
     cmd_tna_all_team(cli, zarg);
 }
 
+static void new_player_connection(sock_t *cli, char *team, game_t *game, sock_list_t *list)
+{
+    ia_t *ia = ZAPPY_CLIENT(cli)->client.ia;
+    char buff[4096] = {0};
+    size_t i = 0;
+
+    for (; strcmp(game->teams[i]->name, team); i++);
+    ia->team = game->teams[i];
+    ia->id = cli->fd;
+    ia->x = rand() % game->map.w;
+    ia->y = rand() % game->map.h;
+    ia->ori = rand() % 4 + 1;
+    ia->level = 1;
+    sprintf(buff, "pnw %d %ld %ld %d %d %s\n", ia->id, ia->x, ia->y, ia->ori, ia->level, team);
+    send_all_graphics(list, buff);
+}
+
 static bool init_zappy_cli(sock_t *cli, sock_list_t *list, char **arg, zarg_t *zarg)
 {
     (void)zarg;
@@ -32,11 +50,13 @@ static bool init_zappy_cli(sock_t *cli, sock_list_t *list, char **arg, zarg_t *z
         send_graphics_informations(cli, list, zarg);
         return (true);
     }
-    else if (strcasecmp("GRAPHIC", arg[0]) && check_team_names(arg, zarg, cli)) {
+    else if (strcasecmp("GRAPHIC", arg[0]) && check_team_names(arg,
+        GET_GAME(list), cli, zarg)) {
         ZAPPY_CLIENT(cli)->cli_type = IA;
         ZAPPY_CLIENT(cli)->client.ia = malloc(sizeof(ia_t));
         memset(ZAPPY_CLIENT(cli)->client.ia, 0, sizeof(ia_t));
         STAILQ_INIT(LIST_CMD(cli));
+        new_player_connection(cli, arg[0], GET_GAME(list), list);
         return (true);
     }
     return (false);
@@ -48,9 +68,10 @@ void exec_command(sock_t *cli, sock_list_t *list, char **arg, zarg_t *zarg)
         if (init_zappy_cli(cli, list, arg, zarg) == false)
             socket_list_remove(list, cli);
         destroy_array(arg);
-    } else if (ZAPPY_CLIENT(cli)->cli_type == IA) {
+    }
+    else if (ZAPPY_CLIENT(cli)->cli_type == IA)
         insert_cmd_ia(cli, arg, zarg);
-    } else {
+    else {
         exec_graph_cmd(cli, list, arg, zarg);
         destroy_array(arg);
     }

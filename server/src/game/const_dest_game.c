@@ -23,7 +23,10 @@ void initialize_game_args(game_t* game, zarg_t *zarg)
     for (i = 0; i < game->nb_teams; i++) {
         game->teams[i] = malloc(sizeof(team_t));
         game->teams[i]->sock = NULL;
-        game->teams[i]->nb_clients = zarg->clients_nb;
+        game->teams[i]->nb_clients = 0;
+        game->teams[i]->name = zarg->team_names[i];
+        game->teams[i]->sock = malloc(sizeof(team_t *) * zarg->clients_nb);
+        memset(game->teams[i]->sock, 0, sizeof(team_t *) * zarg->clients_nb);
     }
     init_map(&game->map, zarg->width, zarg->height);
 }
@@ -43,8 +46,10 @@ void delete_game(const sock_t *cli, void *data)
     (void)cli;
 
     if (game->teams) {
-        for (size_t i = 0; i < game->nb_teams; i++)
+        for (size_t i = 0; i < game->nb_teams; i++) {
+            free(game->teams[i]->sock);
             free(game->teams[i]);
+        }
         free(game->teams);
     }
     destroy_map(&game->map);

@@ -6,6 +6,21 @@
 */
 
 #include "server.h"
+#include "graph_commands.h"
+
+void disconnect_player(sock_t *cli, sock_list_t *list)
+{
+    ia_t *ia = ZAPPY_CLIENT(cli)->client.ia;
+    size_t i = 0;
+    char buffer[4096] = {0};
+
+    for (; ia->team->sock[i] != cli; i++);
+    ia->team->sock[i] = NULL;
+    ia->team->nb_clients--;
+    sprintf(buffer, "pdi %d\n", ia->id);
+    send_all_graphics(list, buffer);
+    printf("IA %d disconnected\n", cli->fd);
+}
 
 void *init_client(const sock_t *cli)
 {

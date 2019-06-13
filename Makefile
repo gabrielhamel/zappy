@@ -35,6 +35,7 @@ SRC_SERV =	./server/src/sockets/client.c				\
 			./server/src/commands/graphic/tna.c			\
 			./server/src/commands/graphic/sgt.c			\
 			./server/src/commands/graphic/sst.c			\
+			./server/src/commands/graphic/send_all.c	\
 			./server/src/teams/check_team_names.c		\
 			./server/src/game/const_dest_game.c			\
 			./server/src/time_manage.c
