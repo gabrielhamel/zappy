@@ -14,7 +14,8 @@
 #include "buffer_cmd.h"
 #include "graphic.h"
 
-static void send_graphics_informations(sock_t *cli, sock_list_t *list, zarg_t *zarg)
+static void send_graphics_informations(sock_t *cli, sock_list_t *list,
+zarg_t *zarg)
 {
     cmd_graph_msz(cli, list, NULL, zarg);
     cmd_send_sgt(cli, zarg);
@@ -24,7 +25,7 @@ static void send_graphics_informations(sock_t *cli, sock_list_t *list, zarg_t *z
     send_all_eggs(cli, list);
 }
 
-static egg_t *available_egg(team_t *team)
+egg_t *available_egg(team_t *team)
 {
     egg_t *egg;
 
@@ -37,38 +38,25 @@ static egg_t *available_egg(team_t *team)
     return NULL;
 }
 
-static void new_player_connection(sock_t *cli, char *team, zarg_t *zarg, sock_list_t *list)
+static void new_player_connection(sock_t *cli, char *team,
+zarg_t *zarg, sock_list_t *list)
 {
     game_t *game = GET_GAME(list);
     ia_t *ia = ZAPPY_CLIENT(cli)->client.ia;
     char buff[4096] = {0};
     size_t i = 0;
-    egg_t *egg;
 
     for (; strcmp(game->teams[i]->name, team); i++);
-    ia->team = game->teams[i];
-    ia->ori = rand() % 4 + 1;
-    ia->level = 1;
-    ia->id = cli->fd;
-    egg = available_egg(ia->team);
-
-    if (egg == NULL) {
-        ia->x = rand() % game->map.w;
-        ia->y = rand() % game->map.h;
-    }
-    else {
-        ia->x = egg->x;
-        ia->y = egg->y;
-        sprintf(buff, "ebo %d\n", egg->id);
-        send_all_graphics(list, buff);
-        free(egg);
-    }
-    dprintf(cli->fd, "%ld\n%d %d\n", zarg->clients_nb - ia->team->nb_clients, zarg->width, zarg->height);
-    sprintf(buff, "pnw %d %ld %ld %d %d %s\n", ia->id, ia->x, ia->y, ia->ori, ia->level, team);
+    init_player(ia, list, game->teams[i], cli->fd);
+    dprintf(cli->fd, "%ld\n%d %d\n",
+    zarg->clients_nb - ia->team->nb_clients, zarg->width, zarg->height);
+    sprintf(buff, "pnw %d %ld %ld %d %d %s\n",
+    ia->id, ia->x, ia->y, ia->ori, ia->level, team);
     send_all_graphics(list, buff);
 }
 
-static bool init_zappy_cli(sock_t *cli, sock_list_t *list, char **arg, zarg_t *zarg)
+static bool init_zappy_cli(sock_t *cli, sock_list_t *list,
+char **arg, zarg_t *zarg)
 {
     (void)zarg;
     (void)list;

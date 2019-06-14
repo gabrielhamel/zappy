@@ -17,7 +17,8 @@ void send_all_eggs(sock_t *graph, sock_list_t *list)
     for (size_t i = 0; i < game->nb_teams; i++) {
         team = game->teams[i];
         LIST_FOREACH(egg, &team->eggs, next)
-            dprintf(graph->fd, "enw %d %d %ld %ld\n", egg->id, egg->player, egg->x, egg->y);
+            dprintf(graph->fd, "enw %d %d %ld %ld\n",
+            egg->id, egg->player, egg->x, egg->y);
     }
 }
 
@@ -36,7 +37,7 @@ void cmd_ia_fork(sock_t *cli, sock_list_t *list, char **arg, zarg_t *zarg)
     egg->state = HATCHING;
     egg->x = ia->x;
     egg->y = ia->y;
-    egg->time = 600.f / zarg->freq; 
+    egg->time = 600.f / zarg->freq;
     LIST_INSERT_HEAD(&team->eggs, egg, next);
     sprintf(buff, "enw %d %d %ld %ld\n", egg->id, cli->fd, egg->x, egg->y);
     send_all_graphics(list, buff);

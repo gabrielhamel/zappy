@@ -6,6 +6,7 @@
 */
 
 #include "server.h"
+#include "game.h"
 #include "graph_commands.h"
 
 void disconnect_player(sock_t *cli, sock_list_t *list)
@@ -56,4 +57,28 @@ void end_client(const sock_t *cli, void *data)
         free(ZAPPY_CLIENT(cli)->client.graphic);
     free(BUFF_CMD(cli));
     free(data);
+}
+
+void init_player(ia_t *ia, sock_list_t *list, team_t *team, int id)
+{
+    char buff[4096] = {0};
+    game_t *game = GET_GAME(list);
+    egg_t *egg;
+
+    ia->team = team;
+    ia->ori = rand() % 4 + 1;
+    ia->level = 1;
+    ia->id = id;
+    egg = available_egg(ia->team);
+    if (egg == NULL) {
+        ia->x = rand() % game->map.w;
+        ia->y = rand() % game->map.h;
+    }
+    else {
+        ia->x = egg->x;
+        ia->y = egg->y;
+        sprintf(buff, "ebo %d\n", egg->id);
+        send_all_graphics(list, buff);
+        free(egg);
+    }
 }

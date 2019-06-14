@@ -11,7 +11,7 @@
 #include "utils.h"
 #include "map.h"
 
-void init_tile(tile_t* tile)
+void init_tile(tile_t *tile)
 {
     for (size_t i = 0; i < N_ITEMS; i++)
         tile->items[i] = 0;
@@ -59,7 +59,7 @@ char *tile_to_string(tile_t *tile)
     memset(temp, 0, 12);
     sprintf(temp, "%d", tile->items[FOOD]);
     str_add(2, res, temp);
-    for (size_t i = 0; i < N_ITEMS; i ++) {
+    for (size_t i = 0; i < N_ITEMS; i++) {
         memset(temp, 0, 12);
         sprintf(temp, "%d", tile->items[FOOD]);
         str_add(3, res, temp, ",");

@@ -28,11 +28,6 @@ typedef enum {
     UNDEFINED
 } client_type_t;
 
-// typedef struct {
-//     const char *name;
-//     void (*func)(sock_t *, sock_list_t *, char **);
-// } command_t;
-
 typedef struct {
     char *cmd_buff;
     client_type_t cli_type;
@@ -47,27 +42,7 @@ void end_client(const sock_t *cli, void *data);
 
 // Section parsing
 
-// typedef struct {
-//     char *port;
-//     char *width;
-//     char *height;
-//     char **team_names;
-//     char *clients_nb;
-//     char *freq;
-// } arg_t;
-
-// typedef struct {
-//     uint16_t port;
-//     unsigned int width;
-//     unsigned int height;
-//     char **team_names;
-//     unsigned int clients_nb;
-//     float freq;
-// } zarg_t;
-
 bool parsing(arg_t *arg, int ac, char **av);
-// void *parse_single_arg(int ac, char **av, argument_t *flag, int *i);
-// void *parse_infinity_arg(int ac, char **av, argument_t *flag, int *i);
 int count_nb_arg(int ac, char **av, int i);
 void arg_to_zarg(arg_t *arg, zarg_t *zarg);
 bool check_port(const char *port);

@@ -7,7 +7,7 @@
 
 #include <signal.h>
 #include <time.h>
-#include <sys/timeb.h> 
+#include <sys/timeb.h>
 #include "server.h"
 #include "game.h"
 

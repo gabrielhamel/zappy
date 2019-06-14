@@ -20,8 +20,7 @@ static argument_t *get_flag(char *str)
 {
     size_t idx = 0;
 
-    for (; idx < ARRAY_SIZE(flags) &&
-        strcmp(str, flags[idx].flag); idx++);
+    for (; idx < ARRAY_SIZE(flags) && strcmp(str, flags[idx].flag); idx++);
     if (idx == ARRAY_SIZE(flags))
         return (NULL);
     return (&flags[idx]);

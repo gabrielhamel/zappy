@@ -22,7 +22,8 @@ static graph_cmd_t cmd_g[] = {
 void exec_graph_cmd(sock_t *cli, sock_list_t *list, char **arg, zarg_t *zarg)
 {
     for (size_t i = 0; i < ARRAY_SIZE(cmd_g) && arg[0]; i++)
-        if (arg[0] && !strcasecmp(cmd_g[i].name, arg[0]) && cmd_g[i].func != NULL) {
+        if (arg[0] && !strcasecmp(cmd_g[i].name, arg[0]) &&
+        cmd_g[i].func != NULL) {
             cmd_g[i].func(cli, list, arg, zarg);
             return;
         }
