@@ -28,6 +28,7 @@ bool init_map(map_t *map, size_t w, size_t h)
     map->h = h;
     map->w = w;
     link_map(map->graph, w, h);
+    add_random_rock(map);
     return (true);
 }
 
@@ -35,9 +36,9 @@ void link_map(tile_t **graph, size_t w, size_t h)
 {
     for (size_t x = 0; x < w; x++) {
         for (size_t y = 0; y < h; y++) {
-            graph[x][y].x = x;
-            graph[x][y].y = y;
-            init_tile(&graph[x][y]);
+            graph[y][x].x = x;
+            graph[y][x].y = y;
+            init_tile(&graph[y][x]);
         }
     }
     link_top(graph, w, h);
@@ -46,9 +47,14 @@ void link_map(tile_t **graph, size_t w, size_t h)
     link_left(graph, w, h);
 }
 
-void add_random_rock(map_t map)
+void add_random_rock(map_t *map)
 {
-    (void)map;
+    // tile_t *tile;
+
+    // for (size_t x = 0; x < map->w; x++)
+    //     for (size_t y = 0; y < map->h; y++) {
+    //         tile = map->graph[x][y]
+    //     }
 }
 
 char *tile_to_string(tile_t *tile)

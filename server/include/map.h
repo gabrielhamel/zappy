@@ -33,7 +33,7 @@ typedef struct map_s {
 } map_t;
 
 bool init_map(map_t *map, size_t w, size_t h);
-
+void add_random_rock(map_t *map);
 void link_map(tile_t **graph, size_t w, size_t h);
 
 void link_top(tile_t **graph, size_t w, size_t h);
