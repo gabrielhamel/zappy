@@ -29,10 +29,13 @@ SRC_SERV =	./server/src/sockets/client.c				\
 			./server/src/parsing/types.c				\
 			./server/src/commands/buffer_cmd/list_fct.c \
 			./server/src/commands/graphic/list.c 		\
+			./server/src/commands/graphic/get_player_by_id.c	\
 			./server/src/commands/graphic/msz.c			\
 			./server/src/commands/graphic/bct.c			\
 			./server/src/commands/graphic/mct.c			\
 			./server/src/commands/graphic/tna.c			\
+			./server/src/commands/graphic/ppo.c			\
+			./server/src/commands/graphic/plv.c			\
 			./server/src/commands/graphic/sgt.c			\
 			./server/src/commands/graphic/sst.c			\
 			./server/src/commands/graphic/send_all.c	\

@@ -12,11 +12,16 @@
 
 void exec_graph_cmd(sock_t *cli, sock_list_t *list, char **arg, zarg_t *zarg);
 
+ia_t* get_player_by_id(int id, sock_list_t *list);
+
 // Liste des commandes graphiques
 void cmd_graph_msz(sock_t *cli, sock_list_t *list, char **arg, zarg_t *zarg);
 void cmd_graph_bct(sock_t *cli, sock_list_t *list, char **arg, zarg_t *zarg);
 void cmd_graph_mct(sock_t *cli, sock_list_t *list, char **arg, zarg_t *zarg);
 void cmd_graph_tna(sock_t *cli, sock_list_t *list, char **arg, zarg_t *zarg);
+void cmd_graph_ppo(sock_t *cli, sock_list_t *list, char **arg, zarg_t *zarg);
+void cmd_graph_plv(sock_t *cli, sock_list_t *list, char **arg, zarg_t *zarg);
+void cmd_graph_pin(sock_t *cli, sock_list_t *list, char **arg, zarg_t *zarg);
 void cmd_graph_sgt(sock_t *cli, sock_list_t *list, char **arg, zarg_t *zarg);
 void cmd_graph_sst(sock_t *cli, sock_list_t *list, char **arg, zarg_t *zarg);
 
