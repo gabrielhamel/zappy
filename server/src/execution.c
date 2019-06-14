@@ -47,6 +47,7 @@ zarg_t *zarg, sock_list_t *list)
     size_t i = 0;
     int nb_remaining;
 
+    add_random_food(list, &game->map);
     for (; strcmp(game->teams[i]->name, team); i++);
     init_player(ia, list, game->teams[i], cli->fd);
     nb_remaining = zarg->clients_nb - ia->team->nb_clients;
