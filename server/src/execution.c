@@ -45,11 +45,14 @@ zarg_t *zarg, sock_list_t *list)
     ia_t *ia = ZAPPY_CLIENT(cli)->client.ia;
     char buff[4096] = {0};
     size_t i = 0;
+    int nb_remaining;
 
     for (; strcmp(game->teams[i]->name, team); i++);
     init_player(ia, list, game->teams[i], cli->fd);
-    dprintf(cli->fd, "%ld\n%d %d\n",
-    zarg->clients_nb - ia->team->nb_clients, zarg->width, zarg->height);
+    nb_remaining = zarg->clients_nb - ia->team->nb_clients;
+    nb_remaining = nb_remaining < 0 ? 0 : nb_remaining;
+    dprintf(cli->fd, "%d\n%d %d\n",
+    nb_remaining, zarg->width, zarg->height);
     sprintf(buff, "pnw %d %ld %ld %d %d %s\n",
     ia->id, ia->x, ia->y, ia->ori, ia->level, team);
     send_all_graphics(list, buff);
