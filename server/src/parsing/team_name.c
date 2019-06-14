@@ -14,6 +14,8 @@ bool check_team(const char *dim)
 
     if (strlen(dim) == 0)
         return false;
+    if (!strcmp("GRAPHIC", dim))
+        return false;
     for (size_t u = 0; buff[u]; u++)
         if (!strcmp(buff[u], dim))
             return false;

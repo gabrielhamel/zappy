@@ -7,13 +7,30 @@
 
 #pragma once
 
+#include <sys/queue.h>
 #include "server.h"
 #include "parser.h"
 #include "map.h"
 
 #define GET_GAME(x) ((game_t *)(x->start->socket->data))
 
+typedef enum {
+    HATCHING,
+    HATCHED
+} egg_state_t;
+
+typedef struct egg_s {
+    LIST_ENTRY(egg_s) next;
+    int id;
+    int player;
+    size_t x;
+    size_t y;
+    float time;
+    egg_state_t state;
+} egg_t;
+
 typedef struct team_t {
+    LIST_HEAD(, egg_s) eggs;
     sock_t **sock;
     size_t nb_clients;
     char *name;

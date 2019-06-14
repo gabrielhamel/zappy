@@ -21,6 +21,20 @@ static void send_graphics_informations(sock_t *cli, sock_list_t *list, zarg_t *z
     cmd_graph_bct_all(cli, list);
     cmd_tna_all_team(cli, zarg);
     send_all_players(cli, list);
+    send_all_eggs(cli, list);
+}
+
+static egg_t *available_egg(team_t *team)
+{
+    egg_t *egg;
+
+    LIST_FOREACH(egg, &team->eggs, next) {
+        if (egg->state == HATCHED) {
+            LIST_REMOVE(egg, next);
+            return egg;
+        }
+    }
+    return NULL;
 }
 
 static void new_player_connection(sock_t *cli, char *team, zarg_t *zarg, sock_list_t *list)
@@ -29,14 +43,26 @@ static void new_player_connection(sock_t *cli, char *team, zarg_t *zarg, sock_li
     ia_t *ia = ZAPPY_CLIENT(cli)->client.ia;
     char buff[4096] = {0};
     size_t i = 0;
+    egg_t *egg;
 
     for (; strcmp(game->teams[i]->name, team); i++);
     ia->team = game->teams[i];
-    ia->id = cli->fd;
-    ia->x = rand() % game->map.w;
-    ia->y = rand() % game->map.h;
     ia->ori = rand() % 4 + 1;
     ia->level = 1;
+    ia->id = cli->fd;
+    egg = available_egg(ia->team);
+
+    if (egg == NULL) {
+        ia->x = rand() % game->map.w;
+        ia->y = rand() % game->map.h;
+    }
+    else {
+        ia->x = egg->x;
+        ia->y = egg->y;
+        sprintf(buff, "ebo %d\n", egg->id);
+        send_all_graphics(list, buff);
+        free(egg);
+    }
     dprintf(cli->fd, "%ld\n%d %d\n", zarg->clients_nb - ia->team->nb_clients, zarg->width, zarg->height);
     sprintf(buff, "pnw %d %ld %ld %d %d %s\n", ia->id, ia->x, ia->y, ia->ori, ia->level, team);
     send_all_graphics(list, buff);

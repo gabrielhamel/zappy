@@ -6,6 +6,7 @@
 */
 
 #include "server.h"
+#include "ia_commands.h"
 
 static ai_cmd_t cmd_g[] = {
     {"Forward", 7, NULL},
@@ -15,7 +16,7 @@ static ai_cmd_t cmd_g[] = {
     {"Inventory", 1, NULL},
     {"Broadcast", 7, NULL},
     {"Connect_nbr", 0, NULL},
-    {"Fork", 42, NULL},
+    {"Fork", 42, cmd_ia_fork},
     {"Eject", 7, NULL},
     {"Take", 7, NULL},
     {"Set", 7, NULL},
