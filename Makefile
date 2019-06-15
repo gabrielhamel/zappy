@@ -50,6 +50,7 @@ SRC_SERV =	./server/src/sockets/client.c				\
 			./server/src/commands/ai/connect_nbr.c		\
 			./server/src/teams/check_team_names.c		\
 			./server/src/game/const_dest_game.c			\
+			./server/src/game/direction.c				\
 			./server/src/time_manage.c
 
 SRC_AI =	./ai/src/Main.cpp							\
