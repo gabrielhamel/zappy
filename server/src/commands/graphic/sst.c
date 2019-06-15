@@ -18,7 +18,7 @@ void cmd_graph_sst(sock_t *cli, sock_list_t *list, char **arg, zarg_t *zarg)
         return;
     }
     nb = atof(arg[1]);
-    if (nb <= 0) {
+    if (check_freq(arg[1]) == false) {
         dprintf(cli->fd, "sbp\n");
         return;
     }
