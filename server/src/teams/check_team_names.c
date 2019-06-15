@@ -44,6 +44,5 @@ bool check_team_names(char **arg, game_t *game, sock_t *cli, zarg_t *zarg)
     for (i = 0; team->sock[i] != NULL; i++);
     team->sock[i] = cli;
     team->nb_clients++;
-    printf("New IA %d\n", cli->fd);
     return true;
 }

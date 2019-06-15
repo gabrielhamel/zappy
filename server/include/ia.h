@@ -28,4 +28,5 @@ typedef struct {
     int level;
     facing_t ori;
     struct team_t *team;
+    float live;
 } ia_t;

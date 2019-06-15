@@ -11,6 +11,19 @@
 #include "server.h"
 #include "game.h"
 
+void refresh_player_live(sock_list_t *list, sock_t *sock, zarg_t *zarg)
+{
+    ia_t *ia = ZAPPY_CLIENT(sock)->client.ia;
+
+    if (ia->inventory[FOOD] == 0) {
+        dprintf(ia->id, "dead\n");
+        destroy_ftp_sock(list, sock);
+        return;
+    }
+    ia->inventory[FOOD]--;
+    ia->live = 126.f / zarg->freq;
+}
+
 static bool *loop(void)
 {
     static bool loop = true;
