@@ -14,8 +14,10 @@ class SocketManager
 
 	private initialise():void
 	{
-		this.commands.set("msz", this.msz);
 		this.commands.set("bct", this.bct);
+		this.commands.set("msz", this.msz);
+		this.commands.set("sgt", this.sgt);
+		this.commands.set("tna", this.tna);
 	}
 	private getDatas = (datas:any):void =>
 	{
@@ -29,6 +31,10 @@ class SocketManager
 				this.commands.get(cur[0])(cur);
 		}
 	}
+	private bct = (datas:Array<string>) =>
+	{
+		this.game.getStage().addTile(datas);
+	}
 	private msz = (datas:Array<string>) =>
 	{
 		let vector:BABYLON.Vector2 = new BABYLON.Vector2(0, 0);
@@ -37,8 +43,12 @@ class SocketManager
 		vector.y = parseInt(datas[2]);
 		this.game.setup(vector);
 	}
-	private bct = (datas:Array<string>) =>
+	private sgt = (datas:Array<string>) =>
 	{
-		this.game.getStage().addTile(datas);
+		Game.timeUnit = parseInt(datas[1]);
+	}
+	private tna = (datas:Array<string>) =>
+	{
+		this.game.addTeam(datas[1]);
 	}
 }

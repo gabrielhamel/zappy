@@ -13,14 +13,8 @@ class Tile
 	constructor(food:number, linemate:number, deraumere:number, sibur:number, mendiane:number, phiras:number, thystame:number, scene:BABYLON.Scene)
 	{
 		let size:number = Game.size.x * Game.size.y * 7;
-		
-		this.stats.set("food", food);
-		this.stats.set("linemate", linemate);
-		this.stats.set("deraumere", deraumere);
-		this.stats.set("sibur", sibur);
-		this.stats.set("mendiane", mendiane);
-		this.stats.set("phiras", phiras);
-		this.stats.set("thystame", thystame);
+
+		this.update(food, linemate, deraumere, sibur, mendiane, phiras, thystame);
 		this.createAnimation();
 		if (!Tile.spriteManager)
 			Tile.spriteManager = new BABYLON.SpriteManager("spriteManager" + Tile.nb, "/assets/resources.png", size, 16, scene);
@@ -70,6 +64,15 @@ class Tile
 		}
 	}
 	
+	public destroy()
+	{
+		let cur:BABYLON.Sprite;
+		
+		while (this.sprites.length > 0) {
+			cur = this.sprites.pop();
+			cur.dispose();
+		}
+	}
 	public initialise(x:number, y:number):void
 	{
 		const ENTRIES:Array<string> = new Array<string>(
@@ -87,5 +90,22 @@ class Tile
 		for (let i:number = this.sprites.length - 1; i >= 0; i--) {
 			scene.beginAnimation(this.sprites[i], 0, Tile.ANIMATION_FPS * 2, true);
 		}
+	}
+	public update(food:number, linemate:number, deraumere:number, sibur:number, mendiane:number, phiras:number, thystame:number):void
+	{
+		this.stats.set("food", food);
+		this.stats.set("linemate", linemate);
+		this.stats.set("deraumere", deraumere);
+		this.stats.set("sibur", sibur);
+		this.stats.set("mendiane", mendiane);
+		this.stats.set("phiras", phiras);
+		this.stats.set("thystame", thystame);
+		this.destroy();
+		if (this.position)
+			this.initialise(this.position.x, this.position.y);
+	}
+	public getPosition()
+	{
+		return (this.position);
 	}
 }
