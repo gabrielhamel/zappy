@@ -9,7 +9,7 @@
 #include "ia_commands.h"
 
 static ai_cmd_t cmd_g[] = {
-    {"Forward", 7, NULL},
+    {"Forward", 7, cmd_ia_forward},
     {"Right", 7, NULL},
     {"Left", 7, NULL},
     {"Look", 7, NULL},
