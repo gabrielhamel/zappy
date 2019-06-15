@@ -1,13 +1,14 @@
 class Game
 {
 	public static size:BABYLON.Vector2;
+	public static timeUnit:number;
+	private camera:Camera;
 	private canvas:HTMLCanvasElement;
 	private engine:BABYLON.Engine;
 	private scene:BABYLON.Scene;
-	private camera:Camera;
-	private keyboard:Keyboard = new Keyboard();
 	private socketManager:SocketManager = new SocketManager(this);
 	private stage:Stage;
+	private teams:Map<string, Team> = new Map<string, Team>();
 
 	constructor(canvas:HTMLCanvasElement)
 	{
@@ -34,6 +35,10 @@ class Game
 		this.scene.render();
 	}
 	
+	public addTeam(name:string)
+	{
+		this.teams.set(name, new Team(name));
+	}
 	public setup(size:BABYLON.Vector2)
 	{
 		Game.size = size;

@@ -60,8 +60,8 @@ var Camera = /** @class */ (function () {
 var Game = /** @class */ (function () {
     function Game(canvas) {
         var _this = this;
-        this.keyboard = new Keyboard();
         this.socketManager = new SocketManager(this);
+        this.teams = new Map();
         this.render = function () {
             _this.stage.render();
             _this.scene.render();
@@ -80,6 +80,9 @@ var Game = /** @class */ (function () {
         window.addEventListener("resize", function () {
             _this.engine.resize();
         });
+    };
+    Game.prototype.addTeam = function (name) {
+        this.teams.set(name, new Team(name));
     };
     Game.prototype.setup = function (size) {
         Game.size = size;
@@ -113,6 +116,11 @@ var MeshBuilder = /** @class */ (function () {
     };
     return MeshBuilder;
 }());
+var Player = /** @class */ (function () {
+    function Player() {
+    }
+    return Player;
+}());
 var SocketManager = /** @class */ (function () {
     function SocketManager(game) {
         var _this = this;
@@ -128,14 +136,20 @@ var SocketManager = /** @class */ (function () {
                     _this.commands.get(cur[0])(cur);
             }
         };
+        this.bct = function (datas) {
+            _this.game.getStage().addTile(datas);
+        };
         this.msz = function (datas) {
             var vector = new BABYLON.Vector2(0, 0);
             vector.x = parseInt(datas[1]);
             vector.y = parseInt(datas[2]);
             _this.game.setup(vector);
         };
-        this.bct = function (datas) {
-            _this.game.getStage().addTile(datas);
+        this.sgt = function (datas) {
+            Game.timeUnit = parseInt(datas[1]);
+        };
+        this.tna = function (datas) {
+            _this.game.addTeam(datas[1]);
         };
         this.game = game;
         this.initialise();
@@ -143,8 +157,10 @@ var SocketManager = /** @class */ (function () {
         this.socket.on("data", this.getDatas);
     }
     SocketManager.prototype.initialise = function () {
-        this.commands.set("msz", this.msz);
         this.commands.set("bct", this.bct);
+        this.commands.set("msz", this.msz);
+        this.commands.set("sgt", this.sgt);
+        this.commands.set("tna", this.tna);
     };
     return SocketManager;
 }());
@@ -173,9 +189,11 @@ var Stage = /** @class */ (function () {
         window.addEventListener("pointerdown", this.onPointerDown);
     }
     Stage.prototype.addTile = function (datas) {
-        var cur = this.tiles.length;
         var tile;
         var stats = new Array();
+        var index;
+        if (this.updateTile(datas))
+            return;
         for (var i = 3; i < datas.length; i++) {
             stats.push(parseInt(datas[i]));
         }
@@ -195,22 +213,41 @@ var Stage = /** @class */ (function () {
             }
         }
     };
+    Stage.prototype.updateTile = function (datas) {
+        var position = new BABYLON.Vector2(parseInt(datas[1]), parseInt(datas[2]));
+        var stats = new Array();
+        var tile;
+        tile = this.tiles.find(function (tile) {
+            return (position.equals(tile.getPosition()));
+        });
+        if (tile == undefined)
+            return (false);
+        for (var i = 3; i < datas.length; i++) {
+            stats.push(parseInt(datas[i]));
+        }
+        tile.update(stats[0], stats[1], stats[2], stats[3], stats[4], stats[5], stats[6]);
+        return (true);
+    };
     Stage.prototype.render = function () {
     };
     return Stage;
+}());
+var Team = /** @class */ (function () {
+    function Team(name) {
+        this.players = new Array();
+        this.NAME = name;
+    }
+    Team.prototype.addPlayer = function (player) {
+        this.players.push(player);
+    };
+    return Team;
 }());
 var Tile = /** @class */ (function () {
     function Tile(food, linemate, deraumere, sibur, mendiane, phiras, thystame, scene) {
         this.stats = new Map();
         this.sprites = new Array();
         var size = Game.size.x * Game.size.y * 7;
-        this.stats.set("food", food);
-        this.stats.set("linemate", linemate);
-        this.stats.set("deraumere", deraumere);
-        this.stats.set("sibur", sibur);
-        this.stats.set("mendiane", mendiane);
-        this.stats.set("phiras", phiras);
-        this.stats.set("thystame", thystame);
+        this.update(food, linemate, deraumere, sibur, mendiane, phiras, thystame);
         this.createAnimation();
         if (!Tile.spriteManager)
             Tile.spriteManager = new BABYLON.SpriteManager("spriteManager" + Tile.nb, "/assets/resources.png", size, 16, scene);
@@ -250,6 +287,13 @@ var Tile = /** @class */ (function () {
             this.sprites.push(sprite);
         }
     };
+    Tile.prototype.destroy = function () {
+        var cur;
+        while (this.sprites.length > 0) {
+            cur = this.sprites.pop();
+            cur.dispose();
+        }
+    };
     Tile.prototype.initialise = function (x, y) {
         var ENTRIES = new Array("food", "linemate", "deraumere", "sibur", "mendiane", "phiras", "thystame");
         this.position = new BABYLON.Vector2(x, y);
@@ -262,59 +306,25 @@ var Tile = /** @class */ (function () {
             scene.beginAnimation(this.sprites[i], 0, Tile.ANIMATION_FPS * 2, true);
         }
     };
+    Tile.prototype.update = function (food, linemate, deraumere, sibur, mendiane, phiras, thystame) {
+        this.stats.set("food", food);
+        this.stats.set("linemate", linemate);
+        this.stats.set("deraumere", deraumere);
+        this.stats.set("sibur", sibur);
+        this.stats.set("mendiane", mendiane);
+        this.stats.set("phiras", phiras);
+        this.stats.set("thystame", thystame);
+        this.destroy();
+        if (this.position)
+            this.initialise(this.position.x, this.position.y);
+    };
+    Tile.prototype.getPosition = function () {
+        return (this.position);
+    };
     Tile.Y = 0.75;
     Tile.ANIMATION_BUMP = 0.15;
     Tile.ANIMATION_FPS = 10;
     Tile.nb = 0;
     Tile.spriteManager = null;
     return Tile;
-}());
-var Key = /** @class */ (function () {
-    function Key(codes) {
-        var _this = this;
-        this.isPressed = false;
-        this.setState = function (event) {
-            for (var i = _this.codes.length; i >= 0; i--) {
-                if (_this.codes[i] == event.which) {
-                    _this.isPressed = (event.type == "keydown");
-                }
-            }
-        };
-        this.codes = codes;
-    }
-    Key.prototype.getState = function () {
-        return (this.isPressed);
-    };
-    return Key;
-}());
-var Keyboard = /** @class */ (function () {
-    function Keyboard() {
-        var _this = this;
-        this.keys = new Array();
-        this.manageKeyEvents = function (key) {
-            for (var i = _this.keys.length - 1; i >= 0; i--) {
-                _this.keys[i].setState(key);
-            }
-        };
-        this.keys.push(new Key(Keyboard.KEYS_LEFT));
-        this.keys.push(new Key(Keyboard.KEYS_UP));
-        this.keys.push(new Key(Keyboard.KEYS_RIGHT));
-        this.keys.push(new Key(Keyboard.KEYS_DOWN));
-        window.addEventListener("keydown", this.manageKeyEvents);
-        window.addEventListener("keyup", this.manageKeyEvents);
-    }
-    Keyboard.prototype.getKey = function (id) {
-        if (id < 0 || id >= this.keys.length)
-            return (false);
-        return (this.keys[id].getState());
-    };
-    Keyboard.KEYS_LEFT = [37, 81];
-    Keyboard.KEYS_UP = [38, 90];
-    Keyboard.KEYS_RIGHT = [39, 68];
-    Keyboard.KEYS_DOWN = [40, 83];
-    Keyboard.LEFT = 0;
-    Keyboard.UP = 1;
-    Keyboard.RIGHT = 2;
-    Keyboard.DOWN = 3;
-    return Keyboard;
 }());

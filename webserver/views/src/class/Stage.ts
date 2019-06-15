@@ -39,10 +39,12 @@ class Stage
 
 	public addTile(datas:Array<string>)
 	{
-		const cur:number = this.tiles.length;
 		let tile:Tile;
 		let stats:Array<number> = new Array<number>();
+		let index:number;
 
+		if (this.updateTile(datas))
+			return;
 		for (let i:number = 3; i < datas.length; i++) {
 			stats.push(parseInt(datas[i]));
 		}
@@ -63,6 +65,23 @@ class Stage
 				this.blocs.push(cur);
 			}
 		}
+	}
+	public updateTile(datas:Array<string>):boolean
+	{
+		let position:BABYLON.Vector2 = new BABYLON.Vector2(parseInt(datas[1]), parseInt(datas[2]));
+		let stats:Array<number> = new Array<number>();
+		let tile:Tile;
+
+		tile = this.tiles.find((tile:Tile) => {
+			return (position.equals(tile.getPosition()));
+		});
+		if (tile == undefined)
+			return (false);
+		for (let i:number = 3; i < datas.length; i++) {
+			stats.push(parseInt(datas[i]));
+		}
+		tile.update(stats[0], stats[1], stats[2], stats[3], stats[4], stats[5], stats[6]);
+		return (true);
 	}
 	public render():void
 	{
