@@ -13,7 +13,7 @@ void cmd_graph_sst(sock_t *cli, sock_list_t *list, char **arg, zarg_t *zarg)
     char buff[4096] = {0};
     float nb;
 
-    if (array_lenght(arg) < 2) {
+    if (array_lenght(arg) < 2 || !is_num(arg[1])) {
         dprintf(cli->fd, "sbp\n");
         return;
     }

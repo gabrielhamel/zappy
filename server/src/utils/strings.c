@@ -6,6 +6,7 @@
 */
 
 #include <stdarg.h>
+#include <stdbool.h>
 #include <string.h>
 #include <stdlib.h>
 
@@ -40,6 +41,14 @@ static char *add_str(char *base, char *to_add)
         end[size_b + counter] = to_add[counter];
     free(to_add);
     return (end);
+}
+
+bool is_num(const char *s)
+{
+    for (size_t i = 0; s[i] != '\0'; i++)
+        if (!(s[i] >= '0' && s[i] <= '9'))
+            return false;
+    return true;
 }
 
 char *str_add(int nb, ...)

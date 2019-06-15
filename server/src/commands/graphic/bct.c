@@ -5,6 +5,7 @@
 ** btc
 */
 
+#include "utils.h"
 #include "graph_commands.h"
 #include "game.h"
 
@@ -31,6 +32,10 @@ void cmd_graph_bct(sock_t *cli, sock_list_t *list, char **arg, zarg_t *zarg)
     if (array_lenght(arg) != 3
         || (unsigned int)atoi(arg[1]) >= GET_GAME(list)->map.w
         || (unsigned int)atoi(arg[2]) >= GET_GAME(list)->map.h) {
+        dprintf(cli->fd, "sbp\n");
+        return;
+    }
+    if (!is_num(arg[1]) || !is_num(arg[2])) {
         dprintf(cli->fd, "sbp\n");
         return;
     }

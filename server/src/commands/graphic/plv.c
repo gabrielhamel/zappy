@@ -6,6 +6,7 @@
 */
 
 #include "graph_commands.h"
+#include "utils.h"
 
 void graph_send_ia_plv(sock_list_t *list, ia_t *ia)
 {
@@ -20,7 +21,7 @@ void cmd_graph_plv(sock_t *cli, sock_list_t *list, char **arg, zarg_t *zarg)
     ia_t *ia;
 
     (void)zarg;
-    if (array_lenght(arg) < 2) {
+    if (array_lenght(arg) < 2 || !is_num(arg[1])) {
         dprintf(cli->fd, "sbp\n");
         return;
     }
