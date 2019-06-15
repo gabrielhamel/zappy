@@ -8,6 +8,14 @@
 #include "graph_commands.h"
 #include "server.h"
 
+static void show_egg(sock_t *graph, egg_t *egg)
+{
+    if (egg->state == DEAD)
+        return;
+    dprintf(graph->fd, "enw %d %d %ld %ld\n",
+    egg->id, egg->player, egg->x, egg->y);
+}
+
 void send_all_eggs(sock_t *graph, sock_list_t *list)
 {
     game_t *game = GET_GAME(list);
@@ -17,8 +25,7 @@ void send_all_eggs(sock_t *graph, sock_list_t *list)
     for (size_t i = 0; i < game->nb_teams; i++) {
         team = game->teams[i];
         LIST_FOREACH(egg, &team->eggs, next)
-            dprintf(graph->fd, "enw %d %d %ld %ld\n",
-            egg->id, egg->player, egg->x, egg->y);
+            show_egg(graph, egg);
     }
 }
 

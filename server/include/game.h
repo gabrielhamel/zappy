@@ -16,7 +16,8 @@
 
 typedef enum {
     HATCHING,
-    HATCHED
+    HATCHED,
+    DEAD,
 } egg_state_t;
 
 typedef struct egg_s {
