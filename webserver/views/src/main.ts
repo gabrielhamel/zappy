@@ -8,4 +8,9 @@ function main():void
 	let game:Game = new Game(canvas);
 }
 
+function middleRand(value:number):number
+{
+	return (value - Math.random() * (value * 2));
+}
+
 document.addEventListener("DOMContentLoaded", main);

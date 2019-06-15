@@ -19,7 +19,18 @@ var Server = /** @class */ (function () {
         this.handleSocketConnection = function (socket) {
             var sock = new Socket_1.default(socket);
             sock.connectToServer("127.0.0.1", _this.serverPort);
+            socket.on("disconnect", function () {
+                _this.handleSocketDisconnection(socket);
+            });
             _this.sockets.push(sock);
+        };
+        this.handleSocketDisconnection = function (socket) {
+            var index = _this.sockets.findIndex(function (sock) {
+                return (sock.getId() == socket.id);
+            });
+            if (index == -1)
+                return;
+            _this.sockets.splice(index, 1);
         };
         this.port = port;
         this.serverPort = serverPort;

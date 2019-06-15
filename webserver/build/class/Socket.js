@@ -22,6 +22,9 @@ var Socket = /** @class */ (function () {
             _this.ioSocket.on("data", _this.sendDatasToServer);
         });
     };
+    Socket.prototype.getId = function () {
+        return (this.ioSocket.id);
+    };
     return Socket;
 }());
 exports.default = Socket;

@@ -5,6 +5,9 @@ function main() {
     var canvas = document.getElementsByTagName("canvas")[0];
     var game = new Game(canvas);
 }
+function middleRand(value) {
+    return (value - Math.random() * (value * 2));
+}
 document.addEventListener("DOMContentLoaded", main);
 var BlocCollection = /** @class */ (function () {
     function BlocCollection(scene) {
@@ -94,6 +97,19 @@ var Game = /** @class */ (function () {
     };
     return Game;
 }());
+var Infobox = /** @class */ (function () {
+    function Infobox() {
+        this.tileInfos = document.getElementById("tileInfos");
+    }
+    Infobox.prototype.updateTile = function (tile) {
+        var list = this.tileInfos.getElementsByTagName("span");
+        var datas = tile.getRawDatas();
+        for (var i = datas.length - 1; i >= 0; i--) {
+            list[i * 2 + 1].textContent = "" + datas[i];
+        }
+    };
+    return Infobox;
+}());
 var MeshBuilder = /** @class */ (function () {
     function MeshBuilder(modelName, scene) {
         var _this = this;
@@ -168,12 +184,19 @@ var Stage = /** @class */ (function () {
     function Stage(scene) {
         var _this = this;
         this.blocs = new Array();
+        this.infobox = new Infobox();
         this.tiles = new Array();
         this.onPointerDown = function (event) {
             var picked = _this.SCENE.pick(event.clientX, event.clientY);
+            var pos;
+            var tile;
             if (!picked || !picked.hit)
                 return;
+            pos = picked.pickedMesh.position;
             picked.pickedMesh.position.y -= 0.1;
+            tile = _this.findTileByPosition(new BABYLON.Vector2(pos.x, pos.z));
+            if (tile)
+                _this.infobox.updateTile(tile);
             if (_this.selected)
                 _this.selected.position.y += 0.1;
             _this.selected = picked.pickedMesh;
@@ -186,8 +209,13 @@ var Stage = /** @class */ (function () {
         this.light = new BABYLON.HemisphericLight("light", lightDir, scene);
         this.light.diffuse = new BABYLON.Color3(1, 1, 1);
         this.light.specular = new BABYLON.Color3(0, 0, 0);
-        window.addEventListener("pointerdown", this.onPointerDown);
+        this.CANVAS.addEventListener("pointerdown", this.onPointerDown);
     }
+    Stage.prototype.findTileByPosition = function (position) {
+        return (this.tiles.find(function (tile) {
+            return (position.equals(tile.getPosition()));
+        }));
+    };
     Stage.prototype.addTile = function (datas) {
         var tile;
         var stats = new Array();
@@ -204,8 +232,8 @@ var Stage = /** @class */ (function () {
     };
     Stage.prototype.createGround = function (width, height) {
         var cur;
-        for (var i = width; i >= 0; i--) {
-            for (var j = height; j >= 0; j--) {
+        for (var i = width - 1; i >= 0; i--) {
+            for (var j = height - 1; j >= 0; j--) {
                 cur = this.blocCollection.getInstance(0);
                 cur.position.x = i;
                 cur.position.z = j;
@@ -220,7 +248,7 @@ var Stage = /** @class */ (function () {
         tile = this.tiles.find(function (tile) {
             return (position.equals(tile.getPosition()));
         });
-        if (tile == undefined)
+        if (!tile)
             return (false);
         for (var i = 3; i < datas.length; i++) {
             stats.push(parseInt(datas[i]));
@@ -278,9 +306,9 @@ var Tile = /** @class */ (function () {
             sprite = new BABYLON.Sprite(ID, Tile.spriteManager);
             sprite.cellIndex = type;
             sprite.isPickable = false;
-            sprite.position.x = this.position.x + Math.random();
+            sprite.position.x = this.position.x + middleRand(Tile.SPREAD);
             sprite.position.y = Tile.Y;
-            sprite.position.z = this.position.y + Math.random();
+            sprite.position.z = this.position.y + middleRand(Tile.SPREAD);
             sprite.size = 0.5;
             sprite.animations = [];
             sprite.animations.push(this.animation);
@@ -321,9 +349,20 @@ var Tile = /** @class */ (function () {
     Tile.prototype.getPosition = function () {
         return (this.position);
     };
-    Tile.Y = 0.75;
+    Tile.prototype.getRawDatas = function () {
+        var output = new Array();
+        var it = this.stats.entries();
+        var res = it.next();
+        while (!res.done) {
+            output.push(res.value[1]);
+            res = it.next();
+        }
+        return (output);
+    };
     Tile.ANIMATION_BUMP = 0.15;
     Tile.ANIMATION_FPS = 10;
+    Tile.SPREAD = 0.4;
+    Tile.Y = 0.75;
     Tile.nb = 0;
     Tile.spriteManager = null;
     return Tile;

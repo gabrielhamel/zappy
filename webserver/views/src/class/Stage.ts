@@ -5,6 +5,7 @@ class Stage
 	private readonly SCENE:BABYLON.Scene;
 	private blocs:Array<BABYLON.InstancedMesh> = new Array<BABYLON.InstancedMesh>();
 	private blocCollection:BlocCollection;
+	private infobox:Infobox = new Infobox();
 	private light:BABYLON.HemisphericLight;
 	private selected:BABYLON.AbstractMesh;
 	private tiles:Array<Tile> = new Array<Tile>();
@@ -22,19 +23,31 @@ class Stage
 		this.light.diffuse = new BABYLON.Color3(1, 1, 1);
 		this.light.specular = new BABYLON.Color3(0, 0, 0);
 
-		window.addEventListener("pointerdown", this.onPointerDown);
+		this.CANVAS.addEventListener("pointerdown", this.onPointerDown);
 	}
 
 	private onPointerDown = (event:PointerEvent):void =>
 	{
 		let picked:BABYLON.PickingInfo = this.SCENE.pick(event.clientX, event.clientY);
+		let pos:BABYLON.Vector3;
+		let tile:Tile;
 
 		if (!picked || !picked.hit)
 			return;
+		pos = picked.pickedMesh.position;
 		picked.pickedMesh.position.y -= 0.1;
+		tile = this.findTileByPosition(new BABYLON.Vector2(pos.x, pos.z));
+		if (tile)
+			this.infobox.updateTile(tile);
 		if (this.selected)
 			this.selected.position.y += 0.1;
 		this.selected = picked.pickedMesh;
+	}
+	private findTileByPosition(position:BABYLON.Vector2):Tile
+	{
+		return (this.tiles.find((tile:Tile) => {
+			return (position.equals(tile.getPosition()));
+		}));
 	}
 
 	public addTile(datas:Array<string>)
@@ -57,8 +70,8 @@ class Stage
 	{
 		let cur:BABYLON.InstancedMesh;
 
-		for (let i:number = width; i >= 0; i--) {
-			for (let j:number = height; j >= 0; j--) {
+		for (let i:number = width - 1; i >= 0; i--) {
+			for (let j:number = height - 1; j >= 0; j--) {
 				cur = this.blocCollection.getInstance(0);
 				cur.position.x = i;
 				cur.position.z = j;
@@ -75,7 +88,7 @@ class Stage
 		tile = this.tiles.find((tile:Tile) => {
 			return (position.equals(tile.getPosition()));
 		});
-		if (tile == undefined)
+		if (!tile)
 			return (false);
 		for (let i:number = 3; i < datas.length; i++) {
 			stats.push(parseInt(datas[i]));
