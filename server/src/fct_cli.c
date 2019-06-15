@@ -59,6 +59,17 @@ void end_client(const sock_t *cli, void *data)
     free(data);
 }
 
+static void init_inventory(ia_t *ia)
+{
+    ia->inventory[FOOD] = 0;
+    ia->inventory[LINEMATE] = 0;
+    ia->inventory[DERAUMERE] = 0;
+    ia->inventory[SIBUR] = 0;
+    ia->inventory[MENDIANE] = 0;
+    ia->inventory[PHIRAS] = 0;
+    ia->inventory[THYSTAME] = 0;
+}
+
 void init_player(ia_t *ia, sock_list_t *list, team_t *team, int id)
 {
     char buff[4096] = {0};
@@ -81,4 +92,5 @@ void init_player(ia_t *ia, sock_list_t *list, team_t *team, int id)
         send_all_graphics(list, buff);
         free(egg);
     }
+    init_inventory(ia);
 }

@@ -10,6 +10,7 @@
 #include <stdlib.h>
 #include <sys/queue.h>
 #include "game.h"
+#include "item.h"
 
 typedef enum {
     NORTH = 1,
@@ -21,6 +22,7 @@ typedef enum {
 typedef struct {
     STAILQ_HEAD(, buffer_cmd_s) list_head;
     int id;
+    int inventory[N_ITEMS];
     size_t x;
     size_t y;
     int level;

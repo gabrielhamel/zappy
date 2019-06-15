@@ -12,7 +12,7 @@ void cmd_graph_ppo(sock_t *cli, sock_list_t *list, char **arg, zarg_t *zarg)
     ia_t *ia;
 
     (void)zarg;
-    if (array_lenght(arg) != 2) {
+    if (array_lenght(arg) < 2) {
         dprintf(cli->fd, "ko\n");
         return;
     }

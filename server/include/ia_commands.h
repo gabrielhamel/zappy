@@ -24,5 +24,6 @@ void cmd_ia_left(sock_t *cli, sock_list_t *list, char **arg, zarg_t *zarg);
 void cmd_ia_right(sock_t *cli, sock_list_t *list, char **arg, zarg_t *zarg);
 void cmd_ia_cnt_nbr(sock_t *cli, sock_list_t *list, char **arg, zarg_t *zarg);
 void cmd_ia_eject(sock_t *cli, sock_list_t *list, char **arg, zarg_t *zarg);
+void cmd_ia_inv(sock_t *cli, sock_list_t *list, char **arg, zarg_t *zarg);
 
 #endif
