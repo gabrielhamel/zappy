@@ -21,7 +21,6 @@ void cmd_graph_tna(sock_t *cli, sock_list_t *list, char **arg, zarg_t *zarg)
     (void)arg;
     (void)zarg;
 
-    for (size_t i = 0; game->teams[i]; i++) {
+    for (size_t i = 0; game->teams[i]; i++)
         dprintf(cli->fd, "tna %s\n", game->teams[i]->name);
-    }
 }

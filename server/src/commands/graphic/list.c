@@ -14,7 +14,7 @@ static graph_cmd_t cmd_g[] = {
     {"tna", cmd_graph_tna},
     {"ppo", cmd_graph_ppo},
     {"plv", cmd_graph_plv},
-    {"pin", NULL},
+    {"pin", cmd_graph_pin},
     {"sgt", cmd_graph_sgt},
     {"sst", cmd_graph_sst}
 };
@@ -28,7 +28,7 @@ void exec_graph_cmd(sock_t *cli, sock_list_t *list, char **arg, zarg_t *zarg)
             return;
         }
         else if (arg[0] && !strcmp(cmd_g[i].name, arg[0])) {
-            dprintf(cli->fd, "Not implemented\n");
+            dprintf(cli->fd, "suc\n");
             return;
         }
     dprintf(cli->fd, "suc\n");

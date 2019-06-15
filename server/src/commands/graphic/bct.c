@@ -31,7 +31,7 @@ void cmd_graph_bct(sock_t *cli, sock_list_t *list, char **arg, zarg_t *zarg)
     if (array_lenght(arg) != 3
         || (unsigned int)atoi(arg[1]) >= GET_GAME(list)->map.w
         || (unsigned int)atoi(arg[2]) >= GET_GAME(list)->map.h) {
-        dprintf(cli->fd, "ko\n");
+        dprintf(cli->fd, "sbp\n");
         return;
     }
     tile = GET_TILE(GET_GAME(list), atoi(arg[1]), atoi(arg[2]));

@@ -16,11 +16,6 @@ void cmd_send_sgt(sock_t *cli, zarg_t *zarg)
 void cmd_graph_sgt(sock_t *cli, sock_list_t *list, char **arg, zarg_t *zarg)
 {
     (void)list;
-
-    if (array_lenght(arg) != 2) {
-        dprintf(cli->fd, "ko\n");
-        return;
-    }
-    zarg->freq = atof(arg[1]);
+    (void)arg;
     dprintf(cli->fd, "sgt %.0f\n", zarg->freq);
 }

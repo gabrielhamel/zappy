@@ -24,6 +24,7 @@ void cmd_graph_plv(sock_t *cli, sock_list_t *list, char **arg, zarg_t *zarg);
 void cmd_graph_pin(sock_t *cli, sock_list_t *list, char **arg, zarg_t *zarg);
 void cmd_graph_sgt(sock_t *cli, sock_list_t *list, char **arg, zarg_t *zarg);
 void cmd_graph_sst(sock_t *cli, sock_list_t *list, char **arg, zarg_t *zarg);
+void cmd_graph_pin(sock_t *cli, sock_list_t *list, char **arg, zarg_t *zarg);
 
 // Commande passives
 void cmd_graph_bct_all(sock_t *cli, sock_list_t *list);
@@ -35,6 +36,8 @@ void send_all_eggs(sock_t *graph, sock_list_t *list);
 
 // Commande envoyés indirectement
 void graph_send_ia_ppo(sock_list_t *list, ia_t *ia);
+void graph_send_ia_plv(sock_list_t *list, ia_t *ia);
+void graph_send_ia_pin(sock_list_t *list, ia_t *ia);
 void graph_send_tile_bct(sock_list_t *list, tile_t *tile);
 
 #endif

@@ -13,12 +13,12 @@ void cmd_graph_ppo(sock_t *cli, sock_list_t *list, char **arg, zarg_t *zarg)
 
     (void)zarg;
     if (array_lenght(arg) < 2) {
-        dprintf(cli->fd, "ko\n");
+        dprintf(cli->fd, "sbp\n");
         return;
     }
     ia = get_player_by_id(atoi(arg[1]), list);
     if (ia == NULL) {
-        dprintf(cli->fd, "ko\n");
+        dprintf(cli->fd, "sbp\n");
         return;
     }
     dprintf(cli->fd, "ppo %d %ld %ld %d\n", ia->id, ia->x, ia->y, ia->ori);

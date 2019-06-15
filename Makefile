@@ -32,6 +32,7 @@ SRC_SERV =	./server/src/sockets/client.c				\
 			./server/src/commands/graphic/get_player_by_id.c	\
 			./server/src/commands/graphic/msz.c			\
 			./server/src/commands/graphic/bct.c			\
+			./server/src/commands/graphic/pin.c			\
 			./server/src/commands/graphic/mct.c			\
 			./server/src/commands/graphic/tna.c			\
 			./server/src/commands/graphic/ppo.c			\
