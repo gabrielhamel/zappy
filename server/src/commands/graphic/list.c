@@ -12,8 +12,8 @@ static graph_cmd_t cmd_g[] = {
     {"bct", cmd_graph_bct},
     {"mct", cmd_graph_mct},
     {"tna", cmd_graph_tna},
-    {"ppo", NULL},
-    {"plv", NULL},
+    {"ppo", cmd_graph_ppo},
+    {"plv", cmd_graph_plv},
     {"pin", NULL},
     {"sgt", cmd_graph_sgt},
     {"sst", cmd_graph_sst}

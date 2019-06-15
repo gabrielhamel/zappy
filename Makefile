@@ -12,6 +12,7 @@ SRC_SERV =	./server/src/sockets/client.c				\
 			./server/src/sockets/list_utils.c			\
 			./server/src/sockets/server.c				\
 			./server/src/game/link_map.c				\
+			./server/src/game/random.c					\
 			./server/src/game/map.c						\
 			./server/src/loop.c							\
 			./server/src/main.c							\
@@ -28,15 +29,19 @@ SRC_SERV =	./server/src/sockets/client.c				\
 			./server/src/parsing/types.c				\
 			./server/src/commands/buffer_cmd/list_fct.c \
 			./server/src/commands/graphic/list.c 		\
+			./server/src/commands/graphic/get_player_by_id.c	\
 			./server/src/commands/graphic/msz.c			\
 			./server/src/commands/graphic/bct.c			\
 			./server/src/commands/graphic/mct.c			\
 			./server/src/commands/graphic/tna.c			\
+			./server/src/commands/graphic/ppo.c			\
+			./server/src/commands/graphic/plv.c			\
 			./server/src/commands/graphic/sgt.c			\
 			./server/src/commands/graphic/sst.c			\
 			./server/src/commands/graphic/send_all.c	\
 			./server/src/commands/ai/list.c 			\
 			./server/src/commands/ai/fork.c				\
+			./server/src/commands/ai/forward.c			\
 			./server/src/teams/check_team_names.c		\
 			./server/src/game/const_dest_game.c			\
 			./server/src/time_manage.c
