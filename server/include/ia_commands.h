@@ -19,5 +19,7 @@ void disconnect_player(sock_t *cli, sock_list_t *list);
 
 void cmd_ia_fork(sock_t *cli, sock_list_t *list, char **arg, zarg_t *zarg);
 void cmd_ia_forward(sock_t *cli, sock_list_t *list, char **arg, zarg_t *zarg);
+void cmd_ia_left(sock_t *cli, sock_list_t *list, char **arg, zarg_t *zarg);
+void cmd_ia_right(sock_t *cli, sock_list_t *list, char **arg, zarg_t *zarg);
 
 #endif

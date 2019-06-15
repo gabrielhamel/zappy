@@ -10,8 +10,8 @@
 
 static ai_cmd_t cmd_g[] = {
     {"Forward", 7, cmd_ia_forward},
-    {"Right", 7, NULL},
-    {"Left", 7, NULL},
+    {"Right", 7, cmd_ia_right},
+    {"Left", 7, cmd_ia_left},
     {"Look", 7, NULL},
     {"Inventory", 1, NULL},
     {"Broadcast", 7, NULL},
