@@ -57,8 +57,10 @@ bool parsing(arg_t *arg, int ac, char **av)
             state = parse_infinity_arg(ac, av, flag, &i);
         else
             state = NULL;
-        if (state == NULL)
+        if (state == NULL) {
+            free(arg->team_names);
             return (false);
+        }
         fill_arg(arg, flag, state);
     }
     if (arg->clients_nb && arg->freq && arg->height
