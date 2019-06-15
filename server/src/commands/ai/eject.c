@@ -53,7 +53,7 @@ void cmd_ia_eject(sock_t *cli, sock_list_t *list, char **arg, zarg_t *zarg)
         client->cli_type != IA)
             continue;
         ia = client->client.ia;
-        if (ia->x != me->x || ia->y != me->y)
+        if (ia->x != me->x || ia->y != me->y || ia == me)
             continue;
         nb++;
         eject(list, me, ia);
