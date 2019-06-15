@@ -7,7 +7,7 @@
 
 #include "graph_commands.h"
 
-ia_t* get_player_by_id(int id, sock_list_t *list)
+ia_t *get_player_by_id(int id, sock_list_t *list)
 {
     sock_node_t *node = list->start;
     zappy_client_t *cli;

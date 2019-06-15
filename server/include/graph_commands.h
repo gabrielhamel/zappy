@@ -12,7 +12,7 @@
 
 void exec_graph_cmd(sock_t *cli, sock_list_t *list, char **arg, zarg_t *zarg);
 
-ia_t* get_player_by_id(int id, sock_list_t *list);
+ia_t *get_player_by_id(int id, sock_list_t *list);
 
 // Liste des commandes graphiques
 void cmd_graph_msz(sock_t *cli, sock_list_t *list, char **arg, zarg_t *zarg);
