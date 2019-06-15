@@ -16,8 +16,13 @@ void update_time_cmd(sock_t *cli, unsigned int new);
 void insert_cmd_ia(sock_t *cli, char **arg, zarg_t *zarg);
 void init_player(ia_t *ia, sock_list_t *list, team_t *team, int id);
 void disconnect_player(sock_t *cli, sock_list_t *list);
+void ia_move(sock_list_t *list, ia_t *ia, facing_t ori);
 
 void cmd_ia_fork(sock_t *cli, sock_list_t *list, char **arg, zarg_t *zarg);
 void cmd_ia_forward(sock_t *cli, sock_list_t *list, char **arg, zarg_t *zarg);
+void cmd_ia_left(sock_t *cli, sock_list_t *list, char **arg, zarg_t *zarg);
+void cmd_ia_right(sock_t *cli, sock_list_t *list, char **arg, zarg_t *zarg);
+void cmd_ia_cnt_nbr(sock_t *cli, sock_list_t *list, char **arg, zarg_t *zarg);
+void cmd_ia_eject(sock_t *cli, sock_list_t *list, char **arg, zarg_t *zarg);
 
 #endif
