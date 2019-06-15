@@ -12,6 +12,8 @@ void cmd_ia_left(sock_t *cli, sock_list_t *list, char **arg, zarg_t *zarg)
 {
     ia_t *ia = ZAPPY_CLIENT(cli)->client.ia;
 
+    (void)arg;
+    (void)zarg;
     ia->ori--;
     if (ia->ori < NORTH)
         ia->ori = WEAST;
