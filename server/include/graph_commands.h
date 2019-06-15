@@ -33,4 +33,8 @@ void send_all_graphics(sock_list_t *list, const char *s);
 void send_all_players(sock_t *graph, sock_list_t *list);
 void send_all_eggs(sock_t *graph, sock_list_t *list);
 
+// Commande envoyés indirectement
+void graph_send_ia_ppo(sock_list_t *list, ia_t *ia);
+void graph_send_tile_bct(sock_list_t *list, tile_t *tile);
+
 #endif

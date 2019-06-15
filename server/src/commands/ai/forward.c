@@ -8,10 +8,17 @@
 #include "graph_commands.h"
 #include "server.h"
 
+void graph_send_ia_ppo(sock_list_t *list, ia_t *ia)
+{
+    char buff[4096] = {0};
+
+    sprintf(buff, "ppo %d %ld %ld %d\n", ia->id, ia->x, ia->y, ia->ori);
+    send_all_graphics(list, buff);
+}
+
 void cmd_ia_forward(sock_t *cli, sock_list_t *list, char **arg, zarg_t *zarg)
 {
     ia_t *ia = ZAPPY_CLIENT(cli)->client.ia;
-    char buff[4096] = {0};
 
     (void)arg;
     switch (ia->ori) {
@@ -29,6 +36,5 @@ void cmd_ia_forward(sock_t *cli, sock_list_t *list, char **arg, zarg_t *zarg)
         break;
     }
     dprintf(cli->fd, "ok\n");
-    sprintf(buff, "ppo %d %ld %ld %d\n", ia->id, ia->x, ia->y, ia->ori);
-    send_all_graphics(list, buff);
+    graph_send_ia_ppo(list, ia);
 }
