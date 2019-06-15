@@ -35,7 +35,20 @@ class Server
 		let sock:Socket = new Socket(socket);
 
 		sock.connectToServer("127.0.0.1", this.serverPort);
+		socket.on("disconnect", () => {
+			this.handleSocketDisconnection(socket);
+		});
 		this.sockets.push(sock);
+	}
+	private handleSocketDisconnection = (socket:socketio.Socket) =>
+	{
+		let index:number = this.sockets.findIndex((sock:Socket) => {
+			return (sock.getId() == socket.id);
+		});
+
+		if (index == -1)
+			return;
+		this.sockets.splice(index, 1);
 	}
 }
 

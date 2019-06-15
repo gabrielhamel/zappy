@@ -1,8 +1,9 @@
 class Tile
 {
-	private static readonly Y:number = 0.75;
 	private static readonly ANIMATION_BUMP:number = 0.15;
 	private static readonly ANIMATION_FPS:number = 10;
+	private static readonly SPREAD:number = 0.4;
+	private static readonly Y:number = 0.75;
 	private static nb:number = 0;
 	private static spriteManager:BABYLON.SpriteManager = null;
 	private stats:Map<string, number> = new Map<string, number>();
@@ -54,9 +55,9 @@ class Tile
 			sprite = new BABYLON.Sprite(ID, Tile.spriteManager);
 			sprite.cellIndex = type;
 			sprite.isPickable = false;
-			sprite.position.x = this.position.x + Math.random();
+			sprite.position.x = this.position.x + middleRand(Tile.SPREAD);
 			sprite.position.y = Tile.Y;
-			sprite.position.z = this.position.y + Math.random();
+			sprite.position.z = this.position.y + middleRand(Tile.SPREAD);
 			sprite.size = 0.5;
 			sprite.animations = [];
 			sprite.animations.push(this.animation);
@@ -107,5 +108,17 @@ class Tile
 	public getPosition()
 	{
 		return (this.position);
+	}
+	public getRawDatas()
+	{
+		let output:Array<number> = new Array<number>();
+		let it:IterableIterator<[string, number]> = this.stats.entries();
+		let res:IteratorResult<[string, number]> = it.next();
+
+		while (!res.done) {
+			output.push(res.value[1]);
+			res = it.next();
+		}
+		return (output);
 	}
 }

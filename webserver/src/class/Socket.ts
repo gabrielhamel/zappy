@@ -30,6 +30,10 @@ class Socket
 			this.ioSocket.on("data", this.sendDatasToServer);
 		});
 	}
+	public getId()
+	{
+		return (this.ioSocket.id);
+	}
 }
 
 export default Socket;
