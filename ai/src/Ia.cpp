@@ -22,7 +22,7 @@ void zpy::Ia::run()
             std::cout << this->_cli->getBroadcast().msg << std::endl;
         this->_cli->left();
         this->_cli->connectNbr();
-        this->_cli->left();
+        this->_cli->right();
         // std::cout << this->_cli->getRemainingPlayer() << std::endl;
     }
 }

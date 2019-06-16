@@ -216,18 +216,5 @@ void zpy::Client::connectNbr()
     this->commandStart();
     this->_server->writeData(command);
     auto buff = this->commandEnd();
-    try {
-        this->_remainingPlayer = std::stoul(buff[0], nullptr, 10);
-    }
-    catch (const std::exception& e) {
-
-        std::cout << "ERROR ===========" << std::endl;
-        std::cout << "stoul=" << buff[0] << std::endl;
-        std::cout << "BEGIN FOR ---" << std::endl;
-        for (auto &i : buff)
-            std::cout << i << std::endl;
-        std::cout << "END FOR   --- " << std::endl;        
-        std::cout << e.what() << std::endl;
-        std::cout << "END ERROR =======" << std::endl;
-    }
+    this->_remainingPlayer = std::stoul(buff[0], nullptr, 10);
 }
