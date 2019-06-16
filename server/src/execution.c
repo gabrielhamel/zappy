@@ -95,13 +95,20 @@ char **arg, zarg_t *zarg)
 
 void exec_command(sock_t *cli, sock_list_t *list, char **arg, zarg_t *zarg)
 {
+    char buff[4096] = {0};
+
     if (ZAPPY_CLIENT(cli)->cli_type == UNDEFINED) {
         if (init_zappy_cli(cli, list, arg, zarg) == false)
             dprintf(cli->fd, "ko\n");
         destroy_array(arg);
     }
-    else if (ZAPPY_CLIENT(cli)->cli_type == IA)
+    else if (ZAPPY_CLIENT(cli)->cli_type == IA) {
+        if (!strcmp(arg[0], "Fork")) {
+            sprintf(buff, "pfk %d\n", cli->fd);
+            send_all_graphics(list, buff);            
+        }
         insert_cmd_ia(cli, arg, zarg);
+    }
     else {
         exec_graph_cmd(cli, list, arg, zarg);
         destroy_array(arg);

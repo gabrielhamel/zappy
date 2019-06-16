@@ -38,7 +38,7 @@ static void refresh_egg(egg_t *egg, sock_list_t *list, zarg_t *zarg)
     if (egg->state == HATCHED)
         return;
     egg->state = HATCHED;
-    sprintf(buff, "eth %d\n", egg->id);
+    sprintf(buff, "eht %d\n", egg->id);
     send_all_graphics(list, buff);
 }
 
