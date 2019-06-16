@@ -127,6 +127,7 @@ namespace zpy {
             void left();
             void resfresh();
             zpy::Client::Response take(const zpy::Client::Object &object);
+            zpy::Client::Response set(const zpy::Client::Object &object);
             zpy::Client::Inventory inventory();
             void broadcast(const std::string &msg);
             bool haveBroadcast();

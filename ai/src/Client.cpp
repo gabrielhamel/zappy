@@ -95,7 +95,7 @@ unsigned int zpy::Client::getEllapsedTime() const
 std::vector<std::string> zpy::Client::selectGoodAnswer(const std::vector<std::vector<std::string>> &cmd)
 {
     for (auto line : cmd)
-        if (line[0] != "message" && line[0] != "dead")
+        if (line[0] != "message" && line[0] != "dead" && line[0] != "eject")
             return line;
     return std::vector<std::string>();
 }
@@ -133,6 +133,19 @@ void zpy::Client::left()
 zpy::Client::Response zpy::Client::take(const zpy::Client::Object &object)
 {
     auto command = "Take " + object.str() + "\n";
+    std::cout << "client: " << command;
+
+    this->commandStart();
+    this->_server->writeData(command);
+    auto buff = this->commandEnd();
+    if (buff[0] == "ok")
+        return zpy::Client::Response::OK;
+    return zpy::Client::Response::KO;
+}
+
+zpy::Client::Response zpy::Client::set(const zpy::Client::Object &object)
+{
+    auto command = "Set " + object.str() + "\n";
     std::cout << "client: " << command;
 
     this->commandStart();
