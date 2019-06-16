@@ -96,7 +96,8 @@ void refresh_cmd(sock_list_t *list, zarg_t *zarg, long int ellapsed)
             continue;
         }
         next = i->next;
-        tmp->time -= (float)ellapsed / 1000.f;
+        if (!ZAPPY_CLIENT(i->socket)->client.ia->fixed)
+            tmp->time -= (float)ellapsed / 1000.f;
         if (tmp->time <= 0)
             exec_ia_cmd(i->socket, list, zarg);
         i = next;

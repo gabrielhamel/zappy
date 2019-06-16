@@ -30,6 +30,14 @@ typedef struct egg_s {
     egg_state_t state;
 } egg_t;
 
+typedef struct incantation_s {
+    LIST_ENTRY(incantation_s) next;
+    struct ia_s **ia;
+    size_t nb_ia;
+    tile_t *tile;
+    float time;
+} incantation_t;
+
 typedef struct team_t {
     LIST_HEAD(, egg_s) eggs;
     sock_t **sock;
@@ -41,6 +49,7 @@ typedef struct s_game {
     team_t **teams;
     size_t nb_teams;
     map_t map;
+    LIST_HEAD(, incantation_s) incantations;
 } game_t;
 
 // Constructeur et destructeur du game

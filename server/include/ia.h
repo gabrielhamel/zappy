@@ -9,6 +9,7 @@
 
 #include <stdlib.h>
 #include <sys/queue.h>
+#include <stdbool.h>
 #include "game.h"
 #include "item.h"
 
@@ -29,6 +30,7 @@ typedef struct ia_s {
     facing_t ori;
     struct team_t *team;
     float live;
+    bool fixed;
 } ia_t;
 
 typedef enum {

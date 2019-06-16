@@ -67,6 +67,7 @@ static void init_some_var(ia_t *ia)
     ia->inventory[MENDIANE] = 0;
     ia->inventory[PHIRAS] = 0;
     ia->inventory[THYSTAME] = 0;
+    ia->fixed = false;
 }
 
 void init_player(ia_t *ia, sock_list_t *list, team_t *team, int id)

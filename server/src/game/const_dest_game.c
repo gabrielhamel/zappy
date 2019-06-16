@@ -18,6 +18,7 @@ void initialize_game_args(game_t *game, zarg_t *zarg)
 {
     size_t i;
 
+    LIST_INIT(&game->incantations);
     game->nb_teams = array_lenght(zarg->team_names);
     game->teams = malloc(sizeof(team_t *) * game->nb_teams);
     for (i = 0; i < game->nb_teams; i++) {
