@@ -17,12 +17,20 @@
 static void send_graphics_informations(sock_t *cli, sock_list_t *list,
 zarg_t *zarg)
 {
+    game_t *game = GET_GAME(list);
+    ia_t *ia;
+
     cmd_graph_msz(cli, list, NULL, zarg);
     cmd_send_sgt(cli, zarg);
     cmd_graph_bct_all(cli, list);
     cmd_tna_all_team(cli, zarg);
     send_all_players(cli, list);
     send_all_eggs(cli, list);
+    for (size_t i = 0; i < game->nb_teams; i++)
+        for (size_t j = 0; j < game->teams[i]->nb_clients; j++) {
+            ia = ZAPPY_CLIENT(game->teams[i]->sock[j])->client.ia;
+            graph_send_ia_pin(list, ia);
+        }
 }
 
 egg_t *available_egg(team_t *team)
@@ -58,6 +66,7 @@ zarg_t *zarg, sock_list_t *list)
     sprintf(buff, "pnw %d %ld %ld %d %d %s\n",
     ia->id, ia->x, ia->y, ia->ori, ia->level, team);
     send_all_graphics(list, buff);
+    graph_send_ia_pin(list, ia);
 }
 
 static bool init_zappy_cli(sock_t *cli, sock_list_t *list,

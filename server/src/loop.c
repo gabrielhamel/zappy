@@ -10,6 +10,7 @@
 #include <sys/timeb.h>
 #include "server.h"
 #include "game.h"
+#include "graph_commands.h"
 
 void refresh_player_live(sock_list_t *list, sock_t *sock, zarg_t *zarg)
 {
@@ -21,6 +22,7 @@ void refresh_player_live(sock_list_t *list, sock_t *sock, zarg_t *zarg)
         return;
     }
     ia->inventory[FOOD]--;
+    graph_send_ia_pin(list, ia);
     ia->live = 126.f / zarg->freq;
 }
 

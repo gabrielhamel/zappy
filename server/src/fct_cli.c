@@ -58,7 +58,7 @@ void end_client(const sock_t *cli, void *data)
     free(data);
 }
 
-static void init_some_var(ia_t *ia, sock_list_t *list)
+static void init_some_var(ia_t *ia)
 {
     ia->inventory[FOOD] = 9;
     ia->inventory[LINEMATE] = 0;
@@ -67,7 +67,6 @@ static void init_some_var(ia_t *ia, sock_list_t *list)
     ia->inventory[MENDIANE] = 0;
     ia->inventory[PHIRAS] = 0;
     ia->inventory[THYSTAME] = 0;
-    graph_send_ia_pin(list, ia);
 }
 
 void init_player(ia_t *ia, sock_list_t *list, team_t *team, int id)
@@ -92,5 +91,5 @@ void init_player(ia_t *ia, sock_list_t *list, team_t *team, int id)
         send_all_graphics(list, buff);
         free(egg);
     }
-    init_some_var(ia, list);
+    init_some_var(ia);
 }

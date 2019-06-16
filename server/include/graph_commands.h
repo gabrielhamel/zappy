@@ -39,6 +39,8 @@ void graph_send_ia_ppo(sock_list_t *list, ia_t *ia);
 void graph_send_ia_plv(sock_list_t *list, ia_t *ia);
 void graph_send_ia_pin(sock_list_t *list, ia_t *ia);
 void graph_send_tile_bct(sock_list_t *list, tile_t *tile);
+void graph_send_ia_pgt(sock_list_t *list, ia_t *ia, ITEM_T item);
+void graph_send_ia_pdr(sock_list_t *list, ia_t *ia, ITEM_T item);
 
 int cmd_ia_settake_parser(sock_t *cli, char **arg);
 
