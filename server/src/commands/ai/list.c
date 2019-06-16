@@ -14,7 +14,7 @@ static ai_cmd_t cmd_g[] = {
     {"Left", 7, cmd_ia_left},
     {"Look", 7, NULL},
     {"Inventory", 1, cmd_ia_inv},
-    {"Broadcast", 7, NULL},
+    {"Broadcast", 7, cmd_ia_broad},
     {"Connect_nbr", 0, cmd_ia_cnt_nbr},
     {"Fork", 42, cmd_ia_fork},
     {"Eject", 7, cmd_ia_eject},

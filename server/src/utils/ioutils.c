@@ -8,6 +8,7 @@
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
+#include "utils.h"
 
 static void put_token(char ***tab, size_t *size, char **tok)
 {
@@ -16,6 +17,16 @@ static void put_token(char ***tab, size_t *size, char **tok)
         *tab = realloc(*tab, ++(*size) * sizeof(char *));
         (*tab)[*size - 1] = NULL;
     }
+}
+
+static void insert_exception(char ***tab, char *s)
+{
+    char **tmp = *tab;
+
+    if (array_lenght(*tab) < 2 || strcmp("Broadcast", *tab[0]))
+        return;
+    free(tmp[1]);
+    tmp[1] = strdup(s);
 }
 
 char **tokenize(char *str, char *delim)
@@ -39,5 +50,6 @@ char **tokenize(char *str, char *delim)
         put_token(&tab, &size, &tok);
     }
     free(tmp);
+    insert_exception(&tab, str);
     return (tab);
 }
