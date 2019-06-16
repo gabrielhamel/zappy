@@ -10,7 +10,7 @@
 
 void cmd_ia_set(sock_t *cli, sock_list_t *list, char **arg, zarg_t *zarg)
 {
-    ia_t *ia = (ia_t *)cli->data;
+    ia_t *ia = ZAPPY_CLIENT(cli)->client.ia;
     tile_t *tile;
     int id_item;
 
@@ -22,12 +22,10 @@ void cmd_ia_set(sock_t *cli, sock_list_t *list, char **arg, zarg_t *zarg)
     if (ia->inventory[id_item] > 0) {
         tile->items[id_item] += 1;
         ia->inventory[id_item] -= 1;
-        graph_send_ia_ppo(list, ia);
         graph_send_ia_pin(list, ia);
+        graph_send_tile_bct(list, tile);
         dprintf(cli->fd, "ok\n");
     }
-    else {
+    else
         dprintf(cli->fd, "ko\n");
-        return;
-    }
 }

@@ -43,6 +43,7 @@ SRC_SERV =	./server/src/sockets/client.c				\
 			./server/src/commands/ai/list.c 			\
 			./server/src/commands/ai/fork.c				\
 			./server/src/commands/ai/forward.c			\
+			./server/src/commands/ai/broadcast.c		\
 			./server/src/commands/ai/eject.c			\
 			./server/src/commands/ai/inventory.c		\
 			./server/src/commands/ai/left.c				\
