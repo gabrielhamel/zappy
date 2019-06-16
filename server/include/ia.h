@@ -38,3 +38,4 @@ typedef enum {
 } direction_t;
 
 int get_direction(ia_t *ia, direction_t x, direction_t y);
+int get_look_player(ia_t *sender, ia_t *receiver);
