@@ -17,6 +17,9 @@ void zpy::Ia::run()
 {
     while (1) {
         this->_cli->resfresh();
-        this->_cli->forward();
+        while (this->_cli->haveBroadcast())
+            std::cout << this->_cli->getBroadcast().msg << std::endl;
+        this->_cli->connectNbr();
+        std::cout << this->_cli->getRemainingPlayer() << std::endl;
     }
 }
