@@ -20,7 +20,7 @@ static ai_cmd_t cmd_g[] = {
     {"Eject", 7, cmd_ia_eject},
     {"Take", 7, cmd_ia_take},
     {"Set", 7, cmd_ia_set},
-    {"Incantation", 300, NULL}
+    {"Incantation", 300, cmd_ia_incant}
 };
 
 static ai_cmd_t *check_ai_cmd(char **cmd)

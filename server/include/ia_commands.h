@@ -17,6 +17,8 @@ void insert_cmd_ia(sock_t *cli, char **arg, zarg_t *zarg);
 void init_player(ia_t *ia, sock_list_t *list, team_t *team, int id);
 void disconnect_player(sock_t *cli, sock_list_t *list);
 void ia_move(sock_list_t *list, ia_t *ia, facing_t ori);
+ia_t **get_players_incantable(game_t *game, ia_t *me, int level);
+bool is_ready_for_incantation(ia_t **players, int level);
 
 void cmd_ia_fork(sock_t *cli, sock_list_t *list, char **arg, zarg_t *zarg);
 void cmd_ia_forward(sock_t *cli, sock_list_t *list, char **arg, zarg_t *zarg);
@@ -28,5 +30,6 @@ void cmd_ia_inv(sock_t *cli, sock_list_t *list, char **arg, zarg_t *zarg);
 void cmd_ia_take(sock_t *cli, sock_list_t *list, char **arg, zarg_t *zarg);
 void cmd_ia_set(sock_t *cli, sock_list_t *list, char **arg, zarg_t *zarg);
 void cmd_ia_broad(sock_t *cli, sock_list_t *list, char **arg, zarg_t *zarg);
+void cmd_ia_incant(sock_t *cli, sock_list_t *list, char **arg, zarg_t *zarg);
 
 #endif

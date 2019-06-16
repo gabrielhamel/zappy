@@ -8,7 +8,7 @@
 #ifndef SERVER_HPP
 #define SERVER_HPP
 
-#define READ_SIZE 100000
+#define READ_SIZE 1000000
 
 #include <netdb.h>
 #include <iostream>
