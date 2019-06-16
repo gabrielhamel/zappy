@@ -11,8 +11,8 @@
 #define ZAPPY_CLIENT(x) ((zappy_client_t *)(x->data))
 #define LIST_CMD(x) &(ZAPPY_CLIENT(x)->client.ia->list_head)
 
-#include "ia.h"
 #include "graphic.h"
+#include "ia.h"
 
 typedef struct buffer_cmd_s {
     char **cmd;
@@ -20,8 +20,8 @@ typedef struct buffer_cmd_s {
     STAILQ_ENTRY(buffer_cmd_s) next;
 } buffer_cmd_t;
 
-typedef union {
-    ia_t *ia;
+typedef union un_cli_s {
+    struct ia_s *ia;
     graphic_t *graphic;
 } un_cli_t;
 

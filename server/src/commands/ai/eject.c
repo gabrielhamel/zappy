@@ -6,7 +6,6 @@
 */
 
 #include "graph_commands.h"
-#include "server.h"
 #include "ia_commands.h"
 
 static void send_res(sock_list_t *list, sock_t *cli, size_t nb)
@@ -28,13 +27,13 @@ static void eject(sock_list_t *list, ia_t *ejecter, ia_t *ejected)
 
     ia_move(list, ejected, ejecter->ori);
     if (ejecter->ori == NORTH)
-        k = 7;
+        k = get_direction(ejected, ZERO, NEGATIVE);
     if (ejecter->ori == EAST)
-        k = 5;
+        k = get_direction(ejected, NEGATIVE, ZERO);
     if (ejecter->ori == SOUTH)
-        k = 3;
+        k = get_direction(ejected, ZERO, POSITIVE);
     if (ejecter->ori == WEAST)
-        k = 1;
+        k = get_direction(ejected, POSITIVE, ZERO);
     dprintf(ejected->id, "eject: %d\n", k);
 }
 

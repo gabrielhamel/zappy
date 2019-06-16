@@ -73,3 +73,6 @@ typedef struct {
     const char *name;
     void (*func)(sock_t *, sock_list_t *, char **, zarg_t *);
 } graph_cmd_t;
+
+void destroy_ftp_sock(sock_list_t *list, sock_t *cli);
+void refresh_player_live(sock_list_t *list, sock_t *sock, zarg_t *zarg);

@@ -17,7 +17,7 @@ static void server_event(sock_list_t *list, sock_t *server, zarg_t *zarg)
         socket_list_add(list, tmp);
 }
 
-static void destroy_ftp_sock(sock_list_t *list, sock_t *cli)
+void destroy_ftp_sock(sock_list_t *list, sock_t *cli)
 {
     if (cli->type == CLIENT && ZAPPY_CLIENT(cli)->cli_type == IA)
         disconnect_player(cli, list);

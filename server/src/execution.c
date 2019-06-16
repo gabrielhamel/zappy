@@ -50,6 +50,7 @@ zarg_t *zarg, sock_list_t *list)
     add_random_food(list, &game->map);
     for (; strcmp(game->teams[i]->name, team); i++);
     init_player(ia, list, game->teams[i], cli->fd);
+    ia->live = 126.f / zarg->freq;
     nb_remaining = zarg->clients_nb - ia->team->nb_clients;
     nb_remaining = nb_remaining < 0 ? 0 : nb_remaining;
     dprintf(cli->fd, "%d\n%d %d\n",

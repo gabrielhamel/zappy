@@ -19,7 +19,7 @@ typedef enum {
     WEAST
 } facing_t;
 
-typedef struct {
+typedef struct ia_s {
     STAILQ_HEAD(, buffer_cmd_s) list_head;
     int id;
     int inventory[N_ITEMS];
@@ -28,4 +28,13 @@ typedef struct {
     int level;
     facing_t ori;
     struct team_t *team;
+    float live;
 } ia_t;
+
+typedef enum {
+    POSITIVE = -1,
+    ZERO,
+    NEGATIVE
+} direction_t;
+
+int get_direction(ia_t *ia, direction_t x, direction_t y);
