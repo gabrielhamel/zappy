@@ -14,6 +14,7 @@ SRC_SERV =	./server/src/sockets/client.c				\
 			./server/src/game/link_map.c				\
 			./server/src/game/random.c					\
 			./server/src/game/map.c						\
+			./server/src/game/incantation.c				\
 			./server/src/loop.c							\
 			./server/src/main.c							\
 			./server/src/events.c						\
