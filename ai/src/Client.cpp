@@ -18,9 +18,11 @@ _line(0)
 {
     this->_server->writeData(this->_team + "\n");
     this->_server->waitData();
-    auto buff = Utils::extract(this->_server->readData());
-    for (auto &cmd : buff)
-        this->parseCommand(cmd);
+    if (this->_server->hasData()) {
+        auto buff = Utils::extract(this->_server->readData());
+        for (auto &cmd : buff)
+            this->parseCommand(cmd);
+    }
 }
 
 zpy::Client::~Client()
@@ -213,5 +215,6 @@ void zpy::Client::connectNbr()
 
     this->commandStart();
     this->_server->writeData(command);
-    this->_remainingPlayer = std::stoul(this->commandEnd()[0], nullptr, 10);
+    auto buff = this->commandEnd();
+    this->_remainingPlayer = std::stoul(buff[0], nullptr, 10);
 }

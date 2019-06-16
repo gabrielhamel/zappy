@@ -15,11 +15,14 @@ zpy::Ia::Ia(std::shared_ptr<zpy::Client> cli)
 
 void zpy::Ia::run()
 {
+    usleep(50000);
     while (1) {
         this->_cli->resfresh();
         while (this->_cli->haveBroadcast())
             std::cout << this->_cli->getBroadcast().msg << std::endl;
+        this->_cli->left();
         this->_cli->connectNbr();
-        std::cout << this->_cli->getRemainingPlayer() << std::endl;
+        this->_cli->right();
+        // std::cout << this->_cli->getRemainingPlayer() << std::endl;
     }
 }
