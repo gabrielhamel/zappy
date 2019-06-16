@@ -21,8 +21,7 @@ static int is_item(char *object_required)
 
 int cmd_ia_settake_parser(sock_t *cli, char **arg)
 {
-    int id_item;
-
+    (void)cli;
     if (array_lenght(arg) < 2)
         return -1;
     return is_item(arg[1]);

@@ -37,18 +37,17 @@ int get_direction(ia_t *ia, direction_t x, direction_t y)
     return 0;
 }
 
-int eject(sock_list_t *list, ia_t *ejecter, ia_t *ejected)
+int get_look_player(ia_t *sender, ia_t *receiver)
 {
     int k = 0;
 
-    ia_move(list, ejected, ejecter->ori);
-    if (ejecter->ori == NORTH)
-        k = get_direction(ejected, ZERO, NEGATIVE);
-    if (ejecter->ori == EAST)
-        k = get_direction(ejected, NEGATIVE, ZERO);
-    if (ejecter->ori == SOUTH)
-        k = get_direction(ejected, ZERO, POSITIVE);
-    if (ejecter->ori == WEAST)
-        k = get_direction(ejected, POSITIVE, ZERO);
-    dprintf(ejected->id, "eject: %d\n", k);
+    if (sender->ori == NORTH)
+        k = get_direction(receiver, ZERO, NEGATIVE);
+    if (sender->ori == EAST)
+        k = get_direction(receiver, NEGATIVE, ZERO);
+    if (sender->ori == SOUTH)
+        k = get_direction(receiver, ZERO, POSITIVE);
+    if (sender->ori == WEAST)
+        k = get_direction(receiver, POSITIVE, ZERO);
+    return k;
 }
