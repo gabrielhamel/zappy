@@ -29,7 +29,7 @@ static void refresh_egg(egg_t *egg, sock_list_t *list, zarg_t *zarg)
 
     if (egg->time > 0)
         return;
-    if (egg->time <= (-10000.f / zarg->freq)) {
+    if (egg->time <= (-1000.f / zarg->freq)) {
         egg->state = DEAD;
         sprintf(buff, "edi %d\n", egg->id);
         send_all_graphics(list, buff);

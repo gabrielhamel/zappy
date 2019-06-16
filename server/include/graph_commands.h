@@ -11,6 +11,7 @@
 #include "server.h"
 
 void exec_graph_cmd(sock_t *cli, sock_list_t *list, char **arg, zarg_t *zarg);
+size_t get_nb_hatcheg_egg(team_t *team);
 
 ia_t *get_player_by_id(int id, sock_list_t *list);
 

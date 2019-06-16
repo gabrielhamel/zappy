@@ -59,7 +59,8 @@ zarg_t *zarg, sock_list_t *list)
     for (; strcmp(game->teams[i]->name, team); i++);
     init_player(ia, list, game->teams[i], cli->fd);
     ia->live = 126.f / zarg->freq;
-    nb_remaining = zarg->clients_nb - ia->team->nb_clients;
+    nb_remaining = zarg->clients_nb - ia->team->nb_clients +
+    get_nb_hatcheg_egg(ia->team);
     nb_remaining = nb_remaining < 0 ? 0 : nb_remaining;
     dprintf(cli->fd, "%d\n%d %d\n",
     nb_remaining, zarg->width, zarg->height);
