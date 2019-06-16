@@ -78,6 +78,9 @@ static void broadcast(map_t *map, ia_t *sender, ia_t *receiver, const char *s)
     if (dir == 8)
         dir = 7;
     dir = get_direction(receiver, interval[dir][2], interval[dir][3]);
+    if (sender->x == receiver->x && sender->y == receiver->y) {
+        
+    }
     dprintf(receiver->id, "message %d, %s\n", dir, s);
 }
 

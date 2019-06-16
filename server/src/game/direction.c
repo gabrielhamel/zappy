@@ -36,3 +36,19 @@ int get_direction(ia_t *ia, direction_t x, direction_t y)
         return dir[1];
     return 0;
 }
+
+int eject(sock_list_t *list, ia_t *ejecter, ia_t *ejected)
+{
+    int k = 0;
+
+    ia_move(list, ejected, ejecter->ori);
+    if (ejecter->ori == NORTH)
+        k = get_direction(ejected, ZERO, NEGATIVE);
+    if (ejecter->ori == EAST)
+        k = get_direction(ejected, NEGATIVE, ZERO);
+    if (ejecter->ori == SOUTH)
+        k = get_direction(ejected, ZERO, POSITIVE);
+    if (ejecter->ori == WEAST)
+        k = get_direction(ejected, POSITIVE, ZERO);
+    dprintf(ejected->id, "eject: %d\n", k);
+}

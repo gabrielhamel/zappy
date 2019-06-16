@@ -4,3 +4,8 @@
 ** File description:
 ** incantation
 */
+
+void start_new_incantation()
+{
+
+}
