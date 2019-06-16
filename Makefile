@@ -99,7 +99,7 @@ titre_ai:
 			@$(ECHO) $(RED)¶ Building ai$(TEAL):$(DEFAULT)
 
 zappy_server: titre_server $(OBJ_SERV)
-			@gcc -o zappy_server $(OBJ_SERV) && $(ECHO) $(GREEN)✓$(TEAL)" BUILD SUCCESS !"$(TEAL) $(DEFAULT) || $(ECHO) $(SANG)✗$(TEAL)" BUILD FAILED !"$(TEAL) $(DEFAULT)
+			@gcc -o zappy_server $(OBJ_SERV) -lm && $(ECHO) $(GREEN)✓$(TEAL)" BUILD SUCCESS !"$(TEAL) $(DEFAULT) || $(ECHO) $(SANG)✗$(TEAL)" BUILD FAILED !"$(TEAL) $(DEFAULT)
 
 zappy_ai:	titre_ai $(OBJ_AI)
 			@g++ -o zappy_ai $(OBJ_AI) && $(ECHO) $(GREEN)✓$(TEAL)" BUILD SUCCESS !"$(TEAL) $(DEFAULT) || $(ECHO) $(SANG)✗$(TEAL)" BUILD FAILED !"$(TEAL) $(DEFAULT)
