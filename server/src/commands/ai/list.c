@@ -18,8 +18,8 @@ static ai_cmd_t cmd_g[] = {
     {"Connect_nbr", 0, cmd_ia_cnt_nbr},
     {"Fork", 42, cmd_ia_fork},
     {"Eject", 7, cmd_ia_eject},
-    {"Take", 7, NULL},
-    {"Set", 7, NULL},
+    {"Take", 7, cmd_ia_take},
+    {"Set", 7, cmd_ia_set},
     {"Incantation", 300, NULL}
 };
 

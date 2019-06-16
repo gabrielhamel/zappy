@@ -40,4 +40,6 @@ void graph_send_ia_plv(sock_list_t *list, ia_t *ia);
 void graph_send_ia_pin(sock_list_t *list, ia_t *ia);
 void graph_send_tile_bct(sock_list_t *list, tile_t *tile);
 
+int cmd_ia_settake_parser(sock_t *cli, char **arg);
+
 #endif
