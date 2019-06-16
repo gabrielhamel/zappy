@@ -204,3 +204,14 @@ void zpy::Client::resfresh()
 {
     this->commandStart();
 }
+
+
+void zpy::Client::connectNbr()
+{
+    auto command = "Connect_nbr \n";
+    std::cout << "client: " << command;
+
+    this->commandStart();
+    this->_server->writeData(command);
+    this->_remainingPlayer = std::stoul(this->commandEnd()[0], nullptr, 10);
+}
