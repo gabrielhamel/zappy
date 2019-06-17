@@ -89,6 +89,7 @@ void refresh_cmd(sock_list_t *list, zarg_t *zarg, long int ellapsed)
 
     refresh_eggs(list, (float)ellapsed / 1000.f, zarg);
     refresh_live(list, (float)ellapsed / 1000.f, zarg);
+    refresh_incantation(list, (float)ellapsed / 1000.f);
     while (i) {
         tmp = get_head(i->socket);
         if (tmp == NULL) {
