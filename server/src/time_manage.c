@@ -27,9 +27,9 @@ static void refresh_egg(egg_t *egg, sock_list_t *list, zarg_t *zarg)
 {
     char buff[4096] = {0};
 
-    if (egg->time > 0)
+    if (egg->time >= 0)
         return;
-    if (egg->time <= (-1000.f / zarg->freq)) {
+    if (egg->time < (-1000.f / zarg->freq)) {
         egg->state = DEAD;
         sprintf(buff, "edi %d\n", egg->id);
         send_all_graphics(list, buff);
@@ -76,8 +76,10 @@ static void refresh_live(sock_list_t *list, float ellapsed, zarg_t *zarg)
         ia->live -= ellapsed;
         tmp = node->socket;
         node = node->next;
-        if (ia->live <= 0)
+        if (ia->live < 0)
             refresh_player_live(list, tmp, zarg);
+        if (check_win_ia(list, ia))
+            return;
     }
 }
 
@@ -99,7 +101,7 @@ void refresh_cmd(sock_list_t *list, zarg_t *zarg, long int ellapsed)
         next = i->next;
         if (!ZAPPY_CLIENT(i->socket)->client.ia->fixed)
             tmp->time -= (float)ellapsed / 1000.f;
-        if (tmp->time <= 0)
+        if (tmp->time < 0)
             exec_ia_cmd(i->socket, list, zarg);
         i = next;
     }

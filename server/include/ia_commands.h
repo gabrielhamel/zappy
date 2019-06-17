@@ -19,6 +19,7 @@ void disconnect_player(sock_t *cli, sock_list_t *list);
 void ia_move(sock_list_t *list, ia_t *ia, facing_t ori);
 ia_t **get_players_incantable(game_t *game, ia_t *me, int level);
 bool is_ready_for_incantation(ia_t **players, int level);
+bool check_win_ia(sock_list_t *list, ia_t *ia);
 
 void cmd_ia_fork(sock_t *cli, sock_list_t *list, char **arg, zarg_t *zarg);
 void cmd_ia_forward(sock_t *cli, sock_list_t *list, char **arg, zarg_t *zarg);

@@ -104,7 +104,7 @@ void exec_command(sock_t *cli, sock_list_t *list, char **arg, zarg_t *zarg)
         destroy_array(arg);
     }
     else if (ZAPPY_CLIENT(cli)->cli_type == IA) {
-        if (!strcmp(arg[0], "Fork")) {
+        if (arg[0] && !strcmp(arg[0], "Fork")) {
             sprintf(buff, "pfk %d\n", cli->fd);
             send_all_graphics(list, buff);
         }

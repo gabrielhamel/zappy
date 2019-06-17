@@ -12,21 +12,21 @@
 void destroy_incantation(sock_list_t *list, incantation_t *inc, bool success)
 {
     char buff[4096] = {0};
+    char *str;
 
     LIST_REMOVE(inc, next);
     for (size_t i = 0; i < inc->nb_ia; i++) {
         if (inc->ia[i] == NULL)
             continue;
-        if (success)
+        if (success) {
             inc->ia[i]->level++;
-        graph_send_ia_plv(list, inc->ia[i]);
+            graph_send_ia_plv(list, inc->ia[i]);
+        }
         dprintf(inc->ia[i]->id, "Current level: %d\n", inc->ia[i]->level);
         inc->ia[i]->fixed = false;
     }
-    if (success)
-        sprintf(buff, "pie %ld %ld ok\n", inc->tile->x, inc->tile->y);
-    else
-        sprintf(buff, "pie %ld %ld ko\n", inc->tile->x, inc->tile->y);
+    str = success ? "ok" : "ko";
+    sprintf(buff, "pie %ld %ld %s\n", inc->tile->x, inc->tile->y, str);
     send_all_graphics(list, buff);
     free(inc->ia);
     free(inc);
@@ -78,7 +78,7 @@ void refresh_incantation(sock_list_t *list, float ellapsed)
     for (inc = game->incantations.lh_first; inc;) {
         inc->time -= ellapsed;
         tmp = inc->next.le_next;
-        if (inc->time <= 0)
+        if (inc->time < 0)
             destroy_incantation(list, inc, true);
         inc = tmp;
     }
