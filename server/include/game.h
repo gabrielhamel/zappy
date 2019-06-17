@@ -60,3 +60,4 @@ void delete_game(const sock_t *cli, void *data);
 void initialize_game_args(game_t *game, zarg_t *zarg);
 bool check_team_names(char **arg, game_t *game, sock_t *cli, zarg_t *zarg);
 egg_t *available_egg(team_t *team);
+void destroy_incantation(sock_list_t *list, incantation_t *inc, bool success);
