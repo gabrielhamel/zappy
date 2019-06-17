@@ -34,7 +34,9 @@ typedef struct incantation_s {
     LIST_ENTRY(incantation_s) next;
     struct ia_s **ia;
     size_t nb_ia;
+    size_t nb_valid;
     tile_t *tile;
+    int level;
     float time;
 } incantation_t;
 

@@ -41,3 +41,4 @@ typedef enum {
 
 int get_direction(ia_t *ia, direction_t x, direction_t y);
 int get_look_player(ia_t *sender, ia_t *receiver);
+void incantation_player_death(sock_list_t *list, ia_t *ia);

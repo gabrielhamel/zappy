@@ -77,3 +77,4 @@ typedef struct {
 void destroy_ftp_sock(sock_list_t *list, sock_t *cli);
 void refresh_player_live(sock_list_t *list, sock_t *sock, zarg_t *zarg);
 void refresh_incantation(sock_list_t *list, float ellapsed);
+int inc_get_level(int level, int value);

@@ -17,6 +17,11 @@ static const int incantation[7][7] = {
     {6, 2, 2, 2, 2, 2, 1}
 };
 
+int inc_get_level(int level, int value)
+{
+    return incantation[level - 2][value];
+}
+
 static void insert_ia(ia_t ***array, ia_t *ia)
 {
     ia_t **tab = *array;

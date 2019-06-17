@@ -16,6 +16,7 @@ void disconnect_player(sock_t *cli, sock_list_t *list)
     char buffer[4096] = {0};
 
     for (; ia->team->sock[i] != cli; i++);
+    incantation_player_death(list, ia);
     ia->team->sock[i] = NULL;
     ia->team->nb_clients--;
     sprintf(buffer, "pdi %d\n", ia->id);
@@ -60,13 +61,13 @@ void end_client(const sock_t *cli, void *data)
 
 static void init_some_var(ia_t *ia)
 {
-    ia->inventory[FOOD] = 9;
-    ia->inventory[LINEMATE] = 0;
-    ia->inventory[DERAUMERE] = 0;
-    ia->inventory[SIBUR] = 0;
-    ia->inventory[MENDIANE] = 0;
-    ia->inventory[PHIRAS] = 0;
-    ia->inventory[THYSTAME] = 0;
+    ia->inventory[FOOD] = 119;
+    ia->inventory[LINEMATE] = 110;
+    ia->inventory[DERAUMERE] = 110;
+    ia->inventory[SIBUR] = 110;
+    ia->inventory[MENDIANE] = 110;
+    ia->inventory[PHIRAS] = 110;
+    ia->inventory[THYSTAME] = 110;
     ia->fixed = false;
 }
 
