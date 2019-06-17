@@ -76,10 +76,10 @@ static void refresh_live(sock_list_t *list, float ellapsed, zarg_t *zarg)
         ia->live -= ellapsed;
         tmp = node->socket;
         node = node->next;
-        if (ia->live < 0)
-            refresh_player_live(list, tmp, zarg);
         if (check_win_ia(list, ia))
             return;
+        if (ia->live < 0)
+            refresh_player_live(list, tmp, zarg);
     }
 }
 
