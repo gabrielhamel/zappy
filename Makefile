@@ -119,7 +119,7 @@ zappy_ai:	titre_ai $(OBJ_AI)
 clean:
 			@$(ECHO) $(RED)¶ Cleaning$(TEAL):$(DEFAULT)
 			@$(ECHO) $(GREEN)  " [OK]" $(TEAL)"Clean obj"$(TEAL)
-			$(RM) $(OBJ_SERV) $(OBJ_AI) $(OBJ_MAIN) gcov.info
+			$(RM) $(OBJ_SERV) $(OBJ_AI) $(OBJ_MAIN) tests/Coverage
 			@($(ECHO) $(GREEN)✓$(TEAL)" CLEAN SUCCESS !"$(TEAL))
 			@find . -name "*.gcda" -delete > /dev/null
 			@find . -name "*.gcno" -delete > /dev/null
@@ -132,15 +132,15 @@ fclean:		clean
 re:			fclean all
 
 tests_run:	titre_tests $(OBJ_SERV)
-			@gcc -o unit_tests $(OBJ_SERV) $(SRC_TESTS) -lm --coverage -lcriterion && $(ECHO) $(GREEN)✓$(TEAL)" BUILD SUCCESS !"$(TEAL) $(DEFAULT) || $(ECHO) $(SANG)✗$(TEAL)" BUILD FAILED !"$(TEAL) $(DEFAULT)
+			@gcc -o unit_tests $(OBJ_SERV) $(SRC_TESTS) $(CFLAGS) -lm --coverage -lcriterion && $(ECHO) $(GREEN)✓$(TEAL)" BUILD SUCCESS !"$(TEAL) $(DEFAULT) || $(ECHO) $(SANG)✗$(TEAL)" BUILD FAILED !"$(TEAL) $(DEFAULT)
 			@(./unit_tests)
-			@(lcov -c -d . --output-file gcov.info) > /dev/null
+			@(lcov -c -d . --output-file tests/Coverage) > /dev/null
 			@(mkdir -p tests/html) > /dev/null 2>&1
-			@(genhtml gcov.info --output-directory tests/html/) > /dev/null
+			@(genhtml tests/Coverage --output-directory tests/html/) > /dev/null
 			@(gcovr --exclude tests/)
 
 %.o : %.c
-			@gcc -c -o $@ $^ $(CFLAGS) && $(ECHO) -n $(GREEN)"  [OK] "$(TEAL) || $(ECHO) -n $(SANG)"  [NO] "$(TEAL) && $(ECHO) $< | rev | cut -d'/' -f 1 | rev
+			@gcc -c -o $@ $^ $(CFLAGS) --coverage && $(ECHO) -n $(GREEN)"  [OK] "$(TEAL) || $(ECHO) -n $(SANG)"  [NO] "$(TEAL) && $(ECHO) $< | rev | cut -d'/' -f 1 | rev
 
 %.o : %.cpp
 			@g++ -c -o $@ $^ $(CFLAGS) && $(ECHO) -n $(GREEN)"  [OK] "$(TEAL) || $(ECHO) -n $(SANG)"  [NO] "$(TEAL) && $(ECHO) $< | rev | cut -d'/' -f 1 | rev
