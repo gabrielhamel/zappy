@@ -107,8 +107,7 @@ titre_server:
 titre_ai:
 			@$(ECHO) $(RED)¶ Building ai$(TEAL):$(DEFAULT)
 
-titre_tests:
-			@$(ECHO) $(RED)¶ Building tests$(TEAL):$(DEFAULT)
+titre_tests: clean
 
 zappy_server: titre_server $(OBJ_SERV) $(OBJ_MAIN)
 			@gcc -o zappy_server $(OBJ_SERV) $(OBJ_MAIN) -lm --coverage && $(ECHO) $(GREEN)✓$(TEAL)" BUILD SUCCESS !"$(TEAL) $(DEFAULT) || $(ECHO) $(SANG)✗$(TEAL)" BUILD FAILED !"$(TEAL) $(DEFAULT)
@@ -121,9 +120,7 @@ clean:
 			@$(ECHO) $(GREEN)  " [OK]" $(TEAL)"Clean obj"$(TEAL)
 			$(RM) $(OBJ_SERV) $(OBJ_AI) $(OBJ_MAIN) tests/Coverage
 			@($(ECHO) $(GREEN)✓$(TEAL)" CLEAN SUCCESS !"$(TEAL))
-			@find . -name "*.gcda" -delete > /dev/null
 			@find . -name "*.gcno" -delete > /dev/null
-			@find . -name "*.gcov" -delete > /dev/null
 			$(RM) tests/html
 
 fclean:		clean
