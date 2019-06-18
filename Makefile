@@ -62,7 +62,7 @@ SRC_SERV =	./server/src/sockets/client.c				\
 
 SRC_MAIN = ./server/src/main.c
 
-SRC_TESTS = ./tests/src/utils.c
+SRC_TESTS = ./tests/src/parsing.c
 
 SRC_AI =	./ai/src/Main.cpp							\
 			./ai/src/Server.cpp							\
@@ -111,7 +111,7 @@ titre_tests:
 			@$(ECHO) $(RED)¶ Building tests$(TEAL):$(DEFAULT)
 
 zappy_server: titre_server $(OBJ_SERV) $(OBJ_MAIN)
-			@gcc -o zappy_server $(OBJ_SERV) $(OBJ_MAIN) -lm && $(ECHO) $(GREEN)✓$(TEAL)" BUILD SUCCESS !"$(TEAL) $(DEFAULT) || $(ECHO) $(SANG)✗$(TEAL)" BUILD FAILED !"$(TEAL) $(DEFAULT)
+			@gcc -o zappy_server $(OBJ_SERV) $(OBJ_MAIN) -lm --coverage && $(ECHO) $(GREEN)✓$(TEAL)" BUILD SUCCESS !"$(TEAL) $(DEFAULT) || $(ECHO) $(SANG)✗$(TEAL)" BUILD FAILED !"$(TEAL) $(DEFAULT)
 
 zappy_ai:	titre_ai $(OBJ_AI)
 			@g++ -o zappy_ai $(OBJ_AI) && $(ECHO) $(GREEN)✓$(TEAL)" BUILD SUCCESS !"$(TEAL) $(DEFAULT) || $(ECHO) $(SANG)✗$(TEAL)" BUILD FAILED !"$(TEAL) $(DEFAULT)
