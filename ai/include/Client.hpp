@@ -134,6 +134,7 @@ namespace zpy {
             zpy::Client::Message getBroadcast();
             void connectNbr();
             unsigned int getRemainingPlayer() const { return _remainingPlayer; }
+            bool incantation();
         private:
             std::vector<std::string> selectGoodAnswer(const std::vector<std::vector<std::string>> &cmd);
             void commandStart();
@@ -147,6 +148,7 @@ namespace zpy {
             std::unique_ptr<zpy::Server> _server;
             std::array<unsigned int, 2> _mapSize;
             unsigned int _line;
+            unsigned short _lvl;
             unsigned int _remainingPlayer;
             std::list<zpy::Client::Message> _broadcast;
     };

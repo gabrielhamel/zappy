@@ -14,7 +14,8 @@ _port(port),
 _team(team),
 _server(std::unique_ptr<zpy::Server>(new zpy::Server(hostname, port))),
 _mapSize({0, 0}),
-_line(0)
+_line(0),
+_lvl(1)
 {
     this->_server->writeData(this->_team + "\n");
     this->_server->waitData();
@@ -175,6 +176,28 @@ zpy::Client::Inventory zpy::Client::inventory()
         std::stoi(buff[12]),
         std::stoi(buff[14]));
     return inv;
+}
+
+bool zpy::Client::incantation()
+{
+    auto command = "Incantation\n";
+    std::cout << "client: " << command;
+
+    this->commandStart();
+    this->_server->writeData(command);
+    auto buff = this->commandEnd();
+    if (buff[0] == "ko")
+        return false;
+    auto buff2 = this->commandEnd();
+    if (buff2[0] == "ko")
+        return false;
+    if (buff2.size() < 2)
+        return false;
+    if (stoul(buff2[2], NULL, 10) > _lvl) {
+        _lvl = stoul(buff2[2], NULL, 10);
+        return true;
+    }
+    return false;
 }
 
 void zpy::Client::broadcast(const std::string &msg)
