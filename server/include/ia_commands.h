@@ -32,5 +32,6 @@ void cmd_ia_take(sock_t *cli, sock_list_t *list, char **arg, zarg_t *zarg);
 void cmd_ia_set(sock_t *cli, sock_list_t *list, char **arg, zarg_t *zarg);
 void cmd_ia_broad(sock_t *cli, sock_list_t *list, char **arg, zarg_t *zarg);
 void cmd_ia_incant(sock_t *cli, sock_list_t *list, char **arg, zarg_t *zarg);
+void cmd_ia_look(sock_t *cli, sock_list_t *list, char **arg, zarg_t *zarg);
 
 #endif

@@ -51,10 +51,11 @@ SRC_SERV =	./server/src/sockets/client.c				\
 			./server/src/commands/ai/left.c				\
 			./server/src/commands/ai/right.c			\
 			./server/src/commands/ai/settake_parser.c	\
-			./server/src/commands/ai/incant.c	\
+			./server/src/commands/ai/incant.c			\
 			./server/src/commands/ai/set.c				\
 			./server/src/commands/ai/take.c				\
 			./server/src/commands/ai/connect_nbr.c		\
+			./server/src/commands/ai/look.c				\
 			./server/src/teams/check_team_names.c		\
 			./server/src/game/const_dest_game.c			\
 			./server/src/game/direction.c				\
