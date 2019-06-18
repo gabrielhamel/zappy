@@ -79,7 +79,7 @@ static void broadcast(map_t *map, ia_t *sender, ia_t *receiver, const char *s)
         dir = 7;
     dir = get_direction(receiver, interval[dir][2], interval[dir][3]);
     if (sender->x == receiver->x && sender->y == receiver->y)
-        dir = get_look_player(sender, receiver);
+        dir = 0;
     dprintf(receiver->id, "message %d, %s\n", dir, s);
 }
 
@@ -100,7 +100,7 @@ void cmd_ia_broad(sock_t *cli, sock_list_t *list, char **arg, zarg_t *zarg)
         client->cli_type != IA)
             continue;
         ia = client->client.ia;
-        if (ia == me || ia->team != me->team)
+        if (ia == me)
             continue;
         broadcast(&GET_GAME(list)->map, me, ia, arg[1]);
     }
