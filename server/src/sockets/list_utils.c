@@ -15,8 +15,6 @@ int socket_list_add(sock_list_t *list, sock_t *socket)
     sock_node_t *node;
 
     node = malloc(sizeof(sock_node_t));
-    if (node == NULL)
-        return (-1);
     FD_SET(socket->fd, &list->fdlist);
     node->next = NULL;
     node->socket = socket;
@@ -84,8 +82,6 @@ sock_list_t *socket_list_init(void)
 {
     sock_list_t *list = malloc(sizeof(sock_list_t));
 
-    if (list == NULL)
-        return (NULL);
     memset(list, 0, sizeof(sock_list_t));
     FD_ZERO(&list->fdlist);
     return (list);

@@ -20,15 +20,10 @@ sock_t *socket_init(ctor_t ctor, dtor_t dtor)
     sock_t *sock = malloc(sizeof(sock_t));
     int option = 1;
 
-    if (sock == NULL)
-        return (NULL);
     memset(sock, 0, sizeof(sock_t));
     sock->fd = socket(AF_INET, SOCK_STREAM, 0);
-    if (sock->fd == -1)
-        return (NULL);
-    if (setsockopt(sock->fd, SOL_SOCKET, SO_REUSEADDR, &option,
-    sizeof(int)) == -1)
-        return (NULL);
+    setsockopt(sock->fd, SOL_SOCKET, SO_REUSEADDR, &option,
+    sizeof(int));
     sock->ctor = ctor;
     sock->dtor = dtor;
     if (sock->ctor != NULL)
@@ -41,8 +36,6 @@ sock_t *socket_serv_init(uint16_t port, ctor_t ctor, dtor_t dtor)
     sock_t *socket = socket_init(ctor, dtor);
     socklen_t len = sizeof(struct sockaddr_in);
 
-    if (socket == NULL)
-        return (NULL);
     socket->info.sin_port = htons(port);
     socket->info.sin_family = AF_INET;
     socket->info.sin_addr.s_addr = INADDR_ANY;
@@ -51,10 +44,7 @@ sock_t *socket_serv_init(uint16_t port, ctor_t ctor, dtor_t dtor)
         socket_destroy(socket);
         return (NULL);
     }
-    if (listen(socket->fd, SOMAXCONN) == -1) {
-        socket_destroy(socket);
-        return (NULL);
-    }
+    listen(socket->fd, SOMAXCONN);
     socket->type = SERVER;
     getsockname(socket->fd, (struct sockaddr *)&socket->info, &len);
     return (socket);
@@ -78,10 +68,6 @@ sock_t *socket_serv_accept_cli(sock_t *server, ctor_t ctor, dtor_t dtor)
 
     memset(client, 0, sizeof(sock_t));
     fd = accept(server->fd, (struct sockaddr *)&client->info, &size);
-    if (fd == -1)
-        return (NULL);
-    if (client == NULL)
-        return (NULL);
     client->fd = fd;
     client->type = CLIENT;
     client->ctor = ctor;
