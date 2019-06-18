@@ -60,9 +60,10 @@ SRC_SERV =	./server/src/sockets/client.c				\
 			./server/src/game/direction.c				\
 			./server/src/time_manage.c
 
-SRC_MAIN = ./server/src/main.c
+SRC_MAIN =  ./server/src/main.c
 
-SRC_TESTS = ./tests/src/parsing.c
+SRC_TESTS = ./tests/src/parsing.c						\
+			./tests/src/utils.c
 
 SRC_AI =	./ai/src/Main.cpp							\
 			./ai/src/Server.cpp							\
