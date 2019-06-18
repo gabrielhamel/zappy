@@ -33,9 +33,7 @@ void cmd_ia_take(sock_t *cli, sock_list_t *list, char **arg, zarg_t *zarg)
     graph_send_tile_bct(list, tile);
     tile = &GET_GAME(list)->map.graph[rand() %
     zarg->height][rand() % zarg->width];
-    if (id_item == FOOD) {
-        tile->items[FOOD] += 1;
-        graph_send_tile_bct(list, tile);
-    }
+    tile->items[id_item] += 1;
+    graph_send_tile_bct(list, tile);
     dprintf(cli->fd, "ok\n");
 }
