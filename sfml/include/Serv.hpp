@@ -18,6 +18,7 @@
 #include <string.h>
 #include <arpa/inet.h>
 #include "Error.hpp"
+#include <cstdio>
 #include <string>
 
 class Server {

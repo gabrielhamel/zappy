@@ -6,6 +6,7 @@
 */
 
 #include <sys/select.h>
+#include <cstdio>
 #include "Serv.hpp"
 
 Server::Server(const std::string &hostname, const std::string &port)
@@ -52,11 +53,19 @@ std::string Server::Read()
     std::string str;
     ssize_t res;
     char buff[READ_SIZE] = {0};
+    char *get = NULL;
+    size_t n = 0;
 
     res = read(this->_fd, buff, READ_SIZE);
     if (res == 0)
         throw SocketError("Server disconnected");
     str.append(buff);
+    std::cout << str;
+    if (str.back() != '\n') {
+        if (getline(&get, &n, fdopen(this->_fd, "r")) == -1)
+            throw SocketError("Server disconnected");
+        str.append(get);
+    }
     return (str);
 }
 

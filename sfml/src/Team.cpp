@@ -17,7 +17,7 @@ Team::Team(const std::string &name)
 
 Team::~Team()
 {
-    std::cout << "Team destroy or copied" << std::endl;
+
 }
 
 Player &Team::AddPlayer(int id, int pos_x, int pos_y, Player::Orientation ori, int level)
