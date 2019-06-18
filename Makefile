@@ -17,7 +17,6 @@ SRC_SERV =	./server/src/sockets/client.c				\
 			./server/src/game/map.c						\
 			./server/src/game/incantation.c				\
 			./server/src/loop.c							\
-			./server/src/main.c							\
 			./server/src/events.c						\
 			./server/src/execution.c					\
 			./server/src/utils/array.c					\
@@ -61,6 +60,10 @@ SRC_SERV =	./server/src/sockets/client.c				\
 			./server/src/game/direction.c				\
 			./server/src/time_manage.c
 
+SRC_MAIN = ./server/src/main.c
+
+SRC_TESTS = ./tests/src/utils.c
+
 SRC_AI =	./ai/src/Main.cpp							\
 			./ai/src/Server.cpp							\
 			./ai/src/Client.cpp							\
@@ -75,6 +78,8 @@ INC_DIR =	-I ./server/include \
 			-I ./ai/include
 
 OBJ_SERV =  $(SRC_SERV:.c=.o)
+
+OBJ_MAIN =	$(SRC_MAIN:.c=.o)
 
 OBJ_AI =  	$(SRC_AI:.cpp=.o)
 
@@ -102,8 +107,11 @@ titre_server:
 titre_ai:
 			@$(ECHO) $(RED)¶ Building ai$(TEAL):$(DEFAULT)
 
-zappy_server: titre_server $(OBJ_SERV)
-			@gcc -o zappy_server $(OBJ_SERV) -lm && $(ECHO) $(GREEN)✓$(TEAL)" BUILD SUCCESS !"$(TEAL) $(DEFAULT) || $(ECHO) $(SANG)✗$(TEAL)" BUILD FAILED !"$(TEAL) $(DEFAULT)
+titre_tests:
+			@$(ECHO) $(RED)¶ Building tests$(TEAL):$(DEFAULT)
+
+zappy_server: titre_server $(OBJ_SERV) $(OBJ_MAIN)
+			@gcc -o zappy_server $(OBJ_SERV) $(OBJ_MAIN) -lm && $(ECHO) $(GREEN)✓$(TEAL)" BUILD SUCCESS !"$(TEAL) $(DEFAULT) || $(ECHO) $(SANG)✗$(TEAL)" BUILD FAILED !"$(TEAL) $(DEFAULT)
 
 zappy_ai:	titre_ai $(OBJ_AI)
 			@g++ -o zappy_ai $(OBJ_AI) && $(ECHO) $(GREEN)✓$(TEAL)" BUILD SUCCESS !"$(TEAL) $(DEFAULT) || $(ECHO) $(SANG)✗$(TEAL)" BUILD FAILED !"$(TEAL) $(DEFAULT)
@@ -111,13 +119,25 @@ zappy_ai:	titre_ai $(OBJ_AI)
 clean:
 			@$(ECHO) $(RED)¶ Cleaning$(TEAL):$(DEFAULT)
 			@$(ECHO) $(GREEN)  " [OK]" $(TEAL)"Clean obj"$(TEAL)
-			$(RM) $(OBJ_SERV) $(OBJ_AI)
+			$(RM) $(OBJ_SERV) $(OBJ_AI) $(OBJ_MAIN) gcov.info
 			@($(ECHO) $(GREEN)✓$(TEAL)" CLEAN SUCCESS !"$(TEAL))
+			@find . -name "*.gcda" -delete > /dev/null
+			@find . -name "*.gcno" -delete > /dev/null
+			@find . -name "*.gcov" -delete > /dev/null
+			$(RM) tests/html
 
 fclean:		clean
-			$(RM) zappy_ai zappy_server
+			$(RM) zappy_ai zappy_server unit_tests
 
 re:			fclean all
+
+tests_run:	titre_tests $(OBJ_SERV)
+			@gcc -o unit_tests $(OBJ_SERV) $(SRC_TESTS) -lm --coverage -lcriterion && $(ECHO) $(GREEN)✓$(TEAL)" BUILD SUCCESS !"$(TEAL) $(DEFAULT) || $(ECHO) $(SANG)✗$(TEAL)" BUILD FAILED !"$(TEAL) $(DEFAULT)
+			@(./unit_tests)
+			@(lcov -c -d . --output-file gcov.info) > /dev/null
+			@(mkdir -p tests/html) > /dev/null 2>&1
+			@(genhtml gcov.info --output-directory tests/html/) > /dev/null
+			@(gcovr --exclude tests/)
 
 %.o : %.c
 			@gcc -c -o $@ $^ $(CFLAGS) && $(ECHO) -n $(GREEN)"  [OK] "$(TEAL) || $(ECHO) -n $(SANG)"  [NO] "$(TEAL) && $(ECHO) $< | rev | cut -d'/' -f 1 | rev
@@ -125,4 +145,4 @@ re:			fclean all
 %.o : %.cpp
 			@g++ -c -o $@ $^ $(CFLAGS) && $(ECHO) -n $(GREEN)"  [OK] "$(TEAL) || $(ECHO) -n $(SANG)"  [NO] "$(TEAL) && $(ECHO) $< | rev | cut -d'/' -f 1 | rev
 
-.PHONY:		all fclean re clean zappy_ai zappy_server
+.PHONY:		all fclean re clean zappy_ai zappy_server tests_run

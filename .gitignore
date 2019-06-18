@@ -15,3 +15,8 @@ sfml/CMakeFiles/
 sfml/Makefile
 sfml/cmake_install.cmake
 sfml/zappy_graphic
+unit_tests
+utils.gcda
+utils.gcno
+gcov.info
+tests/html
