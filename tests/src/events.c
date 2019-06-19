@@ -85,6 +85,7 @@ Test(events, cli_ia_disconnexion)
     res = socket_list_get_event(list);
     cr_assert_neq(res, NULL);
     manage_event(list, res, &zarg);
+    cr_assert_eq(list->start->next, NULL);
 }
 
 Test(events, cli_ia_empty_cmd)
