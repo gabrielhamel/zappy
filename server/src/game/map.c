@@ -19,12 +19,9 @@ void init_tile(tile_t *tile)
 
 bool init_map(map_t *map, size_t w, size_t h)
 {
-    if (!(map->graph = malloc(sizeof(tile_t *) * h)))
-        return (false);
-    for (size_t i = 0; i < h; i++) {
-        if (!(map->graph[i] = malloc(sizeof(tile_t) * w)))
-            return (false);
-    }
+    map->graph = malloc(sizeof(tile_t *) * h);
+    for (size_t i = 0; i < h; i++)
+        map->graph[i] = malloc(sizeof(tile_t) * w);
     map->h = h;
     map->w = w;
     link_map(map->graph, w, h);
@@ -51,20 +48,4 @@ void add_random_rock(tile_t *tile)
 {
     for (int i = 0; i < 6; i++)
         tile->items[1 + i] += (rand() % 101) / 87;
-}
-
-char *tile_to_string(tile_t *tile)
-{
-    char *res = "";
-    char temp[12];
-
-    memset(temp, 0, 12);
-    sprintf(temp, "%d", tile->items[FOOD]);
-    str_add(2, res, temp);
-    for (size_t i = 0; i < N_ITEMS; i++) {
-        memset(temp, 0, 12);
-        sprintf(temp, "%d", tile->items[FOOD]);
-        str_add(3, res, temp, ",");
-    }
-    return (res);
 }
