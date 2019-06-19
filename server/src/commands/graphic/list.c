@@ -27,9 +27,5 @@ void exec_graph_cmd(sock_t *cli, sock_list_t *list, char **arg, zarg_t *zarg)
             cmd_g[i].func(cli, list, arg, zarg);
             return;
         }
-        else if (arg[0] && !strcmp(cmd_g[i].name, arg[0])) {
-            dprintf(cli->fd, "suc\n");
-            return;
-        }
     dprintf(cli->fd, "suc\n");
 }
