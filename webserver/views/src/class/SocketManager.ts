@@ -102,7 +102,7 @@ class SocketManager
 	}
 	private pdr = (datas:Array<string>) =>
 	{
-		this.game.getStage().addChungus(datas);
+		this.game.chungusDroping(datas);
 	}
 	private pgt = (datas:Array<string>) =>
 	{
