@@ -42,8 +42,6 @@ void end_client(const sock_t *cli, void *data)
     buffer_cmd_t *tmp2;
     client_type_t type = zcli->cli_type;
 
-    if (data == NULL)
-        return;
     if (type == IA) {
         tmp = list->stqh_first;
         while (tmp != NULL) {

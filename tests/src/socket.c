@@ -196,3 +196,47 @@ Test(socket, sock_list_remove_last_not_exist)
     cr_assert_eq(list->start->next->next->socket, sock3);
     cr_assert_eq(socket_list_remove(list, sock4), -1);
 }
+
+Test(socket, sock_list_remove_buffer_cmd)
+{
+    sock_t *serv = socket_serv_init(0, init_game, delete_game);
+    sock_t *fake = socket_cli_init(ntohs(serv->info.sin_port), 0, NULL, NULL);
+    sock_list_t *list = socket_list_init();
+    char *team[3] = {"team1", "team2", NULL};
+    zarg_t zarg = {0};
+    arg_t arg = {"8080", "3", "3", team, "2", "1"};
+
+    arg_to_zarg(&arg, &zarg);
+    initialize_game_args(serv->data, &zarg);
+    cr_assert_not_null(serv);
+    cr_assert_not_null(fake);
+    cr_assert_eq(socket_list_add(list, serv), 0);
+    manage_event(list, socket_list_get_event(list), &zarg);
+    sendto(fake->fd, "team1\n", 6, 0, (struct sockaddr *)&serv->info, sizeof(struct sockaddr_in));
+    manage_event(list, socket_list_get_event(list), &zarg);
+    sendto(fake->fd, "Fork\n", 6, 0, (struct sockaddr *)&serv->info, sizeof(struct sockaddr_in));
+    manage_event(list, socket_list_get_event(list), &zarg);
+    cr_assert_eq(ZAPPY_CLIENT(list->start->next->socket)->cli_type, IA);
+    end_client(list->start->next->socket, list->start->next->socket->data);
+}
+
+Test(socket, sock_list_remove_graphic)
+{
+    sock_t *serv = socket_serv_init(0, init_game, delete_game);
+    sock_t *fake = socket_cli_init(ntohs(serv->info.sin_port), 0, NULL, NULL);
+    sock_list_t *list = socket_list_init();
+    char *team[3] = {"team1", "team2", NULL};
+    zarg_t zarg = {0};
+    arg_t arg = {"8080", "3", "3", team, "2", "1"};
+
+    arg_to_zarg(&arg, &zarg);
+    initialize_game_args(serv->data, &zarg);
+    cr_assert_not_null(serv);
+    cr_assert_not_null(fake);
+    cr_assert_eq(socket_list_add(list, serv), 0);
+    manage_event(list, socket_list_get_event(list), &zarg);
+    sendto(fake->fd, "GRAPHIC\n", 8, 0, (struct sockaddr *)&serv->info, sizeof(struct sockaddr_in));
+    manage_event(list, socket_list_get_event(list), &zarg);
+    cr_assert_eq(ZAPPY_CLIENT(list->start->next->socket)->cli_type, GRAPHICAL);
+    end_client(list->start->next->socket, list->start->next->socket->data);
+}
