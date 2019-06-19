@@ -35,7 +35,23 @@ class Game
 		this.stage.render();
 		this.scene.render();
 	}
-	
+	private isChungusAlreadyExist(id:number): boolean
+	{
+		for (let i:number = 0; i < this.chungus.length; i++) {
+			if (id == this.chungus[i].getId())
+				return (true);
+		}
+		return (false);
+	}
+	private getBigChungusById(id:number): Player
+	{
+		for (let i:number = 0; i < this.chungus.length; i++) {
+			if (id == this.chungus[i].getId())
+				return this.chungus[0];
+		}
+		return (this.chungus[0]);// normalement on protège avant la fonction avec un isChungusAlreadyExist() donc on n'arrive jamais ici
+	}
+
 	public addTeam(name:string)
 	{
 		this.teams.set(name, new Team(name));
@@ -50,11 +66,15 @@ class Game
 	{
 		return (this.stage);
 	}
-
 	public addChungus(datas:Array<string>):void
 	{
 		if (datas.length < 7) {
 			console.log("Not enough arguments to summon the big Chungus... CHUNG CHUNG CHUNG");
+			console.log(datas);
+			return;
+		}
+		if (isChungusAlreadyExist(parseInt(datas[1]))) {
+			console.log("You can't clone the big unfamous big chungus !!!");
 			console.log(datas);
 			return;
 		}
@@ -63,5 +83,54 @@ class Game
 		chungus.setOri(parseInt(datas[4]));
 		chungus.setLvl(parseInt(datas[5]));
 		this.chungus.push(chungus);
+	}
+	public updateChungusPos(datas:Array<string>):void
+	{
+		if (datas.length < 5) {
+			console.log("Not enough arguments to move the big Chungus... CHUNG CHUNG CHUNG");
+			console.log(datas);
+			return;
+		}
+		if (!isChungusAlreadyExist(parseInt(datas[1]))) {
+			console.log("This chungus doesn't exist");
+			console.log(datas);
+			return;
+		}
+		movingChungus = this.getBigChungusById(parseInt(datas[1]));
+		movingChungus.setPos(parseInt(datas[2]), parseInt(datas[3]));
+		movingChungus.setOri(parseInt(datas[4]));
+	}
+	public lvlUpChungus(datas:Array<string>):void
+	{
+		if (datas.length < 3) {
+			console.log("Not enough arguments to upgrade the big Chungus... CHUNG CHUNG CHUNG");
+			console.log(datas);
+			return;
+		}
+		if (!isChungusAlreadyExist(parseInt(datas[1]))) {
+			console.log("This chungus doesn't exist");
+			console.log(datas);
+			return;
+		}
+		levelingChungus = this.getBigChungusById(parseInt(datas[1]));
+		levelingChungus.setLvl(parseInt(datas[2]));
+	}
+	public chungusBag(datas:Array<string>):void
+	{
+		if (datas.length < 11) {
+			console.log("Not enough arguments to fill the big Chungus big bag... CHUNG CHUNG CHUNG");
+			console.log(datas);
+			return;
+		}
+		if (!isChungusAlreadyExist(parseInt(datas[1]))) {
+			console.log("This chungus doesn't exist");
+			console.log(datas);
+			return;
+		}
+		fillingChungusBag = this.getBigChungusById(parseInt(datas[1]));
+		fillingChungusBag.setPos(parseInt(datas[2]), parseInt(datas[3]));
+		fillingChungusBag.setBag(parseInt(datas[4]), parseInt(datas[5]),
+		parseInt(datas[6]), parseInt(datas[7]), parseInt(datas[8]),
+		parseInt(datas[9]), parseInt(datas[10]));
 	}
 }

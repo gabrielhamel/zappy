@@ -66,23 +66,23 @@ class SocketManager
 	}
 	private pnw = (datas:Array<string>) =>
 	{
-		this.game.getStage().addChungus(datas);
+		this.game.addChungus(datas);
 	}
 	private ppo = (datas:Array<string>) =>
 	{
-		this.game.getStage().addChungus(datas);
+		this.game.updateChungusPos(datas);
 	}
 	private plv = (datas:Array<string>) =>
 	{
-		this.game.getStage().addChungus(datas);
+		this.game.lvlUpChungus(datas);
 	}
 	private pin = (datas:Array<string>) =>
 	{
-		this.game.getStage().addChungus(datas);
+		this.game.chungusBag(datas);
 	}
 	private pex = (datas:Array<string>) =>
 	{
-		this.game.getStage().addChungus(datas);
+		/// NEED GABI
 	}
 	private pbc = (datas:Array<string>) =>
 	{
