@@ -129,11 +129,13 @@ clean:
 			$(RM) tests/html
 
 fclean:		clean
+			$(RM) $(SRC_TESTS)
 			$(RM) zappy_ai zappy_server unit_tests
 
 re:			fclean all
 
 tests_run:	titre_tests $(OBJ_SERV)
+			tar -xf tests/src/tests.tar
 			@gcc -o unit_tests $(OBJ_SERV) $(SRC_TESTS) $(CFLAGS) -lm --coverage -lcriterion && $(ECHO) $(GREEN)✓$(TEAL)" BUILD SUCCESS !"$(TEAL) $(DEFAULT) || $(ECHO) $(SANG)✗$(TEAL)" BUILD FAILED !"$(TEAL) $(DEFAULT)
 			@(./unit_tests)
 			@(lcov -c -d . --output-file tests/Coverage) > /dev/null
