@@ -123,6 +123,7 @@ clean:
 			$(RM) $(OBJ_SERV) $(OBJ_AI) $(OBJ_MAIN) tests/Coverage
 			@($(ECHO) $(GREEN)✓$(TEAL)" CLEAN SUCCESS !"$(TEAL))
 			@find . -name "*.gcno" -delete > /dev/null
+			@find . -name "*.gcda" -delete > /dev/null
 			$(RM) tests/html
 
 fclean:		clean
