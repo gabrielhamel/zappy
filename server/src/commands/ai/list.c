@@ -66,11 +66,6 @@ void exec_ia_cmd(sock_t *cli, sock_list_t *list, zarg_t *zarg)
             destroy_array(arg);
             return;
         }
-        else if (!strcmp(cmd_g[i].name, cmd->cmd[0])) {
-            dprintf(cli->fd, "Not implemented\n");
-            destroy_array(list_pop(LIST_CMD(cli)));
-            return;
-        }
 }
 
 void update_time_cmd(sock_t *cli, unsigned int new)
