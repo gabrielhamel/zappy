@@ -66,7 +66,8 @@ SRC_TESTS = ./tests/src/parsing.c						\
 			./tests/src/socket.c						\
 			./tests/src/events.c						\
 			./tests/src/broadcast.c						\
-			./tests/src/game.c
+			./tests/src/game.c							\
+			./tests/src/refresh.c
 
 SRC_AI =	./ai/src/Main.cpp							\
 			./ai/src/Server.cpp							\
