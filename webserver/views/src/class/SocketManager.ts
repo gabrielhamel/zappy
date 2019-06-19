@@ -98,7 +98,7 @@ class SocketManager
 	}
 	private pfk = (datas:Array<string>) =>
 	{
-		this.game.chungusAccouching(datas);
+		this.game.chungusAccouching(datas); // PAS BON je confond avec enw
 	}
 	private pdr = (datas:Array<string>) =>
 	{
@@ -106,10 +106,10 @@ class SocketManager
 	}
 	private pgt = (datas:Array<string>) =>
 	{
-		this.game.getStage().addChungus(datas);
+		this.game.chungusTaking(datas);
 	}
 	private pdi = (datas:Array<string>) =>
 	{
-		this.game.getStage().addChungus(datas);
+		this.game.removeChungus(datas);
 	}
 }

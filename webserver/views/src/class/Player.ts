@@ -10,6 +10,8 @@ class Player
 	private bag:Array<number> = new Array<number>();
 	private message: string = "";
 	private incanting: boolean = false;
+	private laying: boolean = false;
+
 
 	constructor(scene:BABYLON.Scene)
 	{
@@ -62,6 +64,10 @@ class Player
 		return (this.teamName);
 	}
 	public drop(item:number):void
+	{
+		this.bag[item]--;
+	}
+	public take(item:number):void
 	{
 		this.bag[item]--;
 	}
