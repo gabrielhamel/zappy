@@ -17,7 +17,8 @@ class SocketManager
 		this.commands.set("bct", this.bct);
 		this.commands.set("msz", this.msz);
 		this.commands.set("sgt", this.sgt);
-		this.commands.set("tna", this.tna);
+        this.commands.set("tna", this.tna);
+		this.commands.set("pnw", this.pnw);
 	}
 	private getDatas = (datas:any):void =>
 	{
@@ -50,5 +51,9 @@ class SocketManager
 	private tna = (datas:Array<string>) =>
 	{
 		this.game.addTeam(datas[1]);
+	}
+	private pnw = (datas:Array<string>) =>
+	{
+		this.game.getStage().addChungus(datas);
 	}
 }

@@ -1,7 +1,7 @@
 class Stage
 {
 	private readonly CANVAS:HTMLCanvasElement;
-	private readonly CHUNGUS:MeshBuilder;
+	private readonly CHUNGUS:MeshBuilder; // DEPRECATED
 	private readonly SCENE:BABYLON.Scene;
 	private blocs:Array<BABYLON.InstancedMesh> = new Array<BABYLON.InstancedMesh>();
 	private blocCollection:BlocCollection;
@@ -9,6 +9,7 @@ class Stage
 	private light:BABYLON.HemisphericLight;
 	private selected:BABYLON.AbstractMesh;
 	private tiles:Array<Tile> = new Array<Tile>();
+	private chungus:Array<Player> = new Array<Player>();
 
 	constructor(scene:BABYLON.Scene)
 	{
@@ -99,5 +100,18 @@ class Stage
 	public render():void
 	{
 
+	}
+	public addChungus(datas:Array<string>):void
+	{
+		if (datas.length < 7) {
+			console.log("Not enough arguments to summon the big Chungus... CHUNG CHUNG CHUNG");
+			console.log(datas);
+			return;
+		}
+		chungus = new Player(parseInt(datas[1]), datas[6], this.SCENE);
+		chungus.setPos(parseInt(datas[2]), parseInt(datas[3]));
+		chungus.setOri(parseInt(datas[4]));
+		chungus.setLvl(parseInt(datas[5]));
+		this.chungus.push(chungus);
 	}
 }
