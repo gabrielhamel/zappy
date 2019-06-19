@@ -8,7 +8,8 @@ class Game
 	private scene:BABYLON.Scene;
 	private socketManager:SocketManager = new SocketManager(this);
 	private stage:Stage;
-	private teams:Map<string, Team> = new Map<string, Team>();
+	private teams:Map<string, Team> = new Map<string, Team>(); // DEPRACATED
+	private chungus:Array<Player> = new Array<Player>();
 
 	constructor(canvas:HTMLCanvasElement)
 	{
@@ -48,5 +49,19 @@ class Game
 	public getStage():Stage
 	{
 		return (this.stage);
+	}
+
+	public addChungus(datas:Array<string>):void
+	{
+		if (datas.length < 7) {
+			console.log("Not enough arguments to summon the big Chungus... CHUNG CHUNG CHUNG");
+			console.log(datas);
+			return;
+		}
+		chungus = new Player(parseInt(datas[1]), datas[6], this.scene);
+		chungus.setPos(parseInt(datas[2]), parseInt(datas[3]));
+		chungus.setOri(parseInt(datas[4]));
+		chungus.setLvl(parseInt(datas[5]));
+		this.chungus.push(chungus);
 	}
 }
