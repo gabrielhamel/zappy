@@ -19,6 +19,18 @@ class SocketManager
 		this.commands.set("sgt", this.sgt);
         this.commands.set("tna", this.tna);
 		this.commands.set("pnw", this.pnw);
+		this.commands.set("ppo", this.ppo);
+		this.commands.set("plv", this.plv);
+		this.commands.set("plv", this.pin);
+		this.commands.set("pex", this.pex);
+		this.commands.set("pbc", this.pbc);
+		this.commands.set("pic", this.pic);
+		this.commands.set("pie", this.pie);
+		this.commands.set("pfk", this.pfk);
+		this.commands.set("pdr", this.pdr);
+		this.commands.set("pgt", this.pgt);
+		this.commands.set("pdi", this.pdi);
+
 	}
 	private getDatas = (datas:any):void =>
 	{
@@ -53,6 +65,50 @@ class SocketManager
 		this.game.addTeam(datas[1]);
 	}
 	private pnw = (datas:Array<string>) =>
+	{
+		this.game.getStage().addChungus(datas);
+	}
+	private ppo = (datas:Array<string>) =>
+	{
+		this.game.getStage().addChungus(datas);
+	}
+	private plv = (datas:Array<string>) =>
+	{
+		this.game.getStage().addChungus(datas);
+	}
+	private pin = (datas:Array<string>) =>
+	{
+		this.game.getStage().addChungus(datas);
+	}
+	private pex = (datas:Array<string>) =>
+	{
+		this.game.getStage().addChungus(datas);
+	}
+	private pbc = (datas:Array<string>) =>
+	{
+		this.game.getStage().addChungus(datas);
+	}
+	private pic = (datas:Array<string>) =>
+	{
+		this.game.getStage().addChungus(datas);
+	}
+	private pie = (datas:Array<string>) =>
+	{
+		this.game.getStage().addChungus(datas);
+	}
+	private pfk = (datas:Array<string>) =>
+	{
+		this.game.getStage().addChungus(datas);
+	}
+	private pdr = (datas:Array<string>) =>
+	{
+		this.game.getStage().addChungus(datas);
+	}
+	private pgt = (datas:Array<string>) =>
+	{
+		this.game.getStage().addChungus(datas);
+	}
+	private pdi = (datas:Array<string>) =>
 	{
 		this.game.getStage().addChungus(datas);
 	}
