@@ -138,7 +138,7 @@ class Game
 	public chungusYelling(datas:Array<string>):void
 	{
 		if (datas.length < 3) {
-			console.log("Not enough arguments to fill the big Chungus big bag... CHUNG CHUNG CHUNG");
+			console.log("To big Chungus the message isn't big enough");
 			console.log(datas);
 			return;
 		}
@@ -149,5 +149,42 @@ class Game
 		}
 		voicingChungus = this.getBigChungusById(parseInt(datas[1]));
 		voicingChungus.setMessage(datas[2]);
+	}
+	public chungusAccouching(datas:Array<string>):void
+	{
+		if (datas.length < 3) {
+			console.log("Not enough arguments to reproduct the big Chungus... CHUNG CHUNG CHUNG");
+			console.log(datas);
+			return;
+		}
+		if (!isChungusAlreadyExist(parseInt(datas[1]))) {
+			console.log("This chungus doesn't exist");
+			console.log(datas);
+			return;
+		}
+		accouchingChungus = this.getBigChungusById(parseInt(datas[1]));
+		egg = new Egg(accouchingChungus.getX(), accouchingChungus.getY(),
+		accouchingChungus.getTeamName(), this.scene);
+		this.eggs.push(egg);
+	}
+	public chungusDroping(datas:Array<string>):void
+	{
+		if (datas.length < 3) {
+			console.log("Not enough arguments to drop the big Chungus... CHUNG CHUNG CHUNG");
+			console.log(datas);
+			return;
+		}
+		if (!isChungusAlreadyExist(parseInt(datas[1]))) {
+			console.log("This chungus doesn't exist");
+			console.log(datas);
+			return;
+		}
+		dropingChungus = this.getBigChungusById(parseInt(datas[1]));
+		dropingChungus.drop(parseInt(datas[2]));
+		let vector:BABYLON.Vector2 = new BABYLON.Vector2(0, 0);
+		vector.x = dropingChungus.getX();
+		vector.y = dropingChungus.getY();
+		tile = this.stage.findTileByPosition(vector);
+		tile.addItem(parseInt(datas[2]));
 	}
 }

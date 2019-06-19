@@ -90,15 +90,15 @@ class SocketManager
 	}
 	private pic = (datas:Array<string>) =>
 	{
-		this.game.getStage().addChungus(datas);
+		/// NEED GABI
 	}
 	private pie = (datas:Array<string>) =>
 	{
-		this.game.getStage().addChungus(datas);
+		/// NEED GABI
 	}
 	private pfk = (datas:Array<string>) =>
 	{
-		this.game.getStage().addChungus(datas);
+		this.game.chungusAccouching(datas);
 	}
 	private pdr = (datas:Array<string>) =>
 	{

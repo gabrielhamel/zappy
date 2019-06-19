@@ -43,13 +43,13 @@ class Stage
 			this.selected.position.y += 0.1;
 		this.selected = picked.pickedMesh;
 	}
-	private findTileByPosition(position:BABYLON.Vector2):Tile
+
+	public findTileByPosition(position:BABYLON.Vector2):Tile
 	{
 		return (this.tiles.find((tile:Tile) => {
 			return (position.equals(tile.getPosition()));
 		}));
 	}
-
 	public addTile(datas:Array<string>)
 	{
 		let tile:Tile;
