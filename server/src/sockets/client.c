@@ -19,8 +19,6 @@ sock_t *socket_cli_init(uint16_t port, uint32_t ip, ctor_t ctor, dtor_t dtor)
 {
     sock_t *socket = socket_init(ctor, dtor);
 
-    if (socket == NULL)
-        return (NULL);
     socket->info.sin_port = htons(port);
     socket->info.sin_family = AF_INET;
     socket->info.sin_addr.s_addr = ip;

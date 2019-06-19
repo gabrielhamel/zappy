@@ -36,18 +36,3 @@ int get_direction(ia_t *ia, direction_t x, direction_t y)
         return dir[1];
     return 0;
 }
-
-int get_look_player(ia_t *sender, ia_t *receiver)
-{
-    int k = 0;
-
-    if (sender->ori == NORTH)
-        k = get_direction(receiver, ZERO, NEGATIVE);
-    if (sender->ori == EAST)
-        k = get_direction(receiver, NEGATIVE, ZERO);
-    if (sender->ori == SOUTH)
-        k = get_direction(receiver, ZERO, POSITIVE);
-    if (sender->ori == WEAST)
-        k = get_direction(receiver, POSITIVE, ZERO);
-    return k;
-}

@@ -33,10 +33,3 @@ char **alloc_array(size_t nbmemb, size_t sizememb)
         tab[i] = NULL;
     return (tab);
 }
-
-void array_dump(const char **tab, const char *delim)
-{
-    for (size_t i = 0; tab[i] != NULL; i++)
-        printf("%s%s", tab[i], delim);
-    printf("\n");
-}

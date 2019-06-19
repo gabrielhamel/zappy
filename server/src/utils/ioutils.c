@@ -31,12 +31,11 @@ static void insert_exception(char ***tab, char *s)
 
 char **tokenize(char *str, char *delim)
 {
-    char **tab = realloc(NULL, 2 * sizeof(char *));
+    char **tab = alloc_array(1, sizeof(char *));
     char *tmp = strdup(str);
     char *tok = strtok(tmp, delim);
     size_t size = 2;
 
-    tab[1] = NULL;
     if (tok == NULL) {
         tab[0] = NULL;
         free(tmp);

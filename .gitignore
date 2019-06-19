@@ -18,5 +18,9 @@ sfml/zappy_graphic
 unit_tests
 utils.gcda
 utils.gcno
-gcov.info
+tests/Coverage
 tests/html
+*.gcda
+*.gcno
+*.gcov
+tests/src/*.c
