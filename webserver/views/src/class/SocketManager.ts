@@ -86,7 +86,7 @@ class SocketManager
 	}
 	private pbc = (datas:Array<string>) =>
 	{
-		this.game.getStage().addChungus(datas);
+		this.game.chungusYelling(datas);
 	}
 	private pic = (datas:Array<string>) =>
 	{

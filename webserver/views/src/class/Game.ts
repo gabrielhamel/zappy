@@ -10,6 +10,8 @@ class Game
 	private stage:Stage;
 	private teams:Map<string, Team> = new Map<string, Team>(); // DEPRACATED
 	private chungus:Array<Player> = new Array<Player>();
+	private eggs:Array<Egg> = new Array<Egg>();
+
 
 	constructor(canvas:HTMLCanvasElement)
 	{
@@ -132,5 +134,20 @@ class Game
 		fillingChungusBag.setBag(parseInt(datas[4]), parseInt(datas[5]),
 		parseInt(datas[6]), parseInt(datas[7]), parseInt(datas[8]),
 		parseInt(datas[9]), parseInt(datas[10]));
+	}
+	public chungusYelling(datas:Array<string>):void
+	{
+		if (datas.length < 3) {
+			console.log("Not enough arguments to fill the big Chungus big bag... CHUNG CHUNG CHUNG");
+			console.log(datas);
+			return;
+		}
+		if (!isChungusAlreadyExist(parseInt(datas[1]))) {
+			console.log("This chungus doesn't exist");
+			console.log(datas);
+			return;
+		}
+		voicingChungus = this.getBigChungusById(parseInt(datas[1]));
+		voicingChungus.setMessage(datas[2]);
 	}
 }

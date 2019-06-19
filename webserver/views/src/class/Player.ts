@@ -8,6 +8,7 @@ class Player
 	private lvl:number;
 	private teamName:string; // peut à remplacer vers une reference de team ou OSEF en vrai
 	private bag:Array<number> = new Array<number>();
+	private message: string = "";
 
 	constructor(scene:BABYLON.Scene)
 	{
@@ -39,8 +40,16 @@ class Player
 		this.bag[5] = phiras;
 		this.bag[6] = thystame;
 	}
+	public setMessage(message:string)
+	{
+		this.message = message;
+	}
 	public getId()
 	{
 		return (this.id);
+	}
+	public getTeamName(): string
+	{
+		return (this.teamName);
 	}
 }
