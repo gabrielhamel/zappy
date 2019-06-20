@@ -7,9 +7,11 @@ class Controller
 	private turnRight:HTMLElement = document.getElementById("turn-right");
 	private teamName:string;
 	private socketManager: SocketManager;
+	private game:Game;
 
-	constructor(socketManager: SocketManager)
+	constructor(game:Game, socketManager: SocketManager)
 	{
+		this.game = game;
 		this.socketManager = socketManager;
 		this.forward.style.display = "none";
 		this.turnLeft.style.display = "none";

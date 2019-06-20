@@ -7,15 +7,14 @@ class Game
 	private canvas:HTMLCanvasElement;
 	private engine:BABYLON.Engine;
 	private scene:BABYLON.Scene;
-	private socketManager:SocketManager = new SocketManager(this);
 	private stage:Stage;
 	private chungus:Array<Player> = new Array<Player>();
 	private eggs:Array<Egg> = new Array<Egg>();
 	private teamsNames:Array<string> = new Array<string>();
 
-	constructor(canvas:HTMLCanvasElement)
+	constructor()
 	{
-		this.canvas = canvas;
+		this.canvas = document.getElementsByTagName("canvas")[0];
 		this.engine = new BABYLON.Engine(this.canvas, true);
 		this.scene = new BABYLON.Scene(this.engine);
 		this.stage = new Stage(this.scene);
