@@ -16,7 +16,9 @@ class SocketManager
 	{
 		this.commands.set("bct", this.bct);
 		this.commands.set("msz", this.msz);
+		this.commands.set("pnw", this.pnw);
 		this.commands.set("sgt", this.sgt);
+<<<<<<< Updated upstream
         this.commands.set("tna", this.tna);
 		this.commands.set("pnw", this.pnw);
 		this.commands.set("ppo", this.ppo);
@@ -31,6 +33,10 @@ class SocketManager
 		this.commands.set("pgt", this.pgt);
 		this.commands.set("pdi", this.pdi);
 		this.commands.set("enw", this.enw);
+=======
+		this.commands.set("sst", this.sgt);
+		this.commands.set("tna", this.tna);
+>>>>>>> Stashed changes
 	}
 	private getDatas = (datas:any):void =>
 	{
@@ -55,6 +61,14 @@ class SocketManager
 		vector.x = parseInt(datas[1]);
 		vector.y = parseInt(datas[2]);
 		this.game.setup(vector);
+	}
+	private pnw = (datas:Array<string>) =>
+	{
+		let position:BABYLON.Vector2 = new BABYLON.Vector2(parseInt(datas[2]), parseInt(datas[3]));
+		let orientation:number = parseInt(datas[4]);
+		let level:number = parseInt(datas[5]);
+
+		this.game.addPlayer(datas[6], position, orientation, level);
 	}
 	private sgt = (datas:Array<string>) =>
 	{

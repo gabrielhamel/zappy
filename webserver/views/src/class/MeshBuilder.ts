@@ -10,9 +10,9 @@ class MeshBuilder
 		BABYLON.SceneLoader.ImportMesh("", "/assets/", modelName, scene, this.load);
 	}
 
-	private load = (meshes:Array<BABYLON.Mesh>) =>
+	private load = (meshes:Array<BABYLON.Mesh>):void =>
 	{
-		this.mesh = meshes[0];
+		this.mesh = meshes[1];
 		this.mesh.scaling = new BABYLON.Vector3(0.35, 0.35, 0.35);
 		this.mesh.position.y = 0.5;
 		this.mesh.isVisible = false;

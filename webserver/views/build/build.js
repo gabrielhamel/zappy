@@ -74,6 +74,7 @@ var Game = /** @class */ (function () {
         this.scene = new BABYLON.Scene(this.engine);
         this.stage = new Stage(this.scene);
         this.camera = new Camera(this.scene);
+        this.CHUNGUS = new MeshBuilder("chungus.glb", this.scene);
         this.initialiseScene();
         this.engine.runRenderLoop(this.render);
     }
@@ -83,6 +84,13 @@ var Game = /** @class */ (function () {
         window.addEventListener("resize", function () {
             _this.engine.resize();
         });
+    };
+    Game.prototype.addPlayer = function (team, position, orientation, level) {
+        var player;
+        if (!this.teams.get(team))
+            return;
+        player = new Player(this.CHUNGUS.getInstance(), position, orientation, level);
+        this.teams.get(team).addPlayer(player);
     };
     Game.prototype.addTeam = function (name) {
         this.teams.set(name, new Team(name));
@@ -115,7 +123,7 @@ var MeshBuilder = /** @class */ (function () {
         var _this = this;
         this.nbClones = 0;
         this.load = function (meshes) {
-            _this.mesh = meshes[0];
+            _this.mesh = meshes[1];
             _this.mesh.scaling = new BABYLON.Vector3(0.35, 0.35, 0.35);
             _this.mesh.position.y = 0.5;
             _this.mesh.isVisible = false;
@@ -133,8 +141,25 @@ var MeshBuilder = /** @class */ (function () {
     return MeshBuilder;
 }());
 var Player = /** @class */ (function () {
-    function Player() {
+    function Player(mesh, position, orientation, level) {
+        if (level === void 0) { level = 1; }
+        this.level = 1;
+        this.mesh = mesh;
+        this.level = level;
+        //this.setOrientation(orientation);
+        this.setPosition(position);
     }
+    Player.prototype.setOrientation = function (orientation) {
+        this.orientation = orientation;
+        this.mesh.rotation.y = orientation * (Math.PI / 2);
+    };
+    Player.prototype.setPosition = function (position) {
+        this.position = position;
+        if (!this.mesh)
+            return;
+        this.mesh.position.x = position.x;
+        this.mesh.position.z = position.y;
+    };
     return Player;
 }());
 var SocketManager = /** @class */ (function () {
@@ -161,6 +186,12 @@ var SocketManager = /** @class */ (function () {
             vector.y = parseInt(datas[2]);
             _this.game.setup(vector);
         };
+        this.pnw = function (datas) {
+            var position = new BABYLON.Vector2(parseInt(datas[2]), parseInt(datas[3]));
+            var orientation = parseInt(datas[4]);
+            var level = parseInt(datas[5]);
+            _this.game.addPlayer(datas[6], position, orientation, level);
+        };
         this.sgt = function (datas) {
             Game.timeUnit = parseInt(datas[1]);
         };
@@ -175,7 +206,9 @@ var SocketManager = /** @class */ (function () {
     SocketManager.prototype.initialise = function () {
         this.commands.set("bct", this.bct);
         this.commands.set("msz", this.msz);
+        this.commands.set("pnw", this.pnw);
         this.commands.set("sgt", this.sgt);
+        this.commands.set("sst", this.sgt);
         this.commands.set("tna", this.tna);
     };
     return SocketManager;
@@ -202,7 +235,6 @@ var Stage = /** @class */ (function () {
             _this.selected = picked.pickedMesh;
         };
         var lightDir = new BABYLON.Vector3(0, 1, 0);
-        this.CHUNGUS = new MeshBuilder("chungus.glb", scene);
         this.CANVAS = scene.getEngine().getRenderingCanvas();
         this.SCENE = scene;
         this.blocCollection = new BlocCollection(scene);

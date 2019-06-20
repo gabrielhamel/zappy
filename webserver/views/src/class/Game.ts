@@ -2,6 +2,7 @@ class Game
 {
 	public static size:BABYLON.Vector2;
 	public static timeUnit:number;
+	private readonly CHUNGUS:MeshBuilder;
 	private camera:Camera;
 	private canvas:HTMLCanvasElement;
 	private engine:BABYLON.Engine;
@@ -19,7 +20,8 @@ class Game
 		this.scene = new BABYLON.Scene(this.engine);
 		this.stage = new Stage(this.scene);
 		this.camera = new Camera(this.scene);
-
+		this.CHUNGUS = new MeshBuilder("chungus.glb", this.scene);
+		
 		this.initialiseScene();
 		this.engine.runRenderLoop(this.render);
 	}
