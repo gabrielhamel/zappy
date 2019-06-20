@@ -31,5 +31,5 @@ void cmd_ia_cnt_nbr(sock_t *cli, sock_list_t *list, char **arg, zarg_t *zarg)
     nb_remaining = zarg->clients_nb - ia->team->nb_clients +
     get_nb_hatcheg_egg(ia->team);
     nb_remaining = nb_remaining < 0 ? 0 : nb_remaining;
-    dprintf(cli->fd, "%d\n", nb_remaining);
+    sock_write(cli, "%d\n", nb_remaining);
 }

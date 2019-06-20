@@ -13,9 +13,9 @@ static void send_res(sock_list_t *list, sock_t *cli, size_t nb)
     char buff[4096] = {0};
 
     if (nb == 0)
-        dprintf(cli->fd, "ko\n");
+        sock_write(cli, "ko\n");
     else {
-        dprintf(cli->fd, "ok\n");
+        sock_write(cli, "ok\n");
         sprintf(buff, "pex %d\n", cli->fd);
         send_all_graphics(list, buff);
     }

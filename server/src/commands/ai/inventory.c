@@ -16,7 +16,7 @@ void cmd_ia_inv(sock_t *cli, sock_list_t *list, char **arg, zarg_t *zarg)
     (void)arg;
     (void)list;
     (void)zarg;
-    dprintf(cli->fd, "[ food %d, linemate %d, deraumere %d, " \
+    sock_write(cli, "[ food %d, linemate %d, deraumere %d, " \
     "sibur %d, mendiane %d, phiras %d, thystame %d ]\n",
     inv[0], inv[1], inv[2], inv[3], inv[4], inv[5], inv[6]);
 }

@@ -62,7 +62,7 @@ zarg_t *zarg, sock_list_t *list)
     nb_remaining = zarg->clients_nb - ia->team->nb_clients +
     get_nb_hatcheg_egg(ia->team);
     nb_remaining = nb_remaining < 0 ? 0 : nb_remaining;
-    dprintf(cli->fd, "%d\n%d %d\n",
+    sock_write(cli, "%d\n%d %d\n",
     nb_remaining, zarg->width, zarg->height);
     sprintf(buff, "pnw %d %ld %ld %d %d %s\n",
     ia->id, ia->x, ia->y, ia->ori, ia->level, team);
@@ -100,7 +100,7 @@ void exec_command(sock_t *cli, sock_list_t *list, char **arg, zarg_t *zarg)
 
     if (ZAPPY_CLIENT(cli)->cli_type == UNDEFINED) {
         if (init_zappy_cli(cli, list, arg, zarg) == false)
-            dprintf(cli->fd, "ko\n");
+            sock_write(cli, "ko\n");
         destroy_array(arg);
     }
     else if (ZAPPY_CLIENT(cli)->cli_type == IA) {

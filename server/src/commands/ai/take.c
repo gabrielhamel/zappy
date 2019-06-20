@@ -23,7 +23,7 @@ void cmd_ia_take(sock_t *cli, sock_list_t *list, char **arg, zarg_t *zarg)
     int id_item = cmd_ia_settake_parser(cli, arg);
 
     if (id_item == -1 || !tile->items[id_item]) {
-        dprintf(cli->fd, "ko\n");
+        sock_write(cli, "ko\n");
         return;
     }
     tile->items[id_item] -= 1;
@@ -35,5 +35,5 @@ void cmd_ia_take(sock_t *cli, sock_list_t *list, char **arg, zarg_t *zarg)
     zarg->height][rand() % zarg->width];
     tile->items[id_item] += 1;
     graph_send_tile_bct(list, tile);
-    dprintf(cli->fd, "ok\n");
+    sock_write(cli, "ok\n");
 }

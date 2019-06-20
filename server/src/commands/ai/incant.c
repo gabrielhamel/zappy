@@ -93,7 +93,7 @@ void cmd_ia_incant(sock_t *cli, sock_list_t *list, char **arg, zarg_t *zarg)
 
     (void)arg;
     if (ias == NULL) {
-        dprintf(cli->fd, "ko\n");
+        sock_write(cli, "ko\n");
         return;
     }
     new_incantation(GET_GAME(list), ias, tile, zarg);

@@ -36,7 +36,7 @@ void insert_cmd_ia(sock_t *cli, char **arg, zarg_t *zarg)
     ai_cmd_t *tmp = check_ai_cmd(arg);
 
     if (tmp == NULL) {
-        dprintf(cli->fd, "ko\n");
+        sock_write(cli, "ko\n");
         destroy_array(arg);
         return;
     }

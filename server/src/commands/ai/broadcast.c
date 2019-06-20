@@ -91,7 +91,7 @@ void cmd_ia_broad(sock_t *cli, sock_list_t *list, char **arg, zarg_t *zarg)
 
     (void)zarg;
     if (array_lenght(arg) < 2) {
-        dprintf(cli->fd, "ok\n");
+        sock_write(cli, "ok\n");
         return;
     }
     for (sock_node_t *node = list->start; node != NULL; node = node->next) {
@@ -105,5 +105,5 @@ void cmd_ia_broad(sock_t *cli, sock_list_t *list, char **arg, zarg_t *zarg)
         broadcast(&GET_GAME(list)->map, me, ia, arg[1]);
     }
     graph_send_broadcast(list, me, arg[1]);
-    dprintf(cli->fd, "ok\n");
+    sock_write(cli, "ok\n");
 }

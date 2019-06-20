@@ -14,16 +14,16 @@ void cmd_graph_sst(sock_t *cli, sock_list_t *list, char **arg, zarg_t *zarg)
     float nb;
 
     if (array_lenght(arg) < 2 || !is_num(arg[1])) {
-        dprintf(cli->fd, "sbp\n");
+        sock_write(cli, "sbp\n");
         return;
     }
     nb = atof(arg[1]);
     if (check_freq(arg[1]) == false) {
-        dprintf(cli->fd, "sbp\n");
+        sock_write(cli, "sbp\n");
         return;
     }
     zarg->freq = nb;
-    dprintf(cli->fd, "sst %.0f\n", zarg->freq);
+    sock_write(cli, "sst %.0f\n", zarg->freq);
     sprintf(buff, "sgt %.0f\n", zarg->freq);
     send_all_graphics(list, buff);
 }
