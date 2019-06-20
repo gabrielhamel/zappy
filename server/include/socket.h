@@ -55,5 +55,6 @@ sock_t *socket_serv_init(uint16_t port, ctor_t ctor, dtor_t dtor);
 sock_t *socket_serv_accept_cli(sock_t *serv, ctor_t ctor, dtor_t dtor);
 int socket_destroy(sock_t *socket);
 int socket_destroy_no_close(sock_t *socket);
+int sock_write(sock_t *sock, const char *format, ...);
 
 #endif
