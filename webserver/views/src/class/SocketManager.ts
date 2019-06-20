@@ -57,6 +57,7 @@ class SocketManager
 		let len:number = array.length;
 		let cur:Array<string>;
 
+		console.log(datas);
 		for (let i:number = 0; i < len; i++) {
 			cur = array[i].split(" ");
 			if (this.commandsPlay.get(cur[0]))
@@ -146,5 +147,10 @@ class SocketManager
 	private edi = (datas:Array<string>) =>
 	{
 		this.game.dyingEgg(datas);
+	}
+
+	public emit(event:string, datas:string)
+	{
+		this.socket.emit(event, datas);
 	}
 }

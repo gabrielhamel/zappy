@@ -75,7 +75,7 @@ var Controller = /** @class */ (function () {
         this.turnRight.style.display = "none";
         this.play.addEventListener("click", function () {
             _this.teamName = _this.form.getElementsByTagName("input")[0].value;
-            // this.socketManager.emit("requestPlay", this.teamName);
+            _this.socketManager.emit("requestPlay", _this.teamName + '\n');
         });
         this.forward.addEventListener("click", function () {
         });
@@ -596,6 +596,7 @@ var SocketManager = /** @class */ (function () {
             var array = datas.split("\n");
             var len = array.length;
             var cur;
+            console.log(datas);
             for (var i = 0; i < len; i++) {
                 cur = array[i].split(" ");
                 if (_this.commandsPlay.get(cur[0]))
@@ -693,6 +694,9 @@ var SocketManager = /** @class */ (function () {
         this.commandsGraph.set("eht", this.eht);
         this.commandsGraph.set("ebo", this.ebo);
         this.commandsGraph.set("edi", this.edi);
+    };
+    SocketManager.prototype.emit = function (event, datas) {
+        this.socket.emit(event, datas);
     };
     return SocketManager;
 }());

@@ -38,7 +38,6 @@ class Socket
 	{
 		let str:string = String.fromCharCode.apply(null, datas);
 		
-		console.log(str);
 		this.ioSocket.emit("play", str);
 	}
 	private sendDatasToServer = (datas:string):void =>

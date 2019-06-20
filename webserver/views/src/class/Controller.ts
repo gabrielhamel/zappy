@@ -18,7 +18,7 @@ class Controller
 		this.turnRight.style.display = "none";
 		this.play.addEventListener("click", () => {
 			this.teamName = this.form.getElementsByTagName("input")[0].value;
-			// this.socketManager.emit("requestPlay", this.teamName);
+			this.socketManager.emit("requestPlay", this.teamName + '\n');
 		});
 		this.forward.addEventListener("click", () => {
 			
