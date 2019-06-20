@@ -52,6 +52,7 @@ SRC_SERV =	./server/src/sockets/client.c				\
 			./server/src/commands/ai/incant.c			\
 			./server/src/commands/ai/set.c				\
 			./server/src/commands/ai/take.c				\
+			./server/src/commands/ai/geter.c			\
 			./server/src/commands/ai/connect_nbr.c		\
 			./server/src/commands/ai/look.c				\
 			./server/src/teams/check_team_names.c		\

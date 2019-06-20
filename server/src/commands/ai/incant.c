@@ -22,7 +22,7 @@ void destroy_incantation(sock_list_t *list, incantation_t *inc, bool success)
             inc->ia[i]->level++;
             graph_send_ia_plv(list, inc->ia[i]);
         }
-        dprintf(inc->ia[i]->id, "Current level: %d\n", inc->ia[i]->level);
+        sock_write(ia_get_sock(inc->ia[i]), "Current level: %d\n", inc->ia[i]->level);
         inc->ia[i]->fixed = false;
     }
     str = success ? "ok" : "ko";
@@ -52,9 +52,10 @@ void incantation_player_death(sock_list_t *list, ia_t *ia)
     }
 }
 
-void new_incantation(game_t *game, ia_t **ia, tile_t *tile, zarg_t *zarg)
+void new_incantation(sock_list_t *list, ia_t **ia, tile_t *tile, zarg_t *zarg)
 {
     incantation_t *inc = malloc(sizeof(incantation_t));
+    game_t *game = GET_GAME(list);
 
     inc->ia = ia;
     inc->nb_ia = array_lenght((char **)ia);
@@ -65,7 +66,7 @@ void new_incantation(game_t *game, ia_t **ia, tile_t *tile, zarg_t *zarg)
     LIST_INSERT_HEAD(&game->incantations, inc, next);
     for (size_t i = 0; i < inc->nb_ia; i++) {
         inc->ia[i]->fixed = true;
-        dprintf(inc->ia[i]->id, "Elevation underway\n");
+        sock_write(ia_get_sock(inc->ia[i]), "Elevation underway\n");
     }
 }
 
@@ -96,7 +97,7 @@ void cmd_ia_incant(sock_t *cli, sock_list_t *list, char **arg, zarg_t *zarg)
         sock_write(cli, "ko\n");
         return;
     }
-    new_incantation(GET_GAME(list), ias, tile, zarg);
+    new_incantation(list, ias, tile, zarg);
     sprintf(buff, "pic %ld %ld %d", tile->x, tile->y, ia->level + 1);
     for (size_t i = 0; ias[i] != NULL; i++)
         sprintf(buff + strlen(buff), " %d", ias[i]->id);

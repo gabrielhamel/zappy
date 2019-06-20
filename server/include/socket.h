@@ -19,10 +19,10 @@ typedef enum sock_type_t {
 } sock_type_t;
 
 typedef struct sock_t {
+    void *data;
     int fd;
     struct sockaddr_in info;
     sock_type_t type;
-    void *data;
     void *(*ctor)(const struct sock_t *);
     void (*dtor)(const struct sock_t *, void *);
 } sock_t;

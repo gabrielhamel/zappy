@@ -80,7 +80,7 @@ static void broadcast(map_t *map, ia_t *sender, ia_t *receiver, const char *s)
     dir = get_direction(receiver, interval[dir][2], interval[dir][3]);
     if (sender->x == receiver->x && sender->y == receiver->y)
         dir = 0;
-    dprintf(receiver->id, "message %d, %s\n", dir, s);
+    sock_write(ia_get_sock(receiver), "message %d, %s\n", dir, s);
 }
 
 void cmd_ia_broad(sock_t *cli, sock_list_t *list, char **arg, zarg_t *zarg)
