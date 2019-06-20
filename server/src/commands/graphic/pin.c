@@ -25,15 +25,15 @@ void cmd_graph_pin(sock_t *cli, sock_list_t *list, char **arg, zarg_t *zarg)
 
     (void)zarg;
     if (array_lenght(arg) < 2 || !is_num(arg[1])) {
-        dprintf(cli->fd, "sbp\n");
+        sock_write(cli, "sbp\n");
         return;
     }
     ia = get_player_by_id(atoi(arg[1]), list);
     if (ia == NULL) {
-        dprintf(cli->fd, "sbp\n");
+        sock_write(cli, "sbp\n");
         return;
     }
     inv = ia->inventory;
-    dprintf(cli->fd, "pin %d %ld %ld %d %d %d %d %d %d %d\n", ia->id,
+    sock_write(cli, "pin %d %ld %ld %d %d %d %d %d %d %d\n", ia->id,
     ia->x, ia->y, inv[0], inv[1], inv[2], inv[3], inv[4], inv[5], inv[6]);
 }

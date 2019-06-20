@@ -24,7 +24,7 @@ void cmd_ia_set(sock_t *cli, sock_list_t *list, char **arg, zarg_t *zarg)
 
     (void)zarg;
     if (id_item == -1 || !ia->inventory[id_item]) {
-        dprintf(cli->fd, "ko\n");
+        sock_write(cli, "ko\n");
         return;
     }
     tile->items[id_item] += 1;
@@ -32,5 +32,5 @@ void cmd_ia_set(sock_t *cli, sock_list_t *list, char **arg, zarg_t *zarg)
     graph_send_ia_pdr(list, ia, id_item);
     graph_send_ia_pin(list, ia);
     graph_send_tile_bct(list, tile);
-    dprintf(cli->fd, "ok\n");
+    sock_write(cli, "ok\n");
 }

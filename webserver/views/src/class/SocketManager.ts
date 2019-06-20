@@ -16,7 +16,9 @@ class SocketManager
 	{
 		this.commands.set("bct", this.bct);
 		this.commands.set("msz", this.msz);
+		this.commands.set("pnw", this.pnw);
 		this.commands.set("sgt", this.sgt);
+		this.commands.set("sst", this.sgt);// WTF ???
         this.commands.set("tna", this.tna);
 		this.commands.set("pnw", this.pnw);
 		this.commands.set("ppo", this.ppo);
@@ -34,7 +36,6 @@ class SocketManager
 		this.commands.set("eht", this.eht);
 		this.commands.set("ebo", this.ebo);
 		this.commands.set("edi", this.edi);
-
 	}
 	private getDatas = (datas:any):void =>
 	{

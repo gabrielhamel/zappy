@@ -18,5 +18,5 @@ void cmd_ia_left(sock_t *cli, sock_list_t *list, char **arg, zarg_t *zarg)
     if (ia->ori < NORTH)
         ia->ori = WEAST;
     graph_send_ia_ppo(list, ia);
-    dprintf(cli->fd, "ok\n");
+    sock_write(cli, "ok\n");
 }

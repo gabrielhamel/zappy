@@ -12,7 +12,7 @@ static void show_egg(sock_t *graph, egg_t *egg)
 {
     if (egg->state == DEAD)
         return;
-    dprintf(graph->fd, "enw %d %d %ld %ld\n",
+    sock_write(graph, "enw %d %d %ld %ld\n",
     egg->id, egg->player, egg->x, egg->y);
 }
 
@@ -48,5 +48,5 @@ void cmd_ia_fork(sock_t *cli, sock_list_t *list, char **arg, zarg_t *zarg)
     LIST_INSERT_HEAD(&team->eggs, egg, next);
     sprintf(buff, "enw %d %d %ld %ld\n", egg->id, cli->fd, egg->x, egg->y);
     send_all_graphics(list, buff);
-    dprintf(cli->fd, "ok\n");
+    sock_write(cli, "ok\n");
 }

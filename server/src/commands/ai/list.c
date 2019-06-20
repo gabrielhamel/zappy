@@ -36,7 +36,7 @@ void insert_cmd_ia(sock_t *cli, char **arg, zarg_t *zarg)
     ai_cmd_t *tmp = check_ai_cmd(arg);
 
     if (tmp == NULL) {
-        dprintf(cli->fd, "ko\n");
+        sock_write(cli, "ko\n");
         destroy_array(arg);
         return;
     }
@@ -64,11 +64,6 @@ void exec_ia_cmd(sock_t *cli, sock_list_t *list, zarg_t *zarg)
             arg = list_pop(LIST_CMD(cli));
             cmd_g[i].func(cli, list, arg, zarg);
             destroy_array(arg);
-            return;
-        }
-        else if (!strcmp(cmd_g[i].name, cmd->cmd[0])) {
-            dprintf(cli->fd, "Not implemented\n");
-            destroy_array(list_pop(LIST_CMD(cli)));
             return;
         }
 }

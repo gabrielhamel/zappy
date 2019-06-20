@@ -29,12 +29,10 @@ typedef enum {
 } client_type_t;
 
 typedef struct {
+    un_cli_t client;
     char *cmd_buff;
     client_type_t cli_type;
-    un_cli_t client;
 } zappy_client_t;
-
-// extern command_t commands_g[];
 
 // Constructeur et destructeur du client
 void *init_client(const sock_t *cli);
