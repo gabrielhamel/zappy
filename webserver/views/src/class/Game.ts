@@ -76,12 +76,12 @@ class Game
 			console.log(datas);
 			return;
 		}
-		if (!this.getBigChungusById(parseInt(datas[1]))) {
+		if (this.getBigChungusById(parseInt(datas[1]))) {
 			console.log("You can't clone the big unfamous big chungus !!!");
 			console.log(datas);
 			return;
 		}
-		let chungus = new Player(parseInt(datas[1]), datas[6], this.scene);
+		let chungus = new Player(parseInt(datas[1]), datas[6], this.CHUNGUS.getInstance(), this.scene);
 		chungus.setPos(parseInt(datas[2]), parseInt(datas[3]));
 		chungus.setOri(parseInt(datas[4]));
 		chungus.setLvl(parseInt(datas[5]));
@@ -95,7 +95,7 @@ class Game
 			return;
 		}
 		let movingChungus = this.getBigChungusById(parseInt(datas[1]))
-		if (movingChungus) {
+		if (!movingChungus) {
 			console.log("This chungus doesn't exist");
 			console.log(datas);
 			return;
