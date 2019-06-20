@@ -60,11 +60,32 @@ var Camera = /** @class */ (function () {
     Camera.ZOOM_SPEED = 1 / 10;
     return Camera;
 }());
+var Egg = /** @class */ (function () {
+    function Egg(id, x, y, teamName, scene) {
+        this.maturity = false;
+        this.x = x;
+        this.y = y;
+        this.teamName = teamName;
+        this.EGG = new MeshBuilder("chungus.glb", scene);
+    }
+    Egg.prototype.setMaturity = function (maturity) {
+        this.maturity = maturity;
+    };
+    Egg.prototype.getId = function () {
+        return (this.id);
+    };
+    Egg.prototype.getMaturity = function () {
+        return (this.maturity);
+    };
+    return Egg;
+}());
 var Game = /** @class */ (function () {
     function Game(canvas) {
         var _this = this;
         this.socketManager = new SocketManager(this);
-        this.teams = new Map();
+        this.chungus = new Array();
+        this.eggs = new Array();
+        this.teamsNames = new Array();
         this.render = function () {
             _this.stage.render();
             _this.scene.render();
@@ -85,15 +106,19 @@ var Game = /** @class */ (function () {
             _this.engine.resize();
         });
     };
-    Game.prototype.addPlayer = function (team, position, orientation, level) {
-        var player;
-        if (!this.teams.get(team))
-            return;
-        player = new Player(this.CHUNGUS.getInstance(), position, orientation, level);
-        this.teams.get(team).addPlayer(player);
+    Game.prototype.getBigChungusById = function (id) {
+        for (var i = 0; i < this.chungus.length; i++) {
+            if (id == this.chungus[i].getId())
+                return this.chungus[0];
+        }
+        return (undefined);
     };
-    Game.prototype.addTeam = function (name) {
-        this.teams.set(name, new Team(name));
+    Game.prototype.getEggById = function (id) {
+        for (var i = 0; i < this.eggs.length; i++) {
+            if (id == this.eggs[i].getId())
+                return this.eggs[0];
+        }
+        return (undefined);
     };
     Game.prototype.setup = function (size) {
         Game.size = size;
@@ -102,6 +127,218 @@ var Game = /** @class */ (function () {
     };
     Game.prototype.getStage = function () {
         return (this.stage);
+    };
+    Game.prototype.addTeam = function (name) {
+        this.teamsNames.push(name);
+    };
+    Game.prototype.addChungus = function (datas) {
+        if (datas.length < 7) {
+            console.log("Not enough arguments to summon the big Chungus... CHUNG CHUNG CHUNG");
+            console.log(datas);
+            return;
+        }
+        if (this.getBigChungusById(parseInt(datas[1]))) {
+            console.log("You can't clone the big unfamous big chungus !!!");
+            console.log(datas);
+            return;
+        }
+        var chungus = new Player(parseInt(datas[1]), datas[6], this.CHUNGUS.getInstance(), this.scene);
+        chungus.setPos(parseInt(datas[2]), parseInt(datas[3]));
+        chungus.setOri(parseInt(datas[4]));
+        chungus.setLvl(parseInt(datas[5]));
+        this.chungus.push(chungus);
+    };
+    Game.prototype.updateChungusPos = function (datas) {
+        if (datas.length < 5) {
+            console.log("Not enough arguments to move the big Chungus... CHUNG CHUNG CHUNG");
+            console.log(datas);
+            return;
+        }
+        var movingChungus = this.getBigChungusById(parseInt(datas[1]));
+        if (!movingChungus) {
+            console.log("This chungus doesn't exist");
+            console.log(datas);
+            return;
+        }
+        movingChungus.setPos(parseInt(datas[2]), parseInt(datas[3]));
+        movingChungus.setOri(parseInt(datas[4]));
+    };
+    Game.prototype.lvlUpChungus = function (datas) {
+        if (datas.length < 3) {
+            console.log("Not enough arguments to upgrade the big Chungus... CHUNG CHUNG CHUNG");
+            console.log(datas);
+            return;
+        }
+        var levelingChungus = this.getBigChungusById(parseInt(datas[1]));
+        if (!levelingChungus) {
+            console.log("This chungus doesn't exist");
+            console.log(datas);
+            return;
+        }
+        levelingChungus.setLvl(parseInt(datas[2]));
+    };
+    Game.prototype.chungusBag = function (datas) {
+        if (datas.length < 11) {
+            console.log("Not enough arguments to fill the big Chungus big bag... CHUNG CHUNG CHUNG");
+            console.log(datas);
+            return;
+        }
+        var fillingChungusBag = this.getBigChungusById(parseInt(datas[1]));
+        if (!fillingChungusBag) {
+            console.log("This chungus doesn't exist");
+            console.log(datas);
+            return;
+        }
+        fillingChungusBag.setPos(parseInt(datas[2]), parseInt(datas[3]));
+        fillingChungusBag.setBag(parseInt(datas[4]), parseInt(datas[5]), parseInt(datas[6]), parseInt(datas[7]), parseInt(datas[8]), parseInt(datas[9]), parseInt(datas[10]));
+    };
+    Game.prototype.chungusYelling = function (datas) {
+        if (datas.length < 3) {
+            console.log("To big Chungus the message isn't big enough");
+            console.log(datas);
+            return;
+        }
+        var voicingChungus = this.getBigChungusById(parseInt(datas[1]));
+        if (!voicingChungus) {
+            console.log("This chungus doesn't exist");
+            console.log(datas);
+            return;
+        }
+        voicingChungus.setMessage(datas[2]);
+    };
+    Game.prototype.chungusLaying = function (datas) {
+        if (datas.length < 2) {
+            console.log("Not enough arguments to reproduct the big Chungus... CHUNG CHUNG CHUNG");
+            console.log(datas);
+            return;
+        }
+        var layingChungus = this.getBigChungusById(parseInt(datas[1]));
+        if (!layingChungus) {
+            console.log("This chungus doesn't exist");
+            console.log(datas);
+            return;
+        }
+        layingChungus.setLayingState(true);
+    };
+    Game.prototype.chungusDroping = function (datas) {
+        if (datas.length < 3) {
+            console.log("Not enough arguments to drop the big Chungus... CHUNG CHUNG CHUNG");
+            console.log(datas);
+            return;
+        }
+        var dropingChungus = this.getBigChungusById(parseInt(datas[1]));
+        if (!dropingChungus) {
+            console.log("This chungus doesn't exist");
+            console.log(datas);
+            return;
+        }
+        dropingChungus.drop(parseInt(datas[2]));
+        var vector = new BABYLON.Vector2(0, 0);
+        vector.x = dropingChungus.getX();
+        vector.y = dropingChungus.getY();
+        var tile = this.stage.findTileByPosition(vector);
+        tile.addItem(parseInt(datas[2]));
+    };
+    Game.prototype.chungusTaking = function (datas) {
+        if (datas.length < 3) {
+            console.log("Not enough arguments to take the big Chungus... CHUNG CHUNG CHUNG");
+            console.log(datas);
+            return;
+        }
+        var gatheringChungus = this.getBigChungusById(parseInt(datas[1]));
+        if (!gatheringChungus) {
+            console.log("This chungus doesn't exist");
+            console.log(datas);
+            return;
+        }
+        gatheringChungus.take(parseInt(datas[2]));
+        var vector = new BABYLON.Vector2(0, 0);
+        vector.x = gatheringChungus.getX();
+        vector.y = gatheringChungus.getY();
+        var tile = this.stage.findTileByPosition(vector);
+        tile.removeItem(parseInt(datas[2]));
+    };
+    Game.prototype.removeChungus = function (datas) {
+        if (datas.length < 2) {
+            console.log("Not enough arguments to kill the big Chungus... CHUNG CHUNG CHUNG");
+            console.log(datas);
+            return;
+        }
+        if (!this.getBigChungusById(parseInt(datas[1]))) {
+            console.log("This chungus doesn't exist");
+            console.log(datas);
+            return;
+        }
+        var i = 0;
+        for (; i < this.chungus.length && this.chungus[i].getId() != parseInt(datas[1]); i++)
+            ;
+        this.chungus.splice(i, 1);
+    };
+    Game.prototype.chungusAccouching = function (datas) {
+        if (datas.length < 5) {
+            console.log("Not enough arguments to reproduct the big Chungus... CHUNG CHUNG CHUNG");
+            console.log(datas);
+            return;
+        }
+        var accouchingChungus = this.getBigChungusById(parseInt(datas[2]));
+        if (!accouchingChungus || this.getEggById(parseInt(datas[1]))) {
+            console.log("This chungus doesn't exist or egg already exist");
+            console.log(datas);
+            return;
+        }
+        var egg = new Egg(parseInt(datas[1]), parseInt(datas[3]), parseInt(datas[4]), accouchingChungus.getTeamName(), this.scene);
+        this.eggs.push(egg);
+        accouchingChungus.setLayingState(false);
+    };
+    Game.prototype.maturingEgg = function (datas) {
+        if (datas.length < 2) {
+            console.log("Not enough arguments to mature an egg");
+            console.log(datas);
+            return;
+        }
+        var egg = this.getEggById(parseInt(datas[1]));
+        if (!egg) {
+            console.log("This egg doesn't exist");
+            console.log(datas);
+            return;
+        }
+        egg.setMaturity(true);
+    };
+    Game.prototype.hatchingEgg = function (datas) {
+        if (datas.length < 2) {
+            console.log("Not enough arguments to mature an egg");
+            console.log(datas);
+            return;
+        }
+        var egg = this.getEggById(parseInt(datas[1]));
+        if (!egg) {
+            console.log("This egg doesn't exist");
+            console.log(datas);
+            return;
+        }
+        //ANIMATION => fade de l'oeuf
+        var i = 0;
+        for (; i < this.eggs.length && this.eggs[i].getId() != parseInt(datas[1]); i++)
+            ;
+        this.eggs.splice(i, 1);
+    };
+    Game.prototype.dyingEgg = function (datas) {
+        if (datas.length < 2) {
+            console.log("Not enough arguments to mature an egg");
+            console.log(datas);
+            return;
+        }
+        var egg = this.getEggById(parseInt(datas[1]));
+        if (!egg) {
+            console.log("This egg doesn't exist");
+            console.log(datas);
+            return;
+        }
+        //ANIMATION => destruction de l'oeuf
+        var i = 0;
+        for (; i < this.eggs.length && this.eggs[i].getId() != parseInt(datas[1]); i++)
+            ;
+        this.eggs.splice(i, 1);
     };
     return Game;
 }());
@@ -117,6 +354,33 @@ var Infobox = /** @class */ (function () {
         }
     };
     return Infobox;
+}());
+var Controller = /** @class */ (function () {
+    function Controller(socketManager) {
+        var _this = this;
+        this.form = document.getElementById("play-form");
+        this.play = document.getElementById("play");
+        this.forward = document.getElementById("forward");
+        this.turnLeft = document.getElementById("turn-left");
+        this.turnRight = document.getElementById("turn-right");
+        this.socketManager = socketManager;
+        this.forward.style.display = "none";
+        this.turnLeft.style.display = "none";
+        this.turnRight.style.display = "none";
+        this.play.addEventListener("click", function () {
+            _this.teamName = _this.form.getElementsByTagName("input")[0].value;
+            // this.socketManager.emit("requestPlay", this.teamName);
+        });
+        this.forward.addEventListener("click", function () {
+        });
+        this.turnLeft.addEventListener("click", function () {
+        });
+        this.turnRight.addEventListener("click", function () {
+        });
+    }
+    Controller.prototype.changeState = function () {
+    };
+    return Controller;
 }());
 var MeshBuilder = /** @class */ (function () {
     function MeshBuilder(modelName, scene) {
@@ -141,26 +405,174 @@ var MeshBuilder = /** @class */ (function () {
     return MeshBuilder;
 }());
 var Player = /** @class */ (function () {
-    function Player(mesh, position, orientation, level) {
-        if (level === void 0) { level = 1; }
-        this.level = 1;
-        this.mesh = mesh;
-        this.level = level;
-        //this.setOrientation(orientation);
-        this.setPosition(position);
+    function Player(id, teamName, skin, scene) {
+        this.bag = new Array();
+        this.message = "";
+        this.incanting = false;
+        this.laying = false;
+        this.id = id;
+        this.teamName = teamName;
+        this.skin = skin;
+        for (var i = 0; i < 7; i++)
+            this.bag.push(0);
     }
-    Player.prototype.setOrientation = function (orientation) {
-        this.orientation = orientation;
-        this.mesh.rotation.y = orientation * (Math.PI / 2);
+    Player.prototype.setPos = function (x, y) {
+        this.x = x;
+        this.y = y;
+        this.skin.position = new BABYLON.Vector3(x, 0.5, y);
     };
-    Player.prototype.setPosition = function (position) {
-        this.position = position;
-        if (!this.mesh)
-            return;
-        this.mesh.position.x = position.x;
-        this.mesh.position.z = position.y;
+    Player.prototype.setOri = function (o) {
+        this.o = o;
+        this.skin.rotation.y = Math.PI / 2 * (o - 1);
+    };
+    Player.prototype.setLvl = function (lvl) {
+        this.lvl = lvl;
+    };
+    Player.prototype.setBag = function (food, linemate, deraumere, sibur, mendiane, phiras, thystame) {
+        this.bag[0] = food;
+        this.bag[1] = linemate;
+        this.bag[2] = deraumere;
+        this.bag[3] = sibur;
+        this.bag[4] = mendiane;
+        this.bag[5] = phiras;
+        this.bag[6] = thystame;
+    };
+    Player.prototype.setMessage = function (message) {
+        this.message = message;
+    };
+    Player.prototype.setLayingState = function (state) {
+        this.laying = state;
+    };
+    Player.prototype.getId = function () {
+        return (this.id);
+    };
+    Player.prototype.getX = function () {
+        return (this.id);
+    };
+    Player.prototype.getY = function () {
+        return (this.id);
+    };
+    Player.prototype.getTeamName = function () {
+        return (this.teamName);
+    };
+    Player.prototype.isLaying = function () {
+        return (this.laying);
+    };
+    Player.prototype.drop = function (item) {
+        this.bag[item]--;
+    };
+    Player.prototype.take = function (item) {
+        this.bag[item]--;
     };
     return Player;
+}());
+var SocketData = /** @class */ (function () {
+    function SocketData(game, socket) {
+        var _this = this;
+        this.commands = new Map();
+        this.getDatas = function (datas) {
+            var array = datas.split("\n");
+            var len = array.length;
+            var cur;
+            for (var i = 0; i < len; i++) {
+                cur = array[i].split(" ");
+                if (_this.commands.get(cur[0]))
+                    _this.commands.get(cur[0])(cur);
+            }
+        };
+        this.bct = function (datas) {
+            _this.game.getStage().addTile(datas);
+        };
+        this.msz = function (datas) {
+            var vector = new BABYLON.Vector2(0, 0);
+            vector.x = parseInt(datas[1]);
+            vector.y = parseInt(datas[2]);
+            _this.game.setup(vector);
+        };
+        this.sgt = function (datas) {
+            Game.timeUnit = parseInt(datas[1]);
+        };
+        this.tna = function (datas) {
+            _this.game.addTeam(datas[1]);
+        };
+        this.pnw = function (datas) {
+            _this.game.addChungus(datas);
+        };
+        this.ppo = function (datas) {
+            _this.game.updateChungusPos(datas);
+        };
+        this.plv = function (datas) {
+            _this.game.lvlUpChungus(datas);
+        };
+        this.pin = function (datas) {
+            _this.game.chungusBag(datas);
+        };
+        this.pex = function (datas) {
+            /// NEED GABI
+        };
+        this.pbc = function (datas) {
+            _this.game.chungusYelling(datas);
+        };
+        this.pic = function (datas) {
+            /// NEED GABI
+        };
+        this.pie = function (datas) {
+            /// NEED GABI
+        };
+        this.pfk = function (datas) {
+            _this.game.chungusLaying(datas);
+        };
+        this.pdr = function (datas) {
+            _this.game.chungusDroping(datas);
+        };
+        this.pgt = function (datas) {
+            _this.game.chungusTaking(datas);
+        };
+        this.pdi = function (datas) {
+            _this.game.removeChungus(datas);
+        };
+        this.enw = function (datas) {
+            _this.game.chungusAccouching(datas);
+        };
+        this.eht = function (datas) {
+            _this.game.maturingEgg(datas);
+        };
+        this.ebo = function (datas) {
+            _this.game.hatchingEgg(datas);
+        };
+        this.edi = function (datas) {
+            _this.game.dyingEgg(datas);
+        };
+        this.game = game;
+        this.initialise();
+        socket.emit("data", "GRAPHIC\n");
+        socket.on("data", this.getDatas);
+    }
+    SocketData.prototype.initialise = function () {
+        this.commands.set("bct", this.bct);
+        this.commands.set("msz", this.msz);
+        this.commands.set("pnw", this.pnw);
+        this.commands.set("sgt", this.sgt);
+        this.commands.set("sst", this.sgt); // WTF ???
+        this.commands.set("tna", this.tna);
+        this.commands.set("pnw", this.pnw);
+        this.commands.set("ppo", this.ppo);
+        this.commands.set("plv", this.plv);
+        this.commands.set("plv", this.pin);
+        this.commands.set("pex", this.pex);
+        this.commands.set("pbc", this.pbc);
+        this.commands.set("pic", this.pic);
+        this.commands.set("pie", this.pie);
+        this.commands.set("pfk", this.pfk);
+        this.commands.set("pdr", this.pdr);
+        this.commands.set("pgt", this.pgt);
+        this.commands.set("pdi", this.pdi);
+        this.commands.set("enw", this.enw);
+        this.commands.set("eht", this.eht);
+        this.commands.set("ebo", this.ebo);
+        this.commands.set("edi", this.edi);
+    };
+    return SocketData;
 }());
 var SocketManager = /** @class */ (function () {
     function SocketManager(game) {
@@ -186,17 +598,59 @@ var SocketManager = /** @class */ (function () {
             vector.y = parseInt(datas[2]);
             _this.game.setup(vector);
         };
-        this.pnw = function (datas) {
-            var position = new BABYLON.Vector2(parseInt(datas[2]), parseInt(datas[3]));
-            var orientation = parseInt(datas[4]);
-            var level = parseInt(datas[5]);
-            _this.game.addPlayer(datas[6], position, orientation, level);
-        };
         this.sgt = function (datas) {
             Game.timeUnit = parseInt(datas[1]);
         };
         this.tna = function (datas) {
             _this.game.addTeam(datas[1]);
+        };
+        this.pnw = function (datas) {
+            _this.game.addChungus(datas);
+        };
+        this.ppo = function (datas) {
+            _this.game.updateChungusPos(datas);
+        };
+        this.plv = function (datas) {
+            _this.game.lvlUpChungus(datas);
+        };
+        this.pin = function (datas) {
+            _this.game.chungusBag(datas);
+        };
+        this.pex = function (datas) {
+            /// NEED GABI
+        };
+        this.pbc = function (datas) {
+            _this.game.chungusYelling(datas);
+        };
+        this.pic = function (datas) {
+            /// NEED GABI
+        };
+        this.pie = function (datas) {
+            /// NEED GABI
+        };
+        this.pfk = function (datas) {
+            _this.game.chungusLaying(datas);
+        };
+        this.pdr = function (datas) {
+            _this.game.chungusDroping(datas);
+        };
+        this.pgt = function (datas) {
+            _this.game.chungusTaking(datas);
+        };
+        this.pdi = function (datas) {
+            _this.game.removeChungus(datas);
+        };
+        this.enw = function (datas) {
+            _this.game.chungusAccouching(datas);
+        };
+        this.eht = function (datas) {
+            _this.game.maturingEgg(datas);
+        };
+        this.ebo = function (datas) {
+            _this.game.hatchingEgg(datas);
+        };
+        this.edi = function (datas) {
+            _this.game.dyingEgg(datas);
         };
         this.game = game;
         this.initialise();
@@ -208,10 +662,32 @@ var SocketManager = /** @class */ (function () {
         this.commands.set("msz", this.msz);
         this.commands.set("pnw", this.pnw);
         this.commands.set("sgt", this.sgt);
-        this.commands.set("sst", this.sgt);
+        this.commands.set("sst", this.sgt); // WTF ???
         this.commands.set("tna", this.tna);
+        this.commands.set("pnw", this.pnw);
+        this.commands.set("ppo", this.ppo);
+        this.commands.set("plv", this.plv);
+        this.commands.set("plv", this.pin);
+        this.commands.set("pex", this.pex);
+        this.commands.set("pbc", this.pbc);
+        this.commands.set("pic", this.pic);
+        this.commands.set("pie", this.pie);
+        this.commands.set("pfk", this.pfk);
+        this.commands.set("pdr", this.pdr);
+        this.commands.set("pgt", this.pgt);
+        this.commands.set("pdi", this.pdi);
+        this.commands.set("enw", this.enw);
+        this.commands.set("eht", this.eht);
+        this.commands.set("ebo", this.ebo);
+        this.commands.set("edi", this.edi);
     };
     return SocketManager;
+}());
+var SocketPlayer = /** @class */ (function () {
+    function SocketPlayer(game) {
+        this.game = game;
+    }
+    return SocketPlayer;
 }());
 var Stage = /** @class */ (function () {
     function Stage(scene) {
@@ -291,16 +767,6 @@ var Stage = /** @class */ (function () {
     Stage.prototype.render = function () {
     };
     return Stage;
-}());
-var Team = /** @class */ (function () {
-    function Team(name) {
-        this.players = new Array();
-        this.NAME = name;
-    }
-    Team.prototype.addPlayer = function (player) {
-        this.players.push(player);
-    };
-    return Team;
 }());
 var Tile = /** @class */ (function () {
     function Tile(food, linemate, deraumere, sibur, mendiane, phiras, thystame, scene) {
@@ -390,6 +856,14 @@ var Tile = /** @class */ (function () {
             res = it.next();
         }
         return (output);
+    };
+    Tile.prototype.addItem = function (item) {
+        var convertArray = new Array("food", "linemate", "deraumere", "sibur", "mendiane", "phiras", "thystame");
+        this.stats.set(convertArray[item], this.stats.get(convertArray[item]) + 1);
+    };
+    Tile.prototype.removeItem = function (item) {
+        var convertArray = new Array("food", "linemate", "deraumere", "sibur", "mendiane", "phiras", "thystame");
+        this.stats.set(convertArray[item], this.stats.get(convertArray[item]) - 1);
     };
     Tile.ANIMATION_BUMP = 0.15;
     Tile.ANIMATION_FPS = 10;

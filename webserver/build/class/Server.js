@@ -17,8 +17,9 @@ var Server = /** @class */ (function () {
             });
         };
         this.handleSocketConnection = function (socket) {
-            var sock = new Socket_1.default(socket);
-            sock.connectToServer("127.0.0.1", _this.serverPort);
+            var sock = new Socket_1.default("127.0.0.1", _this.serverPort, socket);
+            console.log("Client " + socket.id + " is connected to relay.");
+            sock.connectToServer();
             socket.on("disconnect", function () {
                 _this.handleSocketDisconnection(socket);
             });
@@ -28,6 +29,7 @@ var Server = /** @class */ (function () {
             var index = _this.sockets.findIndex(function (sock) {
                 return (sock.getId() == socket.id);
             });
+            console.log("Client " + socket.id + " is disconnected of relay.");
             if (index == -1)
                 return;
             _this.sockets.splice(index, 1);

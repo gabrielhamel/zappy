@@ -2,24 +2,43 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 var net = require("net");
 var Socket = /** @class */ (function () {
-    function Socket(socket) {
+    function Socket(ip, port, socket) {
         var _this = this;
+        this.requestPlay = function (datas) {
+            if (_this.playSocket)
+                return;
+            _this.playSocket = new net.Socket();
+            _this.playSocket.connect(_this.PORT, _this.IP, function () {
+                _this.playSocket.write(datas);
+                _this.playSocket.on("data", _this.receiveServerPlay);
+                _this.ioSocket.on("play", _this.sendIADataToServer);
+            });
+        };
         this.receiveServerDatas = function (datas) {
-            _this.ioSocket.emit("data", String.fromCharCode.apply(null, datas));
-            console.log("data received from server:" + datas);
+            var str = String.fromCharCode.apply(null, datas);
+            _this.ioSocket.emit("data", str);
+        };
+        this.receiveServerPlay = function (datas) {
+            var str = String.fromCharCode.apply(null, datas);
+            _this.ioSocket.emit("play", str);
         };
         this.sendDatasToServer = function (datas) {
             _this.tcpSocket.write(datas);
-            console.log("data sent to server: " + datas);
         };
+        this.sendIADataToServer = function (datas) {
+            _this.playSocket.write(datas);
+        };
+        this.IP = ip;
+        this.PORT = port;
         this.ioSocket = socket;
         this.tcpSocket = new net.Socket();
     }
-    Socket.prototype.connectToServer = function (ip, port) {
+    Socket.prototype.connectToServer = function () {
         var _this = this;
-        this.tcpSocket.connect(port, ip, function () {
+        this.tcpSocket.connect(this.PORT, this.IP, function () {
             _this.tcpSocket.on("data", _this.receiveServerDatas);
             _this.ioSocket.on("data", _this.sendDatasToServer);
+            _this.ioSocket.on("requestPlay", _this.requestPlay);
         });
     };
     Socket.prototype.getId = function () {
