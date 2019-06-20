@@ -275,4 +275,22 @@ class Game
 		for (;i < this.eggs.length && this.eggs[i].getId() != parseInt(datas[1]) ; i++);
 		this.eggs.splice(i, 1);
 	}
+	public dyingEgg(datas:Array<string>):void
+	{
+		if (datas.length < 2) {
+			console.log("Not enough arguments to mature an egg");
+			console.log(datas);
+			return;
+		}
+		let egg = this.getEggById(parseInt(datas[1]));
+		if (!egg) {
+			console.log("This egg doesn't exist");
+			console.log(datas);
+			return;
+		}
+		//ANIMATION => destruction de l'oeuf
+		let i = 0;
+		for (;i < this.eggs.length && this.eggs[i].getId() != parseInt(datas[1]) ; i++);
+		this.eggs.splice(i, 1);
+	}
 }

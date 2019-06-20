@@ -131,6 +131,6 @@ class SocketManager
 	}
 	private edi = (datas:Array<string>) =>
 	{
-		this.game.chungusAccouching(datas);
+		this.game.dyingEgg(datas);
 	}
 }
