@@ -44,7 +44,14 @@ class Game
 		}
 		return (undefined);
 	}
-
+	private getEggById(id:number): Egg
+	{
+		for (let i:number = 0; i < this.eggs.length; i++) {
+			if (id == this.eggs[i].getId())
+				return this.eggs[0];
+		}
+		return (undefined);
+	}
 
 	public setup(size:BABYLON.Vector2)
 	{
@@ -159,25 +166,6 @@ class Game
 		}
 		layingChungus.setLayingState(true);
 	}
-
-	public chungusAccouching(datas:Array<string>):void // PAS BON je confond avec enw
-	{
-		if (datas.length < 2) {
-			console.log("Not enough arguments to reproduct the big Chungus... CHUNG CHUNG CHUNG");
-			console.log(datas);
-			return;
-		}
-		let accouchingChungus = this.getBigChungusById(parseInt(datas[1]));
-		if (!accouchingChungus) {
-			console.log("This chungus doesn't exist");
-			console.log(datas);
-			return;
-		}
-		let egg = new Egg(accouchingChungus.getX(), accouchingChungus.getY(),
-		accouchingChungus.getTeamName(), this.scene);
-		this.eggs.push(egg);
-		accouchingChungus.setLayingState(false);
-	}
 	public chungusDroping(datas:Array<string>):void
 	{
 		if (datas.length < 3) {
@@ -233,5 +221,56 @@ class Game
 		let i = 0;
 		for (;i < this.chungus.length && this.chungus[i].getId() != parseInt(datas[1]) ; i++);
 		this.chungus.splice(i, 1);
+	}
+	public chungusAccouching(datas:Array<string>):void
+	{
+		if (datas.length < 5) {
+			console.log("Not enough arguments to reproduct the big Chungus... CHUNG CHUNG CHUNG");
+			console.log(datas);
+			return;
+		}
+		let accouchingChungus = this.getBigChungusById(parseInt(datas[2]));
+		if (!accouchingChungus || this.getEggById(parseInt(datas[1]))) {
+			console.log("This chungus doesn't exist or egg already exist");
+			console.log(datas);
+			return;
+		}
+		let egg = new Egg(parseInt(datas[1]), parseInt(datas[3]), parseInt(datas[4]),
+		accouchingChungus.getTeamName(), this.scene);
+		this.eggs.push(egg);
+		accouchingChungus.setLayingState(false);
+	}
+	public maturingEgg(datas:Array<string>):void
+	{
+		if (datas.length < 2) {
+			console.log("Not enough arguments to mature an egg");
+			console.log(datas);
+			return;
+		}
+		let egg = this.getEggById(parseInt(datas[1]));
+		if (!egg) {
+			console.log("This egg doesn't exist");
+			console.log(datas);
+			return;
+		}
+		egg.setMaturity(true);
+	}
+	public hatchingEgg(datas:Array<string>):void
+	{
+		if (datas.length < 2) {
+			console.log("Not enough arguments to mature an egg");
+			console.log(datas);
+			return;
+		}
+		let egg = this.getEggById(parseInt(datas[1]));
+		if (!egg) {
+			console.log("This egg doesn't exist");
+			console.log(datas);
+			return;
+		}
+		//ANIMATION => fade de l'oeuf
+		let i = 0;
+		for (;i < this.eggs.length && this.eggs[i].getId() != parseInt(datas[1]) ; i++);
+		this.eggs.splice(i, 1);
 	}
 }

@@ -31,6 +31,10 @@ class SocketManager
 		this.commands.set("pgt", this.pgt);
 		this.commands.set("pdi", this.pdi);
 		this.commands.set("enw", this.enw);
+		this.commands.set("eht", this.eht);
+		this.commands.set("ebo", this.ebo);
+		this.commands.set("edi", this.edi);
+
 	}
 	private getDatas = (datas:any):void =>
 	{
@@ -113,6 +117,18 @@ class SocketManager
 		this.game.removeChungus(datas);
 	}
 	private enw = (datas:Array<string>) =>
+	{
+		this.game.chungusAccouching(datas);
+	}
+	private eht = (datas:Array<string>) =>
+	{
+		this.game.maturingEgg(datas);
+	}
+	private ebo = (datas:Array<string>) =>
+	{
+		this.game.hatchingEgg(datas);
+	}
+	private edi = (datas:Array<string>) =>
 	{
 		this.game.chungusAccouching(datas);
 	}

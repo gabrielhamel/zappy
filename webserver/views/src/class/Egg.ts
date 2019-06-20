@@ -4,9 +4,10 @@ class Egg
 	private id:number;
 	private x:number;
 	private y:number;
-	private teamName:string; // peut à remplacer vers une reference de team ou OSEF en vrai
+	private teamName:string;
+	private maturity:boolean = false;
 
-	constructor(x:number, y:number, teamName:string, scene:BABYLON.Scene)
+	constructor(id: number, x:number, y:number, teamName:string, scene:BABYLON.Scene)
 	{
 		this.x = x;
 		this.y = y;
@@ -14,8 +15,16 @@ class Egg
 		this.EGG = new MeshBuilder("chungus.glb", scene);
 	}
 
+	public setMaturity(maturity:boolean):void
+	{
+		this.maturity = maturity;
+	}
 	public getId():number
 	{
 		return (this.id);
+	}
+	public getMaturity():boolean
+	{
+		return (this.maturity);
 	}
 }
