@@ -7,11 +7,21 @@
 	</head>
 	<body>
 		<canvas>Your browser can't support canvas technology.</canvas>
-		<section id="datas">
-			<article id="playerInfos">
+
+		<section class="controller-box">
+			<form id="play-form">
+				<input type="text" name="teamName" placeholder="Team Name" />
+				<button type="button" id="play">Play</button>
+			</form>
+			<button id="turn-left">Turn Left</button>
+			<button id="forward">Forward</button>
+			<button id="turn-right">Turn Right</button>
+		</section>
+		<section class="info-box" id="datas">
+			<div id="playerInfos">
 				
-			</article>
-			<article id="tileInfos">
+			</div>
+			<div id="tileInfos">
 				<ul>
 					<li><span>Food:</span><span>0</span></li>
 					<li><span>Linemate:</span><span>0</span></li>
@@ -21,7 +31,7 @@
 					<li><span>Phiras:</span><span>0</span></li>
 					<li><span>Thystame:</span><span>0</span></li>
 				</ul>
-			</article>
+			</div>
 		</section>
 		<script src="node_modules/babylonjs/babylon.js"></script>
 		<script src="node_modules/babylonjs-loaders/babylonjs.loaders.min.js"></script>

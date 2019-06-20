@@ -12,7 +12,20 @@ canvas {
 	touch-action: none;
 }
 
-section {
+.controller-box {
+	position: absolute;
+	bottom: 0;
+	left: 0;
+	padding: 10px;
+	width: 20%;
+	color: white;
+	border: solid rgba(52, 152, 219, 0.9) 1px;
+	border-radius: 2px;
+	margin: 30px;
+}
+
+
+.info-box {
 	position: absolute;
 	bottom: 0;
 	right: 0;
@@ -21,7 +34,7 @@ section {
 	color: white;
 }
 
-article {
+div {
 	width: 100%;
 }
 
