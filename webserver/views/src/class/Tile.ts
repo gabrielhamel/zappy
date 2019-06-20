@@ -121,4 +121,20 @@ class Tile
 		}
 		return (output);
 	}
+	public addItem(item:number):void
+	{
+		const convertArray:Array<string> = new Array<string>(
+			"food", "linemate", "deraumere", "sibur",
+			"mendiane", "phiras", "thystame"
+		);
+		this.stats.set(convertArray[item], this.stats.get(convertArray[item]) + 1);
+	}
+	public removeItem(item:number):void
+	{
+		const convertArray:Array<string> = new Array<string>(
+			"food", "linemate", "deraumere", "sibur",
+			"mendiane", "phiras", "thystame"
+		);
+		this.stats.set(convertArray[item], this.stats.get(convertArray[item]) - 1);
+	}
 }

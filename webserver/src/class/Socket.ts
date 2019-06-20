@@ -5,7 +5,7 @@ class Socket
 {
 	private ioSocket:socketio.Socket;
 	private tcpSocket:net.Socket;
-	
+
 	constructor(socket:socketio.Socket)
 	{
 		this.ioSocket = socket;
