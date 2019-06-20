@@ -8,10 +8,9 @@ class Game
 	private scene:BABYLON.Scene;
 	private socketManager:SocketManager = new SocketManager(this);
 	private stage:Stage;
-	private teams:Map<string, Team> = new Map<string, Team>(); // DEPRACATED
 	private chungus:Array<Player> = new Array<Player>();
 	private eggs:Array<Egg> = new Array<Egg>();
-
+	private teamsNames:Array<string> = new Array<string>();
 
 	constructor(canvas:HTMLCanvasElement)
 	{
@@ -37,27 +36,16 @@ class Game
 		this.stage.render();
 		this.scene.render();
 	}
-	private isChungusAlreadyExist(id:number): boolean
-	{
-		for (let i:number = 0; i < this.chungus.length; i++) {
-			if (id == this.chungus[i].getId())
-				return (true);
-		}
-		return (false);
-	}
 	private getBigChungusById(id:number): Player
 	{
 		for (let i:number = 0; i < this.chungus.length; i++) {
 			if (id == this.chungus[i].getId())
 				return this.chungus[0];
 		}
-		return (this.chungus[0]);// normalement on protège avant la fonction avec un isChungusAlreadyExist() donc on n'arrive jamais ici
+		return (undefined);
 	}
 
-	public addTeam(name:string)
-	{
-		this.teams.set(name, new Team(name));
-	}
+
 	public setup(size:BABYLON.Vector2)
 	{
 		Game.size = size;
@@ -68,6 +56,10 @@ class Game
 	{
 		return (this.stage);
 	}
+	public addTeam(name:string):void
+	{
+		this.teamsNames.push(name);
+	}
 	public addChungus(datas:Array<string>):void
 	{
 		if (datas.length < 7) {
@@ -75,12 +67,12 @@ class Game
 			console.log(datas);
 			return;
 		}
-		if (isChungusAlreadyExist(parseInt(datas[1]))) {
+		if (!this.getBigChungusById(parseInt(datas[1]))) {
 			console.log("You can't clone the big unfamous big chungus !!!");
 			console.log(datas);
 			return;
 		}
-		chungus = new Player(parseInt(datas[1]), datas[6], this.scene);
+		let chungus = new Player(parseInt(datas[1]), datas[6], this.scene);
 		chungus.setPos(parseInt(datas[2]), parseInt(datas[3]));
 		chungus.setOri(parseInt(datas[4]));
 		chungus.setLvl(parseInt(datas[5]));
@@ -93,12 +85,12 @@ class Game
 			console.log(datas);
 			return;
 		}
-		if (!isChungusAlreadyExist(parseInt(datas[1]))) {
+		let movingChungus = this.getBigChungusById(parseInt(datas[1]))
+		if (movingChungus) {
 			console.log("This chungus doesn't exist");
 			console.log(datas);
 			return;
 		}
-		movingChungus = this.getBigChungusById(parseInt(datas[1]));
 		movingChungus.setPos(parseInt(datas[2]), parseInt(datas[3]));
 		movingChungus.setOri(parseInt(datas[4]));
 	}
@@ -109,12 +101,13 @@ class Game
 			console.log(datas);
 			return;
 		}
-		if (!isChungusAlreadyExist(parseInt(datas[1]))) {
+		let levelingChungus = this.getBigChungusById(parseInt(datas[1]));
+
+		if (!levelingChungus) {
 			console.log("This chungus doesn't exist");
 			console.log(datas);
 			return;
 		}
-		levelingChungus = this.getBigChungusById(parseInt(datas[1]));
 		levelingChungus.setLvl(parseInt(datas[2]));
 	}
 	public chungusBag(datas:Array<string>):void
@@ -124,12 +117,12 @@ class Game
 			console.log(datas);
 			return;
 		}
-		if (!isChungusAlreadyExist(parseInt(datas[1]))) {
+		let fillingChungusBag = this.getBigChungusById(parseInt(datas[1]));
+		if (!fillingChungusBag) {
 			console.log("This chungus doesn't exist");
 			console.log(datas);
 			return;
 		}
-		fillingChungusBag = this.getBigChungusById(parseInt(datas[1]));
 		fillingChungusBag.setPos(parseInt(datas[2]), parseInt(datas[3]));
 		fillingChungusBag.setBag(parseInt(datas[4]), parseInt(datas[5]),
 		parseInt(datas[6]), parseInt(datas[7]), parseInt(datas[8]),
@@ -142,30 +135,48 @@ class Game
 			console.log(datas);
 			return;
 		}
-		if (!isChungusAlreadyExist(parseInt(datas[1]))) {
+		let voicingChungus = this.getBigChungusById(parseInt(datas[1]));
+
+		if (!voicingChungus) {
 			console.log("This chungus doesn't exist");
 			console.log(datas);
 			return;
 		}
-		voicingChungus = this.getBigChungusById(parseInt(datas[1]));
 		voicingChungus.setMessage(datas[2]);
 	}
-	public chungusAccouching(datas:Array<string>):void // PAS BON je confond avec enw
+	public chungusLaying(datas:Array<string>):void
 	{
-		if (datas.length < 3) {
+		if (datas.length < 2) {
 			console.log("Not enough arguments to reproduct the big Chungus... CHUNG CHUNG CHUNG");
 			console.log(datas);
 			return;
 		}
-		if (!isChungusAlreadyExist(parseInt(datas[1]))) {
+		let layingChungus = this.getBigChungusById(parseInt(datas[1]));
+		if (!layingChungus) {
 			console.log("This chungus doesn't exist");
 			console.log(datas);
 			return;
 		}
-		accouchingChungus = this.getBigChungusById(parseInt(datas[1]));
-		egg = new Egg(accouchingChungus.getX(), accouchingChungus.getY(),
+		layingChungus.setLayingState(true);
+	}
+
+	public chungusAccouching(datas:Array<string>):void // PAS BON je confond avec enw
+	{
+		if (datas.length < 2) {
+			console.log("Not enough arguments to reproduct the big Chungus... CHUNG CHUNG CHUNG");
+			console.log(datas);
+			return;
+		}
+		let accouchingChungus = this.getBigChungusById(parseInt(datas[1]));
+		if (!accouchingChungus) {
+			console.log("This chungus doesn't exist");
+			console.log(datas);
+			return;
+		}
+		let egg = new Egg(accouchingChungus.getX(), accouchingChungus.getY(),
 		accouchingChungus.getTeamName(), this.scene);
 		this.eggs.push(egg);
+		accouchingChungus.setLayingState(false);
 	}
 	public chungusDroping(datas:Array<string>):void
 	{
@@ -174,17 +185,17 @@ class Game
 			console.log(datas);
 			return;
 		}
-		if (!isChungusAlreadyExist(parseInt(datas[1]))) {
+		let dropingChungus = this.getBigChungusById(parseInt(datas[1]));
+		if (!dropingChungus) {
 			console.log("This chungus doesn't exist");
 			console.log(datas);
 			return;
 		}
-		dropingChungus = this.getBigChungusById(parseInt(datas[1]));
 		dropingChungus.drop(parseInt(datas[2]));
 		let vector:BABYLON.Vector2 = new BABYLON.Vector2(0, 0);
 		vector.x = dropingChungus.getX();
 		vector.y = dropingChungus.getY();
-		tile = this.stage.findTileByPosition(vector);
+		let tile = this.stage.findTileByPosition(vector);
 		tile.addItem(parseInt(datas[2]));
 	}
 	public chungusTaking(datas:Array<string>):void
@@ -194,17 +205,17 @@ class Game
 			console.log(datas);
 			return;
 		}
-		if (!isChungusAlreadyExist(parseInt(datas[1]))) {
+		let gatheringChungus = this.getBigChungusById(parseInt(datas[1]));
+		if (!gatheringChungus) {
 			console.log("This chungus doesn't exist");
 			console.log(datas);
 			return;
 		}
-		gatheringChungus = this.getBigChungusById(parseInt(datas[1]));
 		gatheringChungus.take(parseInt(datas[2]));
 		let vector:BABYLON.Vector2 = new BABYLON.Vector2(0, 0);
 		vector.x = gatheringChungus.getX();
 		vector.y = gatheringChungus.getY();
-		tile = this.stage.findTileByPosition(vector);
+		let tile = this.stage.findTileByPosition(vector);
 		tile.removeItem(parseInt(datas[2]));
 	}
 	public removeChungus(datas:Array<string>):void
@@ -214,12 +225,12 @@ class Game
 			console.log(datas);
 			return;
 		}
-		if (!isChungusAlreadyExist(parseInt(datas[1]))) {
+		if (!this.getBigChungusById(parseInt(datas[1]))) {
 			console.log("This chungus doesn't exist");
 			console.log(datas);
 			return;
 		}
-		i = 0;
+		let i = 0;
 		for (;i < this.chungus.length && this.chungus[i].getId() != parseInt(datas[1]) ; i++);
 		this.chungus.splice(i, 1);
 	}

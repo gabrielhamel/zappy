@@ -30,7 +30,7 @@ class SocketManager
 		this.commands.set("pdr", this.pdr);
 		this.commands.set("pgt", this.pgt);
 		this.commands.set("pdi", this.pdi);
-
+		this.commands.set("enw", this.enw);
 	}
 	private getDatas = (datas:any):void =>
 	{
@@ -98,7 +98,7 @@ class SocketManager
 	}
 	private pfk = (datas:Array<string>) =>
 	{
-		this.game.chungusAccouching(datas); // PAS BON je confond avec enw
+		this.game.chungusLaying(datas);
 	}
 	private pdr = (datas:Array<string>) =>
 	{
@@ -111,5 +111,9 @@ class SocketManager
 	private pdi = (datas:Array<string>) =>
 	{
 		this.game.removeChungus(datas);
+	}
+	private enw = (datas:Array<string>) =>
+	{
+		this.game.chungusAccouching(datas);
 	}
 }

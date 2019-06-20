@@ -13,8 +13,10 @@ class Player
 	private laying: boolean = false;
 
 
-	constructor(scene:BABYLON.Scene)
+	constructor(id:number, teamName:string, scene:BABYLON.Scene)
 	{
+		this.id = id;
+		this.teamName = teamName;
 		this.CHUNGUS = new MeshBuilder("chungus.glb", scene);
 		for (let i:number = 0; i < 7; i++)
 			this.bag.push(0);
@@ -47,6 +49,10 @@ class Player
 	{
 		this.message = message;
 	}
+	public setLayingState(state:boolean):void
+	{
+		this.laying = state;
+	}
 	public getId():number
 	{
 		return (this.id);
@@ -62,6 +68,10 @@ class Player
 	public getTeamName():string
 	{
 		return (this.teamName);
+	}
+	public isLaying():boolean
+	{
+		return (this.laying);
 	}
 	public drop(item:number):void
 	{
