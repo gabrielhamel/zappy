@@ -20,7 +20,6 @@ class SocketManager
 		this.commandsGraph.set("msz", this.msz);
 		this.commandsGraph.set("pnw", this.pnw);
 		this.commandsGraph.set("sgt", this.sgt);
-		this.commandsGraph.set("sst", this.sgt);// WTF ???
         this.commandsGraph.set("tna", this.tna);
 		this.commandsGraph.set("pnw", this.pnw);
 		this.commandsGraph.set("ppo", this.ppo);
@@ -59,12 +58,16 @@ class SocketManager
 
 		for (let i:number = 0; i < len; i++) {
 			cur = array[i].split(" ");
+			if (cur[0] == "WELCOME")
+				this.controller.changeState();
 			if (this.commandsPlay.get(cur[0])) {
 				this.commandsPlay.get(cur[0])(cur);
 				continue;
 			}
-			if (cur[0] == "WELCOME")
-				this.controller.changeState();
+			if (cur[0] == "Elevation")
+				this.controller.blockInput();
+			else
+				this.controller.deblockInput();
 		}
 	}
 	private bct = (datas:Array<string>) =>

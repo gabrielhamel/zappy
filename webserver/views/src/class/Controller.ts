@@ -2,14 +2,15 @@ class Controller
 {
 	private form:HTMLElement = document.getElementById("play-form");
 	private play:HTMLElement = document.getElementById("play");
-	private forward:HTMLElement = document.getElementById("forward");
-	private turnLeft:HTMLElement = document.getElementById("turn-left");
-	private turnRight:HTMLElement = document.getElementById("turn-right");
-	private grab:HTMLElement = document.getElementById("grab");
-	private drop:HTMLElement = document.getElementById("drop");
+	private forward:HTMLButtonElement = document.getElementById("forward") as HTMLButtonElement;
+	private turnLeft:HTMLButtonElement = document.getElementById("turn-left") as HTMLButtonElement;
+	private turnRight:HTMLButtonElement = document.getElementById("turn-right") as HTMLButtonElement;
+	private grab:HTMLButtonElement = document.getElementById("grab") as HTMLButtonElement;
+	private drop:HTMLButtonElement = document.getElementById("drop") as HTMLButtonElement;
 	private teamName:string;
 	private socketManager: SocketManager;
 	private game:Game;
+	private free:boolean = true;
 
 	constructor(game:Game, socketManager: SocketManager)
 	{
@@ -25,17 +26,26 @@ class Controller
 			this.socketManager.emit("requestPlay", this.teamName + '\n');
 		});
 		this.forward.addEventListener("click", () => {
-			socketManager.emit("play", "Forward\n");
+			if (this.free == true) {
+				socketManager.emit("play", "Forward\n");
+				this.blockInput();
+			}
 		});
 		this.turnLeft.addEventListener("click", () => {
-			socketManager.emit("play", "Left\n");
+			if (this.free == true) {
+				socketManager.emit("play", "Left\n");
+				this.blockInput();
+			}
 		});
 		this.turnRight.addEventListener("click", () => {
-			socketManager.emit("play", "Right\n");
+			if (this.free == true) {
+				socketManager.emit("play", "Right\n");
+				this.blockInput();
+			}
 		});
 	}
 
-	public changeState()
+	public changeState():void
 	{
 		this.forward.style.display = "inline";
 		this.turnLeft.style.display = "inline";
@@ -43,5 +53,23 @@ class Controller
 		this.grab.style.display = "inline";
 		this.drop.style.display = "inline";
 		this.form.style.display = "none";
+	}
+	public blockInput():void
+	{
+		this.forward.disabled = true;
+		this.turnLeft.disabled = true;
+		this.turnRight.disabled = true;
+		this.grab.disabled = true;
+		this.drop.disabled = true;
+		this.free = false;
+	}
+	public deblockInput():void
+	{
+		this.forward.disabled = false;
+		this.turnLeft.disabled = false;
+		this.turnRight.disabled = false;
+		this.grab.disabled = false;
+		this.drop.disabled = false;
+		this.free = true;
 	}
 }

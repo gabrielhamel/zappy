@@ -29,7 +29,7 @@ var Server = /** @class */ (function () {
             var index = _this.sockets.findIndex(function (sock) {
                 return (sock.getId() == socket.id);
             });
-            console.log("Client " + socket.id + " is disconnected of relay.");
+            console.log("Client " + socket.id + " has been disconnected from relay.");
             if (index == -1)
                 return;
             _this.sockets.splice(index, 1);

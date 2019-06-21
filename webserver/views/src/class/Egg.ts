@@ -1,6 +1,6 @@
 class Egg
 {
-	private readonly EGG:MeshBuilder;
+	private skin:BABYLON.AbstractMesh;
 	private id:number;
 	private x:number;
 	private y:number;
@@ -12,7 +12,6 @@ class Egg
 		this.x = x;
 		this.y = y;
 		this.teamName = teamName;
-		this.EGG = new MeshBuilder("chungus.glb", scene);
 	}
 
 	public setMaturity(maturity:boolean):void

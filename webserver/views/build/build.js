@@ -68,23 +68,62 @@ var Controller = /** @class */ (function () {
         this.forward = document.getElementById("forward");
         this.turnLeft = document.getElementById("turn-left");
         this.turnRight = document.getElementById("turn-right");
+        this.grab = document.getElementById("grab");
+        this.drop = document.getElementById("drop");
+        this.free = true;
         this.game = game;
         this.socketManager = socketManager;
         this.forward.style.display = "none";
         this.turnLeft.style.display = "none";
         this.turnRight.style.display = "none";
+        this.grab.style.display = "none";
+        this.drop.style.display = "none";
         this.play.addEventListener("click", function () {
             _this.teamName = _this.form.getElementsByTagName("input")[0].value;
             _this.socketManager.emit("requestPlay", _this.teamName + '\n');
         });
         this.forward.addEventListener("click", function () {
+            if (_this.free == true) {
+                socketManager.emit("play", "Forward\n");
+                _this.blockInput();
+            }
         });
         this.turnLeft.addEventListener("click", function () {
+            if (_this.free == true) {
+                socketManager.emit("play", "Left\n");
+                _this.blockInput();
+            }
         });
         this.turnRight.addEventListener("click", function () {
+            if (_this.free == true) {
+                socketManager.emit("play", "Right\n");
+                _this.blockInput();
+            }
         });
     }
     Controller.prototype.changeState = function () {
+        this.forward.style.display = "inline";
+        this.turnLeft.style.display = "inline";
+        this.turnRight.style.display = "inline";
+        this.grab.style.display = "inline";
+        this.drop.style.display = "inline";
+        this.form.style.display = "none";
+    };
+    Controller.prototype.blockInput = function () {
+        this.forward.disabled = true;
+        this.turnLeft.disabled = true;
+        this.turnRight.disabled = true;
+        this.grab.disabled = true;
+        this.drop.disabled = true;
+        this.free = false;
+    };
+    Controller.prototype.deblockInput = function () {
+        this.forward.disabled = false;
+        this.turnLeft.disabled = false;
+        this.turnRight.disabled = false;
+        this.grab.disabled = false;
+        this.drop.disabled = false;
+        this.free = true;
     };
     return Controller;
 }());
@@ -94,7 +133,6 @@ var Egg = /** @class */ (function () {
         this.x = x;
         this.y = y;
         this.teamName = teamName;
-        this.EGG = new MeshBuilder("chungus.glb", scene);
     }
     Egg.prototype.setMaturity = function (maturity) {
         this.maturity = maturity;
@@ -596,11 +634,18 @@ var SocketManager = /** @class */ (function () {
             var array = datas.split("\n");
             var len = array.length;
             var cur;
-            console.log(datas);
             for (var i = 0; i < len; i++) {
                 cur = array[i].split(" ");
-                if (_this.commandsPlay.get(cur[0]))
+                if (cur[0] == "WELCOME")
+                    _this.controller.changeState();
+                if (_this.commandsPlay.get(cur[0])) {
                     _this.commandsPlay.get(cur[0])(cur);
+                    continue;
+                }
+                if (cur[0] == "Elevation")
+                    _this.controller.blockInput();
+                else
+                    _this.controller.deblockInput();
             }
         };
         this.bct = function (datas) {
@@ -676,7 +721,6 @@ var SocketManager = /** @class */ (function () {
         this.commandsGraph.set("msz", this.msz);
         this.commandsGraph.set("pnw", this.pnw);
         this.commandsGraph.set("sgt", this.sgt);
-        this.commandsGraph.set("sst", this.sgt); // WTF ???
         this.commandsGraph.set("tna", this.tna);
         this.commandsGraph.set("pnw", this.pnw);
         this.commandsGraph.set("ppo", this.ppo);

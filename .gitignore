@@ -24,3 +24,4 @@ tests/html
 *.gcno
 *.gcov
 tests/src/*.c
+webserver/build/
