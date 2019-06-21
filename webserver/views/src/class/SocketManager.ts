@@ -57,11 +57,14 @@ class SocketManager
 		let len:number = array.length;
 		let cur:Array<string>;
 
-		console.log(datas);
 		for (let i:number = 0; i < len; i++) {
 			cur = array[i].split(" ");
-			if (this.commandsPlay.get(cur[0]))
+			if (this.commandsPlay.get(cur[0])) {
 				this.commandsPlay.get(cur[0])(cur);
+				continue;
+			}
+			if (cur[0] == "WELCOME")
+				this.controller.changeState();
 		}
 	}
 	private bct = (datas:Array<string>) =>

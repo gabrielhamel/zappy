@@ -37,7 +37,7 @@ class Socket
 	private receiveServerPlay = (datas:ArrayBuffer):void =>
 	{
 		let str:string = String.fromCharCode.apply(null, datas);
-		
+
 		this.ioSocket.emit("play", str);
 	}
 	private sendDatasToServer = (datas:string):void =>

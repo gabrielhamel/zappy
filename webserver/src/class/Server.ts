@@ -48,7 +48,7 @@ class Server
 		});
 
 
-		console.log(`Client ${socket.id} is disconnected of relay.`);
+		console.log(`Client ${socket.id} has been disconnected from relay.`);
 		if (index == -1)
 			return;
 		this.sockets.splice(index, 1);
