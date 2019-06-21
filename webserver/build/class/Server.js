@@ -32,6 +32,7 @@ var Server = /** @class */ (function () {
             console.log("Client " + socket.id + " has been disconnected from relay.");
             if (index == -1)
                 return;
+            _this.sockets[index].shutDownTCPSocket();
             _this.sockets.splice(index, 1);
         };
         this.port = port;

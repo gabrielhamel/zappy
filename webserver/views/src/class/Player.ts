@@ -6,7 +6,7 @@ class Player
 	private y:number;
 	private o:number;
 	private lvl:number;
-	private teamName:string; // peut à remplacer vers une reference de team ou OSEF en vrai
+	private teamName:string;
 	private bag:Array<number> = new Array<number>();
 	private message: string = "";
 	private incanting: boolean = false;
@@ -81,5 +81,9 @@ class Player
 	public take(item:number):void
 	{
 		this.bag[item]--;
+	}
+	public die():void
+	{
+		this.skin.dispose();
 	}
 }

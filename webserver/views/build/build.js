@@ -9,6 +9,24 @@ function middleRand(value) {
     return (value - Math.random() * (value * 2));
 }
 document.addEventListener("DOMContentLoaded", main);
+var BerkMesh = /** @class */ (function () {
+    function BerkMesh(meshes) {
+        this.MESHES = meshes;
+    }
+    BerkMesh.prototype.setPosition = function (position) {
+        for (var i = this.MESHES.length - 1; i >= 0; i--)
+            this.MESHES[i].position = position;
+    };
+    BerkMesh.prototype.setRotation = function (angle) {
+        for (var i = this.MESHES.length - 1; i >= 0; i--)
+            this.MESHES[i].rotation.y = angle;
+    };
+    BerkMesh.prototype.dispose = function () {
+        for (var i = this.MESHES.length - 1; i >= 0; i--)
+            this.MESHES[i].dispose();
+    };
+    return BerkMesh;
+}());
 var BlocCollection = /** @class */ (function () {
     function BlocCollection(scene) {
         var _this = this;
@@ -20,6 +38,7 @@ var BlocCollection = /** @class */ (function () {
             output = _this.blocs[type].createInstance(id);
             output.position.y = BlocCollection.HEIGHTS[type];
             output.isVisible = true;
+            output.checkCollisions = true;
             return (output);
         };
         var cur;
@@ -50,7 +69,11 @@ var Camera = /** @class */ (function () {
         this.shiftingSpeedZ = 0;
         var target = BABYLON.Vector3.Zero();
         this.camera = new BABYLON.ArcRotateCamera("mainCamera", Math.PI / 2, Math.PI / 4, 30, target, scene);
-        this.camera.attachControl(scene.getEngine().getRenderingCanvas());
+        this.camera.allowUpsideDown = false;
+        this.camera.checkCollisions = true;
+        this.camera.panningSensibility = 0;
+        this.camera.collisionRadius = new BABYLON.Vector3(1, 1, 1);
+        this.camera.attachControl(scene.getEngine().getRenderingCanvas(), false);
     }
     Camera.prototype.setTarget = function (target) {
         this.camera.setTarget(target);
@@ -158,6 +181,7 @@ var Game = /** @class */ (function () {
         this.canvas = document.getElementsByTagName("canvas")[0];
         this.engine = new BABYLON.Engine(this.canvas, true);
         this.scene = new BABYLON.Scene(this.engine);
+        this.scene.collisionsEnabled = true;
         this.stage = new Stage(this.scene);
         this.camera = new Camera(this.scene);
         this.CHUNGUS = new MeshBuilder("chungus.glb", this.scene);
@@ -166,7 +190,6 @@ var Game = /** @class */ (function () {
     }
     Game.prototype.initialiseScene = function () {
         var _this = this;
-        this.scene.collisionsEnabled = true;
         window.addEventListener("resize", function () {
             _this.engine.resize();
         });
@@ -337,6 +360,7 @@ var Game = /** @class */ (function () {
         var i = 0;
         for (; i < this.chungus.length && this.chungus[i].getId() != parseInt(datas[1]); i++)
             ;
+        this.chungus[i].die();
         this.chungus.splice(i, 1);
     };
     Game.prototype.chungusAccouching = function (datas) {
@@ -425,20 +449,23 @@ var MeshBuilder = /** @class */ (function () {
         var _this = this;
         this.nbClones = 0;
         this.load = function (meshes) {
-            _this.mesh = meshes[1];
-            _this.mesh.scaling = new BABYLON.Vector3(0.35, 0.35, 0.35);
-            _this.mesh.position.y = 0.5;
-            _this.mesh.isVisible = false;
+            _this.meshes = meshes;
+            for (var i = _this.meshes.length - 1; i >= 0; i--) {
+                _this.meshes[i].scaling = new BABYLON.Vector3(0.35, 0.35, 0.35);
+                _this.meshes[i].position.y = 0.5;
+                _this.meshes[i].isVisible = false;
+            }
         };
         this.ID = modelName;
         BABYLON.SceneLoader.ImportMesh("", "/assets/", modelName, scene, this.load);
     }
     MeshBuilder.prototype.getInstance = function () {
-        var output;
-        output = this.mesh.createInstance(this.ID + this.nbClones);
-        output.isVisible = true;
+        var meshes = new Array();
+        for (var i = this.meshes.length - 1; i >= 0; i--) {
+            meshes.push(this.meshes[i].createInstance(this.ID + this.nbClones + "-" + i));
+        }
         this.nbClones++;
-        return (output);
+        return (new BerkMesh(meshes));
     };
     return MeshBuilder;
 }());
@@ -457,11 +484,11 @@ var Player = /** @class */ (function () {
     Player.prototype.setPos = function (x, y) {
         this.x = x;
         this.y = y;
-        this.skin.position = new BABYLON.Vector3(x, 0.5, y);
+        this.skin.setPosition(new BABYLON.Vector3(x, 0.5, y));
     };
     Player.prototype.setOri = function (o) {
         this.o = o;
-        this.skin.rotation.y = Math.PI / 2 * (o - 1);
+        this.skin.setRotation(Math.PI / 2 * (o - 1));
     };
     Player.prototype.setLvl = function (lvl) {
         this.lvl = lvl;
@@ -501,6 +528,9 @@ var Player = /** @class */ (function () {
     };
     Player.prototype.take = function (item) {
         this.bag[item]--;
+    };
+    Player.prototype.die = function () {
+        this.skin.dispose();
     };
     return Player;
 }());

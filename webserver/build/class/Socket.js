@@ -26,6 +26,11 @@ var Socket = /** @class */ (function () {
             _this.tcpSocket.write(datas);
         };
         this.sendIADataToServer = function (datas) {
+            if (datas == "dead") {
+                _this.playSocket.destroy();
+                _this.playSocket = undefined;
+                return;
+            }
             _this.playSocket.write(datas);
         };
         this.IP = ip;
@@ -43,6 +48,14 @@ var Socket = /** @class */ (function () {
     };
     Socket.prototype.getId = function () {
         return (this.ioSocket.id);
+    };
+    Socket.prototype.shutDownTCPSocket = function () {
+        this.tcpSocket.destroy();
+        this.tcpSocket = undefined;
+        if (this.playSocket) {
+            this.playSocket.destroy();
+            this.playSocket = undefined;
+        }
     };
     return Socket;
 }());

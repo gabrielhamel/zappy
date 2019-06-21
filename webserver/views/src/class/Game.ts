@@ -221,6 +221,7 @@ class Game
 		}
 		let i = 0;
 		for (;i < this.chungus.length && this.chungus[i].getId() != parseInt(datas[1]) ; i++);
+		this.chungus[i].die();
 		this.chungus.splice(i, 1);
 	}
 	public chungusAccouching(datas:Array<string>):void
