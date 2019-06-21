@@ -1,7 +1,7 @@
 class MeshBuilder
 {
 	private readonly ID:string;
-	private mesh:BABYLON.Mesh;
+	private meshes:Array<BABYLON.Mesh>;
 	private nbClones:number = 0;
 
 	constructor(modelName:string, scene:BABYLON.Scene)
@@ -12,19 +12,22 @@ class MeshBuilder
 
 	private load = (meshes:Array<BABYLON.Mesh>):void =>
 	{
-		this.mesh = meshes[1];
-		this.mesh.scaling = new BABYLON.Vector3(0.35, 0.35, 0.35);
-		this.mesh.position.y = 0.5;
-		this.mesh.isVisible = false;
+		this.meshes = meshes;
+		for (let i:number = this.meshes.length - 1; i >= 0; i--) {
+			this.meshes[i].scaling = new BABYLON.Vector3(0.35, 0.35, 0.35);
+			this.meshes[i].position.y = 0.5;
+			this.meshes[i].isVisible = false;
+		}
 	}
 
-	public getInstance():BABYLON.AbstractMesh
+	public getInstance():BerkMesh
 	{
-		let output:BABYLON.AbstractMesh;
+		let meshes:Array<BABYLON.InstancedMesh> = new Array<BABYLON.InstancedMesh>();
 
-		output = this.mesh.createInstance(this.ID + this.nbClones);
-		output.isVisible = true;
+		for (let i:number = this.meshes.length - 1; i >= 0; i--) {
+			meshes.push(this.meshes[i].createInstance(this.ID + this.nbClones + "-" + i));
+		}
 		this.nbClones++;
-		return (output);
+		return (new BerkMesh(meshes));
 	}
 }

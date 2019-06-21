@@ -46,6 +46,11 @@ class Socket
 	}
 	private sendIADataToServer = (datas:string):void =>
 	{
+		if (datas == "dead") {
+			this.tcpSocket.destroy();
+			this.tcpSocket = undefined;
+			return;
+		}
 		this.playSocket.write(datas);
 	}
 

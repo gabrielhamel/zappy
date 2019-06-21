@@ -1,6 +1,6 @@
 class Player
 {
-	private skin:BABYLON.AbstractMesh;
+	private skin:BerkMesh;
 	private id:number;
 	private x:number;
 	private y:number;
@@ -12,8 +12,7 @@ class Player
 	private incanting: boolean = false;
 	private laying: boolean = false;
 
-
-	constructor(id:number, teamName:string, skin:BABYLON.AbstractMesh, scene:BABYLON.Scene)
+	constructor(id:number, teamName:string, skin:BerkMesh, scene:BABYLON.Scene)
 	{
 		this.id = id;
 		this.teamName = teamName;
@@ -26,12 +25,12 @@ class Player
 	{
 		this.x = x;
 		this.y = y;
-		this.skin.position = new BABYLON.Vector3(x, 0.5, y);
+		this.skin.setPosition(new BABYLON.Vector3(x, 0.5, y));
 	}
 	public setOri(o:number):void
 	{
 		this.o = o;
-		this.skin.rotation.y = Math.PI / 2 * (o - 1);
+		this.skin.setRotation(Math.PI / 2 * (o - 1));
 	}
 	public setLvl(lvl:number):void
 	{

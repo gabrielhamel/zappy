@@ -17,17 +17,17 @@ class Game
 		this.canvas = document.getElementsByTagName("canvas")[0];
 		this.engine = new BABYLON.Engine(this.canvas, true);
 		this.scene = new BABYLON.Scene(this.engine);
+		this.scene.collisionsEnabled = true;
 		this.stage = new Stage(this.scene);
 		this.camera = new Camera(this.scene);
 		this.CHUNGUS = new MeshBuilder("chungus.glb", this.scene);
-		
+
 		this.initialiseScene();
 		this.engine.runRenderLoop(this.render);
 	}
 
 	private initialiseScene():void
 	{
-		this.scene.collisionsEnabled = true;
 		window.addEventListener("resize", () => {
 			this.engine.resize();
 		});
