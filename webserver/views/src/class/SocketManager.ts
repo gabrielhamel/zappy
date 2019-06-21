@@ -37,6 +37,9 @@ class SocketManager
 		this.commandsGraph.set("eht", this.eht);
 		this.commandsGraph.set("ebo", this.ebo);
 		this.commandsGraph.set("edi", this.edi);
+
+		this.commandsPlay.set("WELCOME", this.nth);
+		this.commandsPlay.set("Elevation", this.elv);
 	}
 	private getDatas = (datas:any):void =>
 	{
@@ -58,16 +61,14 @@ class SocketManager
 
 		for (let i:number = 0; i < len; i++) {
 			cur = array[i].split(" ");
-			if (cur[0] == "WELCOME")
-				this.controller.changeState();
-			if (this.commandsPlay.get(cur[0])) {
+			if (cur[0] == "")
+				continue;
+			if (this.commandsPlay.get(cur[0])) {// GESTION DES EVENTS
 				this.commandsPlay.get(cur[0])(cur);
 				continue;
 			}
-			if (cur[0] == "Elevation")
-				this.controller.blockInput();
-			else
-				this.controller.deblockInput();
+
+			this.controller.handleResponse(cur); // GESTION D'UN RETOUR DE CMD
 		}
 	}
 	private bct = (datas:Array<string>) =>
@@ -153,6 +154,14 @@ class SocketManager
 	private edi = (datas:Array<string>) =>
 	{
 		this.game.dyingEgg(datas);
+	}
+	private nth = (datas:Array<string>) =>
+	{
+		//ne doit rien faire
+	}
+	private elv = (datas:Array<string>) =>
+	{
+		this.controller.blockInput();
 	}
 
 	public emit(event:string, datas:string)

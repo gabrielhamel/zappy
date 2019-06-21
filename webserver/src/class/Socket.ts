@@ -46,7 +46,9 @@ class Socket
 	}
 	private sendIADataToServer = (datas:string):void =>
 	{
-		if (datas == "dead") {
+		if (datas == "dead\n") {
+			this.playSocket.removeAllListeners();
+			this.ioSocket.removeListener("play", this.sendIADataToServer);
 			this.playSocket.destroy();
 			this.playSocket = undefined;
 			return;

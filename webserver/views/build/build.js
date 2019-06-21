@@ -86,21 +86,35 @@ var Camera = /** @class */ (function () {
 var Controller = /** @class */ (function () {
     function Controller(game, socketManager) {
         var _this = this;
-        this.form = document.getElementById("play-form");
+        this.form = document.getElementById("login");
         this.play = document.getElementById("play");
+        this.ui = document.getElementById("ui");
         this.forward = document.getElementById("forward");
         this.turnLeft = document.getElementById("turn-left");
         this.turnRight = document.getElementById("turn-right");
         this.grab = document.getElementById("grab");
         this.drop = document.getElementById("drop");
         this.free = true;
+        this.handleConnection = function (datas) {
+            console.log(datas);
+            if (!(datas[0] == "ko")) {
+                _this.ui.style.display = "block";
+                _this.form.style.display = "none";
+                _this.responseHandler = _this.handleNothing;
+            }
+            else {
+                _this.socketManager.emit("play", "dead\n");
+            }
+        };
+        this.handleNothing = function (datas) {
+            console.log("message reçu mais pas traité");
+            console.log(datas);
+            _this.allowInput();
+        };
+        this.responseHandler = this.handleConnection;
         this.game = game;
         this.socketManager = socketManager;
-        this.forward.style.display = "none";
-        this.turnLeft.style.display = "none";
-        this.turnRight.style.display = "none";
-        this.grab.style.display = "none";
-        this.drop.style.display = "none";
+        this.ui.style.display = "none";
         this.play.addEventListener("click", function () {
             _this.teamName = _this.form.getElementsByTagName("input")[0].value;
             _this.socketManager.emit("requestPlay", _this.teamName + '\n');
@@ -124,14 +138,6 @@ var Controller = /** @class */ (function () {
             }
         });
     }
-    Controller.prototype.changeState = function () {
-        this.forward.style.display = "inline";
-        this.turnLeft.style.display = "inline";
-        this.turnRight.style.display = "inline";
-        this.grab.style.display = "inline";
-        this.drop.style.display = "inline";
-        this.form.style.display = "none";
-    };
     Controller.prototype.blockInput = function () {
         this.forward.disabled = true;
         this.turnLeft.disabled = true;
@@ -140,13 +146,16 @@ var Controller = /** @class */ (function () {
         this.drop.disabled = true;
         this.free = false;
     };
-    Controller.prototype.deblockInput = function () {
+    Controller.prototype.allowInput = function () {
         this.forward.disabled = false;
         this.turnLeft.disabled = false;
         this.turnRight.disabled = false;
         this.grab.disabled = false;
         this.drop.disabled = false;
         this.free = true;
+    };
+    Controller.prototype.handleResponse = function (datas) {
+        this.responseHandler(datas);
     };
     return Controller;
 }());
@@ -534,114 +543,6 @@ var Player = /** @class */ (function () {
     };
     return Player;
 }());
-var SocketData = /** @class */ (function () {
-    function SocketData(game, socket) {
-        var _this = this;
-        this.commands = new Map();
-        this.getDatas = function (datas) {
-            var array = datas.split("\n");
-            var len = array.length;
-            var cur;
-            for (var i = 0; i < len; i++) {
-                cur = array[i].split(" ");
-                if (_this.commands.get(cur[0]))
-                    _this.commands.get(cur[0])(cur);
-            }
-        };
-        this.bct = function (datas) {
-            _this.game.getStage().addTile(datas);
-        };
-        this.msz = function (datas) {
-            var vector = new BABYLON.Vector2(0, 0);
-            vector.x = parseInt(datas[1]);
-            vector.y = parseInt(datas[2]);
-            _this.game.setup(vector);
-        };
-        this.sgt = function (datas) {
-            Game.timeUnit = parseInt(datas[1]);
-        };
-        this.tna = function (datas) {
-            _this.game.addTeam(datas[1]);
-        };
-        this.pnw = function (datas) {
-            _this.game.addChungus(datas);
-        };
-        this.ppo = function (datas) {
-            _this.game.updateChungusPos(datas);
-        };
-        this.plv = function (datas) {
-            _this.game.lvlUpChungus(datas);
-        };
-        this.pin = function (datas) {
-            _this.game.chungusBag(datas);
-        };
-        this.pex = function (datas) {
-            /// NEED GABI
-        };
-        this.pbc = function (datas) {
-            _this.game.chungusYelling(datas);
-        };
-        this.pic = function (datas) {
-            /// NEED GABI
-        };
-        this.pie = function (datas) {
-            /// NEED GABI
-        };
-        this.pfk = function (datas) {
-            _this.game.chungusLaying(datas);
-        };
-        this.pdr = function (datas) {
-            _this.game.chungusDroping(datas);
-        };
-        this.pgt = function (datas) {
-            _this.game.chungusTaking(datas);
-        };
-        this.pdi = function (datas) {
-            _this.game.removeChungus(datas);
-        };
-        this.enw = function (datas) {
-            _this.game.chungusAccouching(datas);
-        };
-        this.eht = function (datas) {
-            _this.game.maturingEgg(datas);
-        };
-        this.ebo = function (datas) {
-            _this.game.hatchingEgg(datas);
-        };
-        this.edi = function (datas) {
-            _this.game.dyingEgg(datas);
-        };
-        this.game = game;
-        this.initialise();
-        socket.emit("data", "GRAPHIC\n");
-        socket.on("data", this.getDatas);
-    }
-    SocketData.prototype.initialise = function () {
-        this.commands.set("bct", this.bct);
-        this.commands.set("msz", this.msz);
-        this.commands.set("pnw", this.pnw);
-        this.commands.set("sgt", this.sgt);
-        this.commands.set("sst", this.sgt); // WTF ???
-        this.commands.set("tna", this.tna);
-        this.commands.set("pnw", this.pnw);
-        this.commands.set("ppo", this.ppo);
-        this.commands.set("plv", this.plv);
-        this.commands.set("plv", this.pin);
-        this.commands.set("pex", this.pex);
-        this.commands.set("pbc", this.pbc);
-        this.commands.set("pic", this.pic);
-        this.commands.set("pie", this.pie);
-        this.commands.set("pfk", this.pfk);
-        this.commands.set("pdr", this.pdr);
-        this.commands.set("pgt", this.pgt);
-        this.commands.set("pdi", this.pdi);
-        this.commands.set("enw", this.enw);
-        this.commands.set("eht", this.eht);
-        this.commands.set("ebo", this.ebo);
-        this.commands.set("edi", this.edi);
-    };
-    return SocketData;
-}());
 var SocketManager = /** @class */ (function () {
     function SocketManager() {
         var _this = this;
@@ -666,16 +567,13 @@ var SocketManager = /** @class */ (function () {
             var cur;
             for (var i = 0; i < len; i++) {
                 cur = array[i].split(" ");
-                if (cur[0] == "WELCOME")
-                    _this.controller.changeState();
-                if (_this.commandsPlay.get(cur[0])) {
+                if (cur[0] == "")
+                    continue;
+                if (_this.commandsPlay.get(cur[0])) { // GESTION DES EVENTS
                     _this.commandsPlay.get(cur[0])(cur);
                     continue;
                 }
-                if (cur[0] == "Elevation")
-                    _this.controller.blockInput();
-                else
-                    _this.controller.deblockInput();
+                _this.controller.handleResponse(cur); // GESTION D'UN RETOUR DE CMD
             }
         };
         this.bct = function (datas) {
@@ -740,6 +638,12 @@ var SocketManager = /** @class */ (function () {
         };
         this.edi = function (datas) {
             _this.game.dyingEgg(datas);
+        };
+        this.nth = function (datas) {
+            //ne doit rien faire
+        };
+        this.elv = function (datas) {
+            _this.controller.blockInput();
         };
         this.initialise();
         this.socket.emit("data", "GRAPHIC\n");
@@ -768,17 +672,13 @@ var SocketManager = /** @class */ (function () {
         this.commandsGraph.set("eht", this.eht);
         this.commandsGraph.set("ebo", this.ebo);
         this.commandsGraph.set("edi", this.edi);
+        this.commandsPlay.set("WELCOME", this.nth);
+        this.commandsPlay.set("Elevation", this.elv);
     };
     SocketManager.prototype.emit = function (event, datas) {
         this.socket.emit(event, datas);
     };
     return SocketManager;
-}());
-var SocketPlayer = /** @class */ (function () {
-    function SocketPlayer(game) {
-        this.game = game;
-    }
-    return SocketPlayer;
 }());
 var Stage = /** @class */ (function () {
     function Stage(scene) {

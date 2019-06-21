@@ -1,7 +1,8 @@
 class Controller
 {
-	private form:HTMLElement = document.getElementById("play-form");
+	private form:HTMLElement = document.getElementById("login");
 	private play:HTMLElement = document.getElementById("play");
+	private ui:HTMLElement = document.getElementById("ui");
 	private forward:HTMLButtonElement = document.getElementById("forward") as HTMLButtonElement;
 	private turnLeft:HTMLButtonElement = document.getElementById("turn-left") as HTMLButtonElement;
 	private turnRight:HTMLButtonElement = document.getElementById("turn-right") as HTMLButtonElement;
@@ -11,16 +12,14 @@ class Controller
 	private socketManager: SocketManager;
 	private game:Game;
 	private free:boolean = true;
+	private responseHandler:any;
 
 	constructor(game:Game, socketManager: SocketManager)
 	{
+		this.responseHandler = this.handleConnection;
 		this.game = game;
 		this.socketManager = socketManager;
-		this.forward.style.display = "none";
-		this.turnLeft.style.display = "none";
-		this.turnRight.style.display = "none";
-		this.grab.style.display = "none";
-		this.drop.style.display = "none";
+		this.ui.style.display = "none";
 		this.play.addEventListener("click", () => {
 			this.teamName = this.form.getElementsByTagName("input")[0].value;
 			this.socketManager.emit("requestPlay", this.teamName + '\n');
@@ -45,15 +44,25 @@ class Controller
 		});
 	}
 
-	public changeState():void
+	private handleConnection = (datas:Array<string>): void =>
 	{
-		this.forward.style.display = "inline";
-		this.turnLeft.style.display = "inline";
-		this.turnRight.style.display = "inline";
-		this.grab.style.display = "inline";
-		this.drop.style.display = "inline";
-		this.form.style.display = "none";
+		console.log(datas);
+		if (!(datas[0] == "ko")) {
+			this.ui.style.display = "block";
+			this.form.style.display = "none";
+			this.responseHandler = this.handleNothing;
+		}
+		else {
+			this.socketManager.emit("play", "dead\n");
+		}
 	}
+	private handleNothing = (datas:Array<string>): void =>
+	{
+		console.log("message reçu mais pas traité");
+		console.log(datas);
+		this.allowInput();
+	}
+
 	public blockInput():void
 	{
 		this.forward.disabled = true;
@@ -63,7 +72,7 @@ class Controller
 		this.drop.disabled = true;
 		this.free = false;
 	}
-	public deblockInput():void
+	public allowInput():void
 	{
 		this.forward.disabled = false;
 		this.turnLeft.disabled = false;
@@ -71,5 +80,9 @@ class Controller
 		this.grab.disabled = false;
 		this.drop.disabled = false;
 		this.free = true;
+	}
+	public handleResponse(datas:Array<string>):void
+	{
+		this.responseHandler(datas);
 	}
 }

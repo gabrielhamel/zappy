@@ -9,20 +9,21 @@
 		<canvas>Your browser can't support canvas technology.</canvas>
 
 		<section class="controller-box">
-			<form id="play-form">
+			<form id="login">
 				<input type="text" name="teamName" placeholder="Team Name" />
 				<button type="button" id="play">Play</button>
 			</form>
-			<button id="turn-left">Turn Left</button>
-			<button id="forward">Forward</button>
-			<button id="turn-right">Turn Right</button>
-			<button id="grab">Grab Item</button>
-			<button id="drop">Drop Item</button>
+			<div id="ui">
+				<button id="turn-left">Turn Left</button>
+				<button id="forward">Forward</button>
+				<button id="turn-right">Turn Right</button>
+				<button id="grab">Grab Item</button>
+				<button id="drop">Drop Item</button>
+				<div id="playerInfos">	
+				</div>
+			</div>
 		</section>
 		<section class="info-box" id="datas">
-			<div id="playerInfos">
-				
-			</div>
 			<div id="tileInfos">
 				<ul>
 					<li><span>Food:</span><span>0</span></li>

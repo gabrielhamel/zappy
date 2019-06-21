@@ -26,7 +26,9 @@ var Socket = /** @class */ (function () {
             _this.tcpSocket.write(datas);
         };
         this.sendIADataToServer = function (datas) {
-            if (datas == "dead") {
+            if (datas == "dead\n") {
+                _this.playSocket.removeAllListeners();
+                _this.ioSocket.removeListener("play", _this.sendIADataToServer);
                 _this.playSocket.destroy();
                 _this.playSocket = undefined;
                 return;
