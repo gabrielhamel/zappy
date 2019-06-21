@@ -75,6 +75,7 @@ SRC_AI =	./ai/src/Main.cpp							\
 			./ai/src/Parser.cpp							\
 			./ai/src/Utils.cpp							\
 			./ai/src/Inventory.cpp						\
+			./ai/src/Tile.cpp							\
 			./ai/src/Message.cpp						\
 			./ai/src/Ia.cpp
 

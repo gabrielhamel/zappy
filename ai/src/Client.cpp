@@ -177,6 +177,43 @@ zpy::Client::Inventory zpy::Client::inventory()
     return inv;
 }
 
+std::vector <zpy::Client::Tile *> zpy::Client::look(void)
+{
+    auto command = "Look\n";
+    std::cout << "client: " << command;
+    std::vector <zpy::Client::Tile *> tiles;
+    std::vector <std::string>::iterator buffIt;
+    std::vector <zpy::Client::Tile *>::iterator tileIt;
+
+    this->commandStart();
+    this->_server->writeData(command);
+    auto buff = this->commandEnd();
+    tiles.push_back(new Tile(false, false, false, false, false, false, false, false));
+    for (buffIt = buff.begin(); buffIt != buff.end(); buffIt++) {
+        if ((*buffIt).find("player") != std::string::npos)
+            (*tileIt)->player = true;
+        if ((*buffIt).find("food") != std::string::npos)
+            (*tileIt)->food = true;
+        if ((*buffIt).find("linemate") != std::string::npos)
+            (*tileIt)->linemate = true;
+        if ((*buffIt).find("deraumere") != std::string::npos)
+            (*tileIt)->deraumere = true;
+        if ((*buffIt).find("sibur") != std::string::npos)
+            (*tileIt)->sibur = true;
+        if ((*buffIt).find("mendiane") != std::string::npos)
+            (*tileIt)->mendiane = true;
+        if ((*buffIt).find("phiras") != std::string::npos)
+            (*tileIt)->phiras = true;
+        if ((*buffIt).find("thystame") != std::string::npos)
+            (*tileIt)->thystame = true;
+        if ((*buffIt).find(",") != std::string::npos) {
+            tiles.push_back(new Tile(false, false, false, false, false, false, false, false));
+            tileIt++;
+        }
+    }
+    return (tiles);
+}
+
 void zpy::Client::broadcast(const std::string &msg)
 {
     auto command = "Broadcast " + msg + "\n";

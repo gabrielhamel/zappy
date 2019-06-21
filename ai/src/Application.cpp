@@ -6,7 +6,7 @@
 */
 
 #include <iostream>
-#include "Ia.hpp"
+#include "Ai.hpp"
 #include "Application.hpp"
 
 zpy::Application::Application(int ac, char **av)

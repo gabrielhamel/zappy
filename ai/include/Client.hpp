@@ -56,6 +56,29 @@ namespace zpy {
                     unsigned int thystame;
             };
             /*
+            ** Tile
+            */
+            class Tile {
+                public:
+                    Tile(
+                        bool player,
+                        bool food,
+                        bool linemate,
+                        bool deraumere,
+                        bool sibur,
+                        bool mendiane,
+                        bool phiras,
+                        bool thystame);
+                    bool player;
+                    bool food;
+                    bool linemate;
+                    bool deraumere;
+                    bool sibur;
+                    bool mendiane;
+                    bool phiras;
+                    bool thystame;
+            };
+            /*
             ** All objects
             */
             class Object {
@@ -129,6 +152,7 @@ namespace zpy {
             zpy::Client::Response take(const zpy::Client::Object &object);
             zpy::Client::Response set(const zpy::Client::Object &object);
             zpy::Client::Inventory inventory();
+            std::vector <zpy::Client::Tile *> look(void);
             void broadcast(const std::string &msg);
             bool haveBroadcast();
             zpy::Client::Message getBroadcast();
