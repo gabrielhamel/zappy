@@ -33,7 +33,8 @@ static void incantation_player_ejected(sock_list_t *list, ia_t *ia)
         tmp = inc->next.le_next;
         if (i != inc->nb_ia) {
             inc->nb_valid--;
-            sock_write(ia_get_sock(inc->ia[i]), "Current level: %d\n", inc->ia[i]->level);
+            sock_write(ia_get_sock(inc->ia[i]), "Current level: %d\n",
+            inc->ia[i]->level);
             inc->ia[i] = NULL;
             if ((int)inc->nb_valid < inc_get_level(inc->level, 0))
                 destroy_incantation(list, inc, false);

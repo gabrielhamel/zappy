@@ -22,7 +22,8 @@ void destroy_incantation(sock_list_t *list, incantation_t *inc, bool success)
             inc->ia[i]->level++;
             graph_send_ia_plv(list, inc->ia[i]);
         }
-        sock_write(ia_get_sock(inc->ia[i]), "Current level: %d\n", inc->ia[i]->level);
+        sock_write(ia_get_sock(inc->ia[i]), "Current level: %d\n",
+        inc->ia[i]->level);
         inc->ia[i]->fixed = false;
     }
     str = success ? "ok" : "ko";
