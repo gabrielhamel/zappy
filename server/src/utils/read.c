@@ -42,7 +42,7 @@ char *read_line(sock_t *socket)
     char buff[READ_SIZE] = {0};
     char *tmp;
 
-    if (!read(socket->fd, buff, READ_SIZE)) {
+    if (!read(socket->fd, buff, READ_SIZE - 1)) {
         tmp = BUFF_CMD(socket);
         if (!strcmp("", tmp))
             return (NULL);
