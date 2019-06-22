@@ -44,5 +44,5 @@ void cmd_ia_forward(sock_t *cli, sock_list_t *list, char **arg, zarg_t *zarg)
     (void)arg;
     (void)zarg;
     ia_move(list, ia, ia->ori);
-    dprintf(cli->fd, "ok\n");
+    sock_write(cli, "ok\n");
 }

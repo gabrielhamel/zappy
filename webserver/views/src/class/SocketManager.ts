@@ -16,8 +16,26 @@ class SocketManager
 	{
 		this.commands.set("bct", this.bct);
 		this.commands.set("msz", this.msz);
+		this.commands.set("pnw", this.pnw);
 		this.commands.set("sgt", this.sgt);
-		this.commands.set("tna", this.tna);
+		this.commands.set("sst", this.sgt);// WTF ???
+        this.commands.set("tna", this.tna);
+		this.commands.set("pnw", this.pnw);
+		this.commands.set("ppo", this.ppo);
+		this.commands.set("plv", this.plv);
+		this.commands.set("plv", this.pin);
+		this.commands.set("pex", this.pex);
+		this.commands.set("pbc", this.pbc);
+		this.commands.set("pic", this.pic);
+		this.commands.set("pie", this.pie);
+		this.commands.set("pfk", this.pfk);
+		this.commands.set("pdr", this.pdr);
+		this.commands.set("pgt", this.pgt);
+		this.commands.set("pdi", this.pdi);
+		this.commands.set("enw", this.enw);
+		this.commands.set("eht", this.eht);
+		this.commands.set("ebo", this.ebo);
+		this.commands.set("edi", this.edi);
 	}
 	private getDatas = (datas:any):void =>
 	{
@@ -50,5 +68,69 @@ class SocketManager
 	private tna = (datas:Array<string>) =>
 	{
 		this.game.addTeam(datas[1]);
+	}
+	private pnw = (datas:Array<string>) =>
+	{
+		this.game.addChungus(datas);
+	}
+	private ppo = (datas:Array<string>) =>
+	{
+		this.game.updateChungusPos(datas);
+	}
+	private plv = (datas:Array<string>) =>
+	{
+		this.game.lvlUpChungus(datas);
+	}
+	private pin = (datas:Array<string>) =>
+	{
+		this.game.chungusBag(datas);
+	}
+	private pex = (datas:Array<string>) =>
+	{
+		/// NEED GABI
+	}
+	private pbc = (datas:Array<string>) =>
+	{
+		this.game.chungusYelling(datas);
+	}
+	private pic = (datas:Array<string>) =>
+	{
+		/// NEED GABI
+	}
+	private pie = (datas:Array<string>) =>
+	{
+		/// NEED GABI
+	}
+	private pfk = (datas:Array<string>) =>
+	{
+		this.game.chungusLaying(datas);
+	}
+	private pdr = (datas:Array<string>) =>
+	{
+		this.game.chungusDroping(datas);
+	}
+	private pgt = (datas:Array<string>) =>
+	{
+		this.game.chungusTaking(datas);
+	}
+	private pdi = (datas:Array<string>) =>
+	{
+		this.game.removeChungus(datas);
+	}
+	private enw = (datas:Array<string>) =>
+	{
+		this.game.chungusAccouching(datas);
+	}
+	private eht = (datas:Array<string>) =>
+	{
+		this.game.maturingEgg(datas);
+	}
+	private ebo = (datas:Array<string>) =>
+	{
+		this.game.hatchingEgg(datas);
+	}
+	private edi = (datas:Array<string>) =>
+	{
+		this.game.chungusAccouching(datas);
 	}
 }

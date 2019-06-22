@@ -13,8 +13,6 @@ static buffer_cmd_t *get_head(sock_t *sock)
 {
     zappy_client_t *cli;
 
-    if (sock == NULL)
-        return (NULL);
     if (sock->type != CLIENT)
         return (NULL);
     cli = sock->data;

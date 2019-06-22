@@ -61,22 +61,22 @@ namespace zpy {
             class Tile {
                 public:
                     Tile(
-                        bool player,
-                        bool food,
-                        bool linemate,
-                        bool deraumere,
-                        bool sibur,
-                        bool mendiane,
-                        bool phiras,
-                        bool thystame);
-                    bool player;
-                    bool food;
-                    bool linemate;
-                    bool deraumere;
-                    bool sibur;
-                    bool mendiane;
-                    bool phiras;
-                    bool thystame;
+                        unsigned int player,
+                        unsigned int food,
+                        unsigned int linemate,
+                        unsigned int deraumere,
+                        unsigned int sibur,
+                        unsigned int mendiane,
+                        unsigned int phiras,
+                        unsigned int thystame);
+                    unsigned int player;
+                    unsigned int food;
+                    unsigned int linemate;
+                    unsigned int deraumere;
+                    unsigned int sibur;
+                    unsigned int mendiane;
+                    unsigned int phiras;
+                    unsigned int thystame;
             };
             /*
             ** All objects
@@ -158,6 +158,7 @@ namespace zpy {
             zpy::Client::Message getBroadcast();
             void connectNbr();
             unsigned int getRemainingPlayer() const { return _remainingPlayer; }
+            bool incantation();
         private:
             std::vector<std::string> selectGoodAnswer(const std::vector<std::vector<std::string>> &cmd);
             void commandStart();
@@ -171,6 +172,7 @@ namespace zpy {
             std::unique_ptr<zpy::Server> _server;
             std::array<unsigned int, 2> _mapSize;
             unsigned int _line;
+            unsigned short _lvl;
             unsigned int _remainingPlayer;
             std::list<zpy::Client::Message> _broadcast;
     };

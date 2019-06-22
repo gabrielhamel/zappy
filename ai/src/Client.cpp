@@ -5,6 +5,8 @@
 ** Client
 */
 
+#include <algorithm>
+
 #include "Client.hpp"
 #include "Utils.hpp"
 
@@ -14,7 +16,8 @@ _port(port),
 _team(team),
 _server(std::unique_ptr<zpy::Server>(new zpy::Server(hostname, port))),
 _mapSize({0, 0}),
-_line(0)
+_line(0),
+_lvl(1)
 {
     this->_server->writeData(this->_team + "\n");
     this->_server->waitData();
@@ -188,30 +191,57 @@ std::vector <zpy::Client::Tile *> zpy::Client::look(void)
     this->commandStart();
     this->_server->writeData(command);
     auto buff = this->commandEnd();
-    tiles.push_back(new Tile(false, false, false, false, false, false, false, false));
+    tiles.push_back(new Tile(0, 0, 0, 0, 0, 0, 0, 0));
     for (buffIt = buff.begin(); buffIt != buff.end(); buffIt++) {
+        if ((*buffIt).find(",") != std::string::npos)
+            tiles.push_back(new Tile(0, 0, 0, 0, 0, 0, 0, 0));
+    }
+    tileIt = tiles.begin();
+    for (buffIt = buff.begin(); buffIt != buff.end(); buffIt++) {
+        std::cout << *buffIt << std::endl;
         if ((*buffIt).find("player") != std::string::npos)
-            (*tileIt)->player = true;
+            (*tileIt)->player++;
         if ((*buffIt).find("food") != std::string::npos)
-            (*tileIt)->food = true;
+            (*tileIt)->food++;
         if ((*buffIt).find("linemate") != std::string::npos)
-            (*tileIt)->linemate = true;
+            (*tileIt)->linemate++;
         if ((*buffIt).find("deraumere") != std::string::npos)
-            (*tileIt)->deraumere = true;
+            (*tileIt)->deraumere++;
         if ((*buffIt).find("sibur") != std::string::npos)
-            (*tileIt)->sibur = true;
+            (*tileIt)->sibur++;
         if ((*buffIt).find("mendiane") != std::string::npos)
-            (*tileIt)->mendiane = true;
+            (*tileIt)->mendiane++;
         if ((*buffIt).find("phiras") != std::string::npos)
-            (*tileIt)->phiras = true;
+            (*tileIt)->phiras++;
         if ((*buffIt).find("thystame") != std::string::npos)
-            (*tileIt)->thystame = true;
+            (*tileIt)->thystame++;
         if ((*buffIt).find(",") != std::string::npos) {
-            tiles.push_back(new Tile(false, false, false, false, false, false, false, false));
             tileIt++;
         }
     }
     return (tiles);
+}
+
+bool zpy::Client::incantation()
+{
+    auto command = "Incantation\n";
+    std::cout << "client: " << command;
+
+    this->commandStart();
+    this->_server->writeData(command);
+    auto buff = this->commandEnd();
+    if (buff[0] == "ko")
+        return false;
+    auto buff2 = this->commandEnd();
+    if (buff2[0] == "ko")
+        return false;
+    if (buff2.size() < 2)
+        return false;
+    if (stoul(buff2[2], NULL, 10) > _lvl) {
+        _lvl = stoul(buff2[2], NULL, 10);
+        return true;
+    }
+    return false;
 }
 
 void zpy::Client::broadcast(const std::string &msg)

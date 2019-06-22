@@ -7,14 +7,14 @@
 
 #include "Client.hpp"
 
-zpy::Client::Tile::Tile(bool player,
-                        bool food,
-                        bool linemate,
-                        bool deraumere,
-                        bool sibur,
-                        bool mendiane,
-                        bool phiras,
-                        bool thystame) :
+zpy::Client::Tile::Tile(unsigned int player,
+                        unsigned int food,
+                        unsigned int linemate,
+                        unsigned int deraumere,
+                        unsigned int sibur,
+                        unsigned int mendiane,
+                        unsigned int phiras,
+                        unsigned int thystame) :
                         player(player),
                         food(food),
                         linemate(linemate),

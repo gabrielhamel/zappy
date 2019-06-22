@@ -10,12 +10,12 @@
 
 void cmd_send_sgt(sock_t *cli, zarg_t *zarg)
 {
-    dprintf(cli->fd, "sgt %.0f\n", zarg->freq);
+    sock_write(cli, "sgt %.0f\n", zarg->freq);
 }
 
 void cmd_graph_sgt(sock_t *cli, sock_list_t *list, char **arg, zarg_t *zarg)
 {
     (void)list;
     (void)arg;
-    dprintf(cli->fd, "sgt %.0f\n", zarg->freq);
+    sock_write(cli, "sgt %.0f\n", zarg->freq);
 }

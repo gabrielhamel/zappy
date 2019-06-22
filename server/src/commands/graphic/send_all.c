@@ -24,7 +24,7 @@ void send_all_players(sock_t *graph, sock_list_t *list)
         if (cli->cli_type != IA)
             continue;
         ia = cli->client.ia;
-        dprintf(graph->fd, "pnw %d %ld %ld %d %d %s\n",
+        sock_write(graph, "pnw %d %ld %ld %d %d %s\n",
         ia->id, ia->x, ia->y, ia->ori, ia->level, ia->team->name);
     }
 }

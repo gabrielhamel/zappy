@@ -8,6 +8,7 @@
 
 SRC_SERV =	./server/src/sockets/client.c				\
 			./server/src/sockets/list_event.c			\
+			./server/src/sockets/write.c				\
 			./server/src/sockets/list_utils.c			\
 			./server/src/sockets/server.c				\
 			./server/src/game/link_map.c				\
@@ -15,7 +16,6 @@ SRC_SERV =	./server/src/sockets/client.c				\
 			./server/src/game/win.c						\
 			./server/src/game/map.c						\
 			./server/src/game/incantation.c				\
-			./server/src/loop.c							\
 			./server/src/events.c						\
 			./server/src/execution.c					\
 			./server/src/utils/array.c					\
@@ -52,6 +52,7 @@ SRC_SERV =	./server/src/sockets/client.c				\
 			./server/src/commands/ai/incant.c			\
 			./server/src/commands/ai/set.c				\
 			./server/src/commands/ai/take.c				\
+			./server/src/commands/ai/geter.c			\
 			./server/src/commands/ai/connect_nbr.c		\
 			./server/src/commands/ai/look.c				\
 			./server/src/teams/check_team_names.c		\
@@ -59,14 +60,18 @@ SRC_SERV =	./server/src/sockets/client.c				\
 			./server/src/game/direction.c				\
 			./server/src/time_manage.c
 
-SRC_MAIN =  ./server/src/main.c
+SRC_MAIN =  ./server/src/main.c							\
+			./server/src/loop.c
 
 SRC_TESTS = ./tests/src/parsing.c						\
 			./tests/src/utils.c							\
 			./tests/src/socket.c						\
 			./tests/src/events.c						\
 			./tests/src/broadcast.c						\
-			./tests/src/game.c
+			./tests/src/game.c							\
+			./tests/src/refresh.c						\
+			./tests/src/graphics.c						\
+			./tests/src/ia.c
 
 SRC_AI =	./ai/src/Main.cpp							\
 			./ai/src/Server.cpp							\
@@ -139,7 +144,7 @@ tests_run:	titre_tests $(OBJ_SERV)
 			@(tar -xf tests/src/tests.tar)
 			@gcc -o unit_tests $(OBJ_SERV) $(SRC_TESTS) $(CFLAGS) -lm --coverage -lcriterion && $(ECHO) $(GREEN)✓$(TEAL)" BUILD SUCCESS !"$(TEAL) $(DEFAULT) || $(ECHO) $(SANG)✗$(TEAL)" BUILD FAILED !"$(TEAL) $(DEFAULT)
 			@(./unit_tests)
-			@(lcov -c -d . --output-file tests/Coverage) > /dev/null
+			@(lcov -c -d server --output-file tests/Coverage) > /dev/null
 			@(mkdir -p tests/html) > /dev/null 2>&1
 			@(genhtml tests/Coverage --output-directory tests/html/) > /dev/null
 			@(gcovr --exclude tests/)

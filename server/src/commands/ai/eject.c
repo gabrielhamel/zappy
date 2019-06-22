@@ -13,9 +13,9 @@ static void send_res(sock_list_t *list, sock_t *cli, size_t nb)
     char buff[4096] = {0};
 
     if (nb == 0)
-        dprintf(cli->fd, "ko\n");
+        sock_write(cli, "ko\n");
     else {
-        dprintf(cli->fd, "ok\n");
+        sock_write(cli, "ok\n");
         sprintf(buff, "pex %d\n", cli->fd);
         send_all_graphics(list, buff);
     }
@@ -33,7 +33,7 @@ static void incantation_player_ejected(sock_list_t *list, ia_t *ia)
         tmp = inc->next.le_next;
         if (i != inc->nb_ia) {
             inc->nb_valid--;
-            dprintf(inc->ia[i]->id, "Current level: %d\n", inc->ia[i]->level);
+            sock_write(ia_get_sock(inc->ia[i]), "Current level: %d\n", inc->ia[i]->level);
             inc->ia[i] = NULL;
             if ((int)inc->nb_valid < inc_get_level(inc->level, 0))
                 destroy_incantation(list, inc, false);
@@ -58,7 +58,7 @@ static void eject(sock_list_t *list, ia_t *ejecter, ia_t *ejected)
         k = get_direction(ejected, ZERO, POSITIVE);
     if (ejecter->ori == WEAST)
         k = get_direction(ejected, POSITIVE, ZERO);
-    dprintf(ejected->id, "eject: %d\n", k);
+    sock_write(ia_get_sock(ejected), "eject: %d\n", k);
     if (begin != end)
         incantation_player_ejected(list, ejected);
 }

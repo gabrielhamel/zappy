@@ -26,7 +26,7 @@ void add_random_food(sock_list_t *list, map_t *map)
 
     for (size_t y = 0; y < map->h; y++)
         for (size_t x = 0; x < map->w; x++) {
-            value = (rand() % 101) / 87;
+            value = (rand() % 101) / 50;
             map->graph[y][x].items[0] += value;
             value ? graph_send_tile_bct(list, &map->graph[y][x]) : 0;
         }

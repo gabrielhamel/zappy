@@ -1,7 +1,10 @@
 class Stage
 {
 	private readonly CANVAS:HTMLCanvasElement;
-	private readonly CHUNGUS:MeshBuilder;
+<<<<<<< Updated upstream
+	private readonly CHUNGUS:MeshBuilder; // DEPRECATED
+=======
+>>>>>>> Stashed changes
 	private readonly SCENE:BABYLON.Scene;
 	private blocs:Array<BABYLON.InstancedMesh> = new Array<BABYLON.InstancedMesh>();
 	private blocCollection:BlocCollection;
@@ -14,7 +17,6 @@ class Stage
 	{
 		let lightDir = new BABYLON.Vector3(0, 1, 0);
 
-		this.CHUNGUS = new MeshBuilder("chungus.glb", scene);
 		this.CANVAS = scene.getEngine().getRenderingCanvas();
 		this.SCENE = scene;
 		this.blocCollection = new BlocCollection(scene);
@@ -43,13 +45,13 @@ class Stage
 			this.selected.position.y += 0.1;
 		this.selected = picked.pickedMesh;
 	}
-	private findTileByPosition(position:BABYLON.Vector2):Tile
+
+	public findTileByPosition(position:BABYLON.Vector2):Tile
 	{
 		return (this.tiles.find((tile:Tile) => {
 			return (position.equals(tile.getPosition()));
 		}));
 	}
-
 	public addTile(datas:Array<string>)
 	{
 		let tile:Tile;
