@@ -28,6 +28,8 @@ zarg_t *zarg)
     send_all_eggs(cli, list);
     for (size_t i = 0; i < game->nb_teams; i++)
         for (size_t j = 0; j < game->teams[i]->nb_clients; j++) {
+            if (game->teams[i]->sock[j] == NULL)
+                continue;
             ia = ZAPPY_CLIENT(game->teams[i]->sock[j])->client.ia;
             graph_send_ia_pin(list, ia);
         }

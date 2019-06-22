@@ -1,10 +1,6 @@
 class Stage
 {
 	private readonly CANVAS:HTMLCanvasElement;
-<<<<<<< Updated upstream
-	private readonly CHUNGUS:MeshBuilder; // DEPRECATED
-=======
->>>>>>> Stashed changes
 	private readonly SCENE:BABYLON.Scene;
 	private blocs:Array<BABYLON.InstancedMesh> = new Array<BABYLON.InstancedMesh>();
 	private blocCollection:BlocCollection;

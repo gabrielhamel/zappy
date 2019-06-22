@@ -14,7 +14,11 @@ class Camera
 		let target:BABYLON.Vector3 = BABYLON.Vector3.Zero();
 		
 		this.camera = new BABYLON.ArcRotateCamera("mainCamera", Math.PI / 2, Math.PI / 4, 30, target, scene);
-		this.camera.attachControl(scene.getEngine().getRenderingCanvas());
+		this.camera.allowUpsideDown = false;
+		this.camera.checkCollisions = true;
+		this.camera.panningSensibility = 0;
+		this.camera.collisionRadius = new BABYLON.Vector3(1, 1, 1);
+		this.camera.attachControl(scene.getEngine().getRenderingCanvas(), false);
 	}
 	
 	public setTarget(target:BABYLON.Vector3)

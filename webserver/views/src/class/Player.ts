@@ -1,23 +1,22 @@
 class Player
 {
-	private readonly CHUNGUS:MeshBuilder;
+	private skin:BerkMesh;
 	private id:number;
 	private x:number;
 	private y:number;
 	private o:number;
 	private lvl:number;
-	private teamName:string; // peut à remplacer vers une reference de team ou OSEF en vrai
+	private teamName:string;
 	private bag:Array<number> = new Array<number>();
 	private message: string = "";
 	private incanting: boolean = false;
 	private laying: boolean = false;
 
-
-	constructor(id:number, teamName:string, scene:BABYLON.Scene)
+	constructor(id:number, teamName:string, skin:BerkMesh, scene:BABYLON.Scene)
 	{
 		this.id = id;
 		this.teamName = teamName;
-		this.CHUNGUS = new MeshBuilder("chungus.glb", scene);
+		this.skin = skin;
 		for (let i:number = 0; i < 7; i++)
 			this.bag.push(0);
 	}
@@ -26,10 +25,12 @@ class Player
 	{
 		this.x = x;
 		this.y = y;
+		this.skin.setPosition(new BABYLON.Vector3(x, 0.5, y));
 	}
 	public setOri(o:number):void
 	{
 		this.o = o;
+		this.skin.setRotation(Math.PI / 2 * (o - 1));
 	}
 	public setLvl(lvl:number):void
 	{
@@ -80,5 +81,9 @@ class Player
 	public take(item:number):void
 	{
 		this.bag[item]--;
+	}
+	public die():void
+	{
+		this.skin.dispose();
 	}
 }

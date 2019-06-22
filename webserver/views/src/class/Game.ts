@@ -7,28 +7,27 @@ class Game
 	private canvas:HTMLCanvasElement;
 	private engine:BABYLON.Engine;
 	private scene:BABYLON.Scene;
-	private socketManager:SocketManager = new SocketManager(this);
 	private stage:Stage;
 	private chungus:Array<Player> = new Array<Player>();
 	private eggs:Array<Egg> = new Array<Egg>();
 	private teamsNames:Array<string> = new Array<string>();
 
-	constructor(canvas:HTMLCanvasElement)
+	constructor()
 	{
-		this.canvas = canvas;
+		this.canvas = document.getElementsByTagName("canvas")[0];
 		this.engine = new BABYLON.Engine(this.canvas, true);
 		this.scene = new BABYLON.Scene(this.engine);
+		this.scene.collisionsEnabled = true;
 		this.stage = new Stage(this.scene);
 		this.camera = new Camera(this.scene);
 		this.CHUNGUS = new MeshBuilder("chungus.glb", this.scene);
-		
+
 		this.initialiseScene();
 		this.engine.runRenderLoop(this.render);
 	}
 
 	private initialiseScene():void
 	{
-		this.scene.collisionsEnabled = true;
 		window.addEventListener("resize", () => {
 			this.engine.resize();
 		});
@@ -76,12 +75,12 @@ class Game
 			console.log(datas);
 			return;
 		}
-		if (!this.getBigChungusById(parseInt(datas[1]))) {
+		if (this.getBigChungusById(parseInt(datas[1]))) {
 			console.log("You can't clone the big unfamous big chungus !!!");
 			console.log(datas);
 			return;
 		}
-		let chungus = new Player(parseInt(datas[1]), datas[6], this.scene);
+		let chungus = new Player(parseInt(datas[1]), datas[6], this.CHUNGUS.getInstance(), this.scene);
 		chungus.setPos(parseInt(datas[2]), parseInt(datas[3]));
 		chungus.setOri(parseInt(datas[4]));
 		chungus.setLvl(parseInt(datas[5]));
@@ -95,7 +94,7 @@ class Game
 			return;
 		}
 		let movingChungus = this.getBigChungusById(parseInt(datas[1]))
-		if (movingChungus) {
+		if (!movingChungus) {
 			console.log("This chungus doesn't exist");
 			console.log(datas);
 			return;
@@ -222,6 +221,7 @@ class Game
 		}
 		let i = 0;
 		for (;i < this.chungus.length && this.chungus[i].getId() != parseInt(datas[1]) ; i++);
+		this.chungus[i].die();
 		this.chungus.splice(i, 1);
 	}
 	public chungusAccouching(datas:Array<string>):void
@@ -271,6 +271,24 @@ class Game
 			return;
 		}
 		//ANIMATION => fade de l'oeuf
+		let i = 0;
+		for (;i < this.eggs.length && this.eggs[i].getId() != parseInt(datas[1]) ; i++);
+		this.eggs.splice(i, 1);
+	}
+	public dyingEgg(datas:Array<string>):void
+	{
+		if (datas.length < 2) {
+			console.log("Not enough arguments to mature an egg");
+			console.log(datas);
+			return;
+		}
+		let egg = this.getEggById(parseInt(datas[1]));
+		if (!egg) {
+			console.log("This egg doesn't exist");
+			console.log(datas);
+			return;
+		}
+		//ANIMATION => destruction de l'oeuf
 		let i = 0;
 		for (;i < this.eggs.length && this.eggs[i].getId() != parseInt(datas[1]) ; i++);
 		this.eggs.splice(i, 1);

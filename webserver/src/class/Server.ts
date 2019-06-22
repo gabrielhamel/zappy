@@ -32,9 +32,10 @@ class Server
 	}
 	private handleSocketConnection = (socket:socketio.Socket):void =>
 	{
-		let sock:Socket = new Socket(socket);
+		let sock:Socket = new Socket("127.0.0.1", this.serverPort, socket);
 
-		sock.connectToServer("127.0.0.1", this.serverPort);
+		console.log(`Client ${socket.id} is connected to relay.`);
+		sock.connectToServer();
 		socket.on("disconnect", () => {
 			this.handleSocketDisconnection(socket);
 		});
@@ -46,8 +47,11 @@ class Server
 			return (sock.getId() == socket.id);
 		});
 
+
+		console.log(`Client ${socket.id} has been disconnected from relay.`);
 		if (index == -1)
 			return;
+		this.sockets[index].shutDownTCPSocket();
 		this.sockets.splice(index, 1);
 	}
 }

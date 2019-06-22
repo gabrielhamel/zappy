@@ -34,6 +34,7 @@ class BlocCollection
 		output = this.blocs[type].createInstance(id);
 		output.position.y = BlocCollection.HEIGHTS[type];
 		output.isVisible = true;
+		output.checkCollisions = true;
 		return (output);
 	}
 }

@@ -1,41 +1,45 @@
 class SocketManager
 {
 	private socket = io();
-	private game:Game;
-	private commands:Map<string, Function> = new Map<string, Function>();
+	private game:Game = new Game();
+	private controller:Controller = new Controller(this.game, this);
+	private commandsGraph:Map<string, Function> = new Map<string, Function>();
+	private commandsPlay:Map<string, Function> = new Map<string, Function>();
 	
-	constructor(game:Game)
+	constructor()
 	{
-		this.game = game;
 		this.initialise();
 		this.socket.emit("data", "GRAPHIC\n");
 		this.socket.on("data", this.getDatas);
+		this.socket.on("play", this.getPlay);
 	}
 
 	private initialise():void
 	{
-		this.commands.set("bct", this.bct);
-		this.commands.set("msz", this.msz);
-		this.commands.set("pnw", this.pnw);
-		this.commands.set("sgt", this.sgt);
-		this.commands.set("sst", this.sgt);// WTF ???
-        this.commands.set("tna", this.tna);
-		this.commands.set("pnw", this.pnw);
-		this.commands.set("ppo", this.ppo);
-		this.commands.set("plv", this.plv);
-		this.commands.set("plv", this.pin);
-		this.commands.set("pex", this.pex);
-		this.commands.set("pbc", this.pbc);
-		this.commands.set("pic", this.pic);
-		this.commands.set("pie", this.pie);
-		this.commands.set("pfk", this.pfk);
-		this.commands.set("pdr", this.pdr);
-		this.commands.set("pgt", this.pgt);
-		this.commands.set("pdi", this.pdi);
-		this.commands.set("enw", this.enw);
-		this.commands.set("eht", this.eht);
-		this.commands.set("ebo", this.ebo);
-		this.commands.set("edi", this.edi);
+		this.commandsGraph.set("bct", this.bct);
+		this.commandsGraph.set("msz", this.msz);
+		this.commandsGraph.set("pnw", this.pnw);
+		this.commandsGraph.set("sgt", this.sgt);
+        this.commandsGraph.set("tna", this.tna);
+		this.commandsGraph.set("pnw", this.pnw);
+		this.commandsGraph.set("ppo", this.ppo);
+		this.commandsGraph.set("plv", this.plv);
+		this.commandsGraph.set("plv", this.pin);
+		this.commandsGraph.set("pex", this.pex);
+		this.commandsGraph.set("pbc", this.pbc);
+		this.commandsGraph.set("pic", this.pic);
+		this.commandsGraph.set("pie", this.pie);
+		this.commandsGraph.set("pfk", this.pfk);
+		this.commandsGraph.set("pdr", this.pdr);
+		this.commandsGraph.set("pgt", this.pgt);
+		this.commandsGraph.set("pdi", this.pdi);
+		this.commandsGraph.set("enw", this.enw);
+		this.commandsGraph.set("eht", this.eht);
+		this.commandsGraph.set("ebo", this.ebo);
+		this.commandsGraph.set("edi", this.edi);
+
+		this.commandsPlay.set("WELCOME", this.nth);
+		this.commandsPlay.set("Elevation", this.elv);
 	}
 	private getDatas = (datas:any):void =>
 	{
@@ -45,8 +49,26 @@ class SocketManager
 
 		for (let i:number = 0; i < len; i++) {
 			cur = array[i].split(" ");
-			if (this.commands.get(cur[0]))
-				this.commands.get(cur[0])(cur);
+			if (this.commandsGraph.get(cur[0]))
+				this.commandsGraph.get(cur[0])(cur);
+		}
+	}
+	private getPlay = (datas:any):void =>
+	{
+		let array:Array<string> = datas.split("\n");
+		let len:number = array.length;
+		let cur:Array<string>;
+
+		for (let i:number = 0; i < len; i++) {
+			cur = array[i].split(" ");
+			if (cur[0] == "")
+				continue;
+			if (this.commandsPlay.get(cur[0])) {// GESTION DES EVENTS
+				this.commandsPlay.get(cur[0])(cur);
+				continue;
+			}
+
+			this.controller.handleResponse(cur); // GESTION D'UN RETOUR DE CMD
 		}
 	}
 	private bct = (datas:Array<string>) =>
@@ -131,6 +153,19 @@ class SocketManager
 	}
 	private edi = (datas:Array<string>) =>
 	{
-		this.game.chungusAccouching(datas);
+		this.game.dyingEgg(datas);
+	}
+	private nth = (datas:Array<string>) =>
+	{
+		//ne doit rien faire
+	}
+	private elv = (datas:Array<string>) =>
+	{
+		this.controller.blockInput();
+	}
+
+	public emit(event:string, datas:string)
+	{
+		this.socket.emit(event, datas);
 	}
 }
