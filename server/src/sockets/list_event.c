@@ -33,6 +33,8 @@ sock_t **socket_list_get_event(sock_list_t *list)
     if (ret == 0 || ret == -1)
         return (NULL);
     tab = malloc(sizeof(sock_t *) * (ret + 1));
+    if (tab == NULL)
+        return NULL;
     memset(tab, 0, sizeof(sock_t *) * (ret + 1));
     for (int i = 0; i < FD_SETSIZE; i++)
         if (FD_ISSET(i, &tmp))

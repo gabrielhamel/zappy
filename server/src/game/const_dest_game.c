@@ -14,13 +14,15 @@ static void destroy_map(map_t *map)
     free(map->graph);
 }
 
-void initialize_game_args(game_t *game, zarg_t *zarg)
+bool initialize_game_args(game_t *game, zarg_t *zarg)
 {
     size_t i;
 
     LIST_INIT(&game->incantations);
     game->nb_teams = array_lenght(zarg->team_names);
     game->teams = malloc(sizeof(team_t *) * game->nb_teams);
+    if (game->teams == NULL)
+        return false;
     for (i = 0; i < game->nb_teams; i++) {
         game->teams[i] = malloc(sizeof(team_t));
         memset(game->teams[i], 0, sizeof(team_t));
@@ -30,7 +32,7 @@ void initialize_game_args(game_t *game, zarg_t *zarg)
         memset(game->teams[i]->sock, 0, sizeof(sock_t *) * zarg->clients_nb);
         LIST_INIT(&game->teams[i]->eggs);
     }
-    init_map(&game->map, zarg->width, zarg->height);
+    return init_map(&game->map, zarg->width, zarg->height);
 }
 
 void *init_game(const sock_t *cli)

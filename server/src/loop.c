@@ -58,9 +58,10 @@ int launch_zappy(zarg_t *zarg)
         socket_list_destroy(list);
         return 84;
     }
-    initialize_game_args(tmp->data, zarg);
-    if (tmp == NULL)
-        return (84);
+    if (initialize_game_args(tmp->data, zarg) == false) {
+        socket_list_destroy(list);
+        return 84;
+    }
     socket_list_add(list, tmp);
     signal(SIGINT, forcequit);
     zappy_loop(list, zarg);

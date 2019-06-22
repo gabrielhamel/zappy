@@ -20,8 +20,11 @@ void init_tile(tile_t *tile)
 bool init_map(map_t *map, size_t w, size_t h)
 {
     map->graph = malloc(sizeof(tile_t *) * h);
+    if (map->graph == NULL)
+        return false;
     for (size_t i = 0; i < h; i++)
-        map->graph[i] = malloc(sizeof(tile_t) * w);
+        if ((map->graph[i] = malloc(sizeof(tile_t) * w)) == NULL)
+            return false;
     map->h = h;
     map->w = w;
     link_map(map->graph, w, h);
