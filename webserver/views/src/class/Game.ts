@@ -13,6 +13,7 @@ class Game
 	private chungus:Array<Player> = new Array<Player>();
 	private eggs:Array<Egg> = new Array<Egg>();
 	private teamsNames:Array<string> = new Array<string>();
+	private tchat:Tchat = new Tchat();
 
 	constructor()
 	{
@@ -154,6 +155,7 @@ class Game
 			return;
 		}
 		voicingChungus.setMessage(datas[2]);
+
 	}
 	public chungusLaying(datas:Array<string>):void
 	{
