@@ -26,6 +26,7 @@ static void incantation_player_ejected(sock_list_t *list, ia_t *ia)
     game_t *game = GET_GAME(list);
     incantation_t *inc;
     size_t i;
+    sock_t sock = {0};
     incantation_t *tmp;
 
     for (inc = game->incantations.lh_first; inc;) {
@@ -33,7 +34,7 @@ static void incantation_player_ejected(sock_list_t *list, ia_t *ia)
         tmp = inc->next.le_next;
         if (i != inc->nb_ia) {
             inc->nb_valid--;
-            sock_write(ia_get_sock(inc->ia[i]), "Current level: %d\n",
+            sock_write(ia_get_sock(&sock, inc->ia[i]), "Current level: %d\n",
             inc->ia[i]->level);
             inc->ia[i] = NULL;
             if ((int)inc->nb_valid < inc_get_level(inc->level, 0))
@@ -48,6 +49,7 @@ static void eject(sock_list_t *list, ia_t *ejecter, ia_t *ejected)
     int k = 0;
     tile_t *begin = GET_TILE(GET_GAME(list), ejected->x, ejected->y);
     tile_t *end;
+    sock_t sock = {0};
 
     ia_move(list, ejected, ejecter->ori);
     end = GET_TILE(GET_GAME(list), ejected->x, ejected->y);
@@ -59,7 +61,7 @@ static void eject(sock_list_t *list, ia_t *ejecter, ia_t *ejected)
         k = get_direction(ejected, ZERO, POSITIVE);
     if (ejecter->ori == WEAST)
         k = get_direction(ejected, POSITIVE, ZERO);
-    sock_write(ia_get_sock(ejected), "eject: %d\n", k);
+    sock_write(ia_get_sock(&sock, ejected), "eject: %d\n", k);
     if (begin != end)
         incantation_player_ejected(list, ejected);
 }

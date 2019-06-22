@@ -13,6 +13,7 @@ void destroy_incantation(sock_list_t *list, incantation_t *inc, bool success)
 {
     char buff[4096] = {0};
     char *str;
+    sock_t sock = {0};
 
     LIST_REMOVE(inc, next);
     for (size_t i = 0; i < inc->nb_ia; i++) {
@@ -22,7 +23,7 @@ void destroy_incantation(sock_list_t *list, incantation_t *inc, bool success)
             inc->ia[i]->level++;
             graph_send_ia_plv(list, inc->ia[i]);
         }
-        sock_write(ia_get_sock(inc->ia[i]), "Current level: %d\n",
+        sock_write(ia_get_sock(&sock, inc->ia[i]), "Current level: %d\n",
         inc->ia[i]->level);
         inc->ia[i]->fixed = false;
     }
@@ -57,6 +58,7 @@ void new_incantation(sock_list_t *list, ia_t **ia, tile_t *tile, zarg_t *zarg)
 {
     incantation_t *inc = malloc(sizeof(incantation_t));
     game_t *game = GET_GAME(list);
+    sock_t sock = {0};
 
     inc->ia = ia;
     inc->nb_ia = array_lenght((char **)ia);
@@ -67,7 +69,7 @@ void new_incantation(sock_list_t *list, ia_t **ia, tile_t *tile, zarg_t *zarg)
     LIST_INSERT_HEAD(&game->incantations, inc, next);
     for (size_t i = 0; i < inc->nb_ia; i++) {
         inc->ia[i]->fixed = true;
-        sock_write(ia_get_sock(inc->ia[i]), "Elevation underway\n");
+        sock_write(ia_get_sock(&sock, inc->ia[i]), "Elevation underway\n");
     }
 }
 
