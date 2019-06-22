@@ -19,7 +19,7 @@ static const char *objects[N_ITEMS] = {
     "thystame"
 };
 
-static bool tile_have_player(sock_list_t *list, tile_t *tile)
+bool tile_have_player(sock_list_t *list, tile_t *tile)
 {
     zappy_client_t *client;
     ia_t *ia;
@@ -36,14 +36,14 @@ static bool tile_have_player(sock_list_t *list, tile_t *tile)
     return false;
 }
 
-static bool tile_have_item(ITEM_T item, tile_t *tile)
+bool tile_have_item(ITEM_T item, tile_t *tile)
 {
     if (tile->items[item] != 0)
         return true;
     return false;
 }
 
-static void tile_to_string(sock_list_t *list, tile_t *tile, char *buff)
+void tile_to_string(sock_list_t *list, tile_t *tile, char *buff)
 {
     bool first = false;
 
