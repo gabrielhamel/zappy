@@ -13,7 +13,7 @@
 				<input type="text" name="teamName" placeholder="Team Name" />
 				<button type="button" id="play">Play</button>
 			</form>
-			<div id="ui">
+			<div class="ui" id="ui">
 				<button id="turn-left">Turn Left</button>
 				<button id="forward">Forward</button>
 				<button id="turn-right">Turn Right</button>
@@ -35,6 +35,16 @@
 					<li><span>Thystame:</span><span>0</span></li>
 				</ul>
 			</div>
+		</section>
+		<section class="tchat-box">
+			<ul>
+				<li>message 2</li>
+				<li>message 3</li>
+			</ul>
+			<form class="tchat-group-input" id="tchat-input">
+				<input class="tchat-input" type="text" name="tchat" placeholder="Type your message" />
+				<button class="tchat-button" type="button" id="send">Send</button>
+			</form>
 		</section>
 		<script src="node_modules/babylonjs/babylon.js"></script>
 		<script src="node_modules/babylonjs-loaders/babylonjs.loaders.min.js"></script>

@@ -12,6 +12,17 @@ canvas {
 	touch-action: none;
 }
 
+@keyframes pop-bottom {
+	from {
+		bottom: -200px;
+	  opacity: 0.1;
+	}
+	to {
+		bottom: 0;
+	  opacity: 1;
+	}
+}
+
 .controller-box {
 	position: absolute;
 	bottom: 0;
@@ -20,14 +31,48 @@ canvas {
 	width: 20%;
 	color: white;
 	border: solid rgba(52, 152, 219, 0.9) 1px;
-	border-radius: 2px;
+	border-radius: 3px;
 	margin: 30px;
+	animation-name: pop-bottom;
+	animation-duration: 3s;
+	animation-timing-function: ease;
 }
 
+.tchat-box {
+	position: absolute;
+	max-height: 200px;
+	bottom: 0;
+	right: 0;
+	padding: 10px;
+	width: 30%;
+	color: white;
+	border: solid rgba(52, 152, 219, 0.9) 1px;
+	background: rgba(52, 152, 219, 0.5);
+	border-radius: 3px;
+	margin: 30px;
+	animation-name: pop-bottom;
+	animation-duration: 3s;
+	animation-timing-function: ease;
+}
+
+.tchat-group-input {
+	position: relative;
+	padding: 5px;
+	/* border: solid rgba(30, 100, 160, 0.9) 1px; */
+	background: rgba(30, 100, 160, 1);
+}
+
+.tchat-input {
+	width: 60%;
+}
+
+.tchat-button {
+	width: 30%
+}
 
 .info-box {
 	position: absolute;
-	bottom: 0;
+	top: 0;
 	right: 0;
 	padding: 10px;
 	width: 10%;
