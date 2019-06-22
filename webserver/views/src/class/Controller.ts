@@ -94,6 +94,13 @@ class Controller
 		this.send.disabled = false;
 		this.free = true;
 	}
+	public die():void
+	{
+		this.ui.style.display = "none";
+		this.tchat.style.display = "none";
+		this.login.style.display = "block";
+		this.responseHandler = this.handleConnection;
+	}
 	public handleResponse(datas:Array<string>):void
 	{
 		this.responseHandler(datas);
