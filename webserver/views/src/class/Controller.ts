@@ -1,11 +1,13 @@
 class Controller
 {
-	private form:HTMLElement = document.getElementById("login");
+	private login:HTMLElement = document.getElementById("login");
 	private play:HTMLElement = document.getElementById("play");
+	private tchat:HTMLElement = document.getElementById("tchat-form");
+	private send:HTMLButtonElement = document.getElementById("send") as HTMLButtonElement;
 	private ui:HTMLElement = document.getElementById("ui");
 	private forward:HTMLButtonElement = document.getElementById("forward") as HTMLButtonElement;
 	private turnLeft:HTMLButtonElement = document.getElementById("turn-left") as HTMLButtonElement;
-	private turnRight:HTMLButtonElement = document.getElementById("turn-right") as HTMLButtonElement;
+	private turnRight:HTMLButtonElement = document.getElementById("turn-right") as HTMLButtonElement;	
 	private grab:HTMLButtonElement = document.getElementById("grab") as HTMLButtonElement;
 	private drop:HTMLButtonElement = document.getElementById("drop") as HTMLButtonElement;
 	private teamName:string;
@@ -20,9 +22,10 @@ class Controller
 		this.game = game;
 		this.socketManager = socketManager;
 		this.ui.style.display = "none";
+		this.tchat.style.display = "none";
 		this.play.addEventListener("click", () => {
-			this.teamName = this.form.getElementsByTagName("input")[0].value;
-			this.socketManager.emit("requestPlay", this.teamName + '\n');
+			this.teamName = this.login.getElementsByTagName("input")[0].value;
+			this.socketManager.emit("requestPlay", this.teamName + "\n");
 		});
 		this.forward.addEventListener("click", () => {
 			if (this.free == true) {
@@ -42,6 +45,10 @@ class Controller
 				this.blockInput();
 			}
 		});
+		this.send.addEventListener("click", () => {
+			let msg = this.tchat.getElementsByTagName("input")[0].value;
+			this.socketManager.emit("play", "Broadcast " +  msg + "\n");
+		});
 	}
 
 	private handleConnection = (datas:Array<string>): void =>
@@ -49,7 +56,8 @@ class Controller
 		console.log(datas);
 		if (!(datas[0] == "ko")) {
 			this.ui.style.display = "block";
-			this.form.style.display = "none";
+			this.tchat.style.display = "block";
+			this.login.style.display = "none";
 			this.responseHandler = this.handleNothing;
 		}
 		else {
@@ -70,6 +78,7 @@ class Controller
 		this.turnRight.disabled = true;
 		this.grab.disabled = true;
 		this.drop.disabled = true;
+		this.send.disabled = true;
 		this.free = false;
 	}
 	public allowInput():void
@@ -79,6 +88,7 @@ class Controller
 		this.turnRight.disabled = false;
 		this.grab.disabled = false;
 		this.drop.disabled = false;
+		this.send.disabled = false;
 		this.free = true;
 	}
 	public handleResponse(datas:Array<string>):void

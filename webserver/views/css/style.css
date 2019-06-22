@@ -79,31 +79,31 @@ canvas {
 	color: white;
 }
 
-div {
+.tile-items {
+	padding: 0;
 	width: 100%;
 }
 
 ul {
-	padding: 0;
-	width: 100%;
+
 	list-style: none;
 }
 
-li {
+.item {
 	width: 100%;
 	text-shadow: 0px 0px 20px black;
 	transition: border-bottom 0.2s;
 }
 
-li span {
+.item span {
 	display: inline-block;
 	width: 50%;
 }
 
-li span:nth-child(2) {
+.item span:nth-child(2) {
 	text-align: right;
 }
 
-li:hover {
+.item:hover {
 	border-bottom: 3px solid white;
 }
