@@ -42,7 +42,7 @@ class Game
 	{
 		for (let i:number = 0; i < this.chungus.length; i++) {
 			if (id == this.chungus[i].getId())
-				return this.chungus[0];
+				return this.chungus[i];
 		}
 		return (undefined);
 	}
@@ -50,9 +50,17 @@ class Game
 	{
 		for (let i:number = 0; i < this.eggs.length; i++) {
 			if (id == this.eggs[i].getId())
-				return this.eggs[0];
+				return this.eggs[i];
 		}
 		return (undefined);
+	}
+	private composeMsg(index:number, datas:Array<string>):string
+	{
+		let res = "";
+
+		for(let i = index; i < datas.length; i++)
+			res = res + " " + datas[i];
+		return res;
 	}
 
 	public setup(size:BABYLON.Vector2)
@@ -151,8 +159,9 @@ class Game
 			console.log(datas);
 			return;
 		}
-		voicingChungus.setMessage(datas[2]);
-
+		let msg = this.composeMsg(3, datas);
+		voicingChungus.setMessage(msg);
+		this.tchat.addMessage(voicingChungus.getTeamName(), datas[1], msg);
 	}
 	public chungusLaying(datas:Array<string>):void
 	{

@@ -40,7 +40,6 @@ canvas {
 
 .tchat-box {
 	position: absolute;
-	max-height: 200px;
 	bottom: 0;
 	right: 0;
 	padding: 10px;
@@ -55,8 +54,14 @@ canvas {
 	animation-timing-function: ease;
 }
 
+.tchat-list {
+	max-height: 400px;
+	overflow-y: auto;
+}
+
 .tchat-group-input {
 	position: relative;
+	bottom: 0px;
 	padding: 5px;
 	/* border: solid rgba(30, 100, 160, 0.9) 1px; */
 	background: rgba(30, 100, 160, 1);
@@ -106,4 +111,14 @@ ul {
 
 .item:hover {
 	border-bottom: 3px solid white;
+}
+
+.fade-out {
+	opacity: 0;
+	transition: opacity 1s linear;
+}
+
+.fade-out-second-last {
+	opacity: 0.3;
+	transition: opacity 2s linear;
 }

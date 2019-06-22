@@ -46,8 +46,11 @@ class Controller
 			}
 		});
 		this.send.addEventListener("click", () => {
-			let msg = this.tchat.getElementsByTagName("input")[0].value;
-			this.socketManager.emit("play", "Broadcast " +  msg + "\n");
+			if (this.free == true) {
+				let msg = this.tchat.getElementsByTagName("input")[0].value;
+				this.socketManager.emit("play", "Broadcast " +  msg + "\n");
+				this.blockInput();
+			}
 		});
 	}
 

@@ -142,8 +142,11 @@ var Controller = /** @class */ (function () {
             }
         });
         this.send.addEventListener("click", function () {
-            var msg = _this.tchat.getElementsByTagName("input")[0].value;
-            _this.socketManager.emit("play", "Broadcast " + msg + "\n");
+            if (_this.free == true) {
+                var msg = _this.tchat.getElementsByTagName("input")[0].value;
+                _this.socketManager.emit("play", "Broadcast " + msg + "\n");
+                _this.blockInput();
+            }
         });
     }
     Controller.prototype.blockInput = function () {
@@ -161,6 +164,7 @@ var Controller = /** @class */ (function () {
         this.turnRight.disabled = false;
         this.grab.disabled = false;
         this.drop.disabled = false;
+        this.send.disabled = false;
         this.free = true;
     };
     Controller.prototype.handleResponse = function (datas) {
@@ -192,6 +196,7 @@ var Game = /** @class */ (function () {
         this.chungus = new Array();
         this.eggs = new Array();
         this.teamsNames = new Array();
+        this.tchat = new Tchat();
         this.render = function () {
             _this.stage.render();
             _this.scene.render();
@@ -215,16 +220,22 @@ var Game = /** @class */ (function () {
     Game.prototype.getBigChungusById = function (id) {
         for (var i = 0; i < this.chungus.length; i++) {
             if (id == this.chungus[i].getId())
-                return this.chungus[0];
+                return this.chungus[i];
         }
         return (undefined);
     };
     Game.prototype.getEggById = function (id) {
         for (var i = 0; i < this.eggs.length; i++) {
             if (id == this.eggs[i].getId())
-                return this.eggs[0];
+                return this.eggs[i];
         }
         return (undefined);
+    };
+    Game.prototype.composeMsg = function (index, datas) {
+        var res = "";
+        for (var i = index; i < datas.length; i++)
+            res = res + " " + datas[i];
+        return res;
     };
     Game.prototype.setup = function (size) {
         Game.size = size;
@@ -310,7 +321,9 @@ var Game = /** @class */ (function () {
             console.log(datas);
             return;
         }
-        voicingChungus.setMessage(datas[2]);
+        var msg = this.composeMsg(3, datas);
+        voicingChungus.setMessage(msg);
+        this.tchat.addMessage(voicingChungus.getTeamName(), datas[1], msg);
     };
     Game.prototype.chungusLaying = function (datas) {
         if (datas.length < 2) {
@@ -767,6 +780,28 @@ var Stage = /** @class */ (function () {
     Stage.prototype.render = function () {
     };
     return Stage;
+}());
+var Tchat = /** @class */ (function () {
+    function Tchat() {
+        this.msgs = new Array();
+    }
+    Tchat.prototype.addMessage = function (teamName, id, msg) {
+        var tchat = document.getElementById("tchat-list");
+        var newMsg = document.createElement("li");
+        newMsg.innerHTML = "<strong> [" + teamName + " - " + id + "]</strong> " + msg;
+        tchat.append(newMsg);
+        var msgs = tchat.getElementsByTagName("li");
+        if (msgs.length > 8) {
+            msgs[2].classList.add("fade-out-second-last");
+        }
+        if (msgs.length > 9) {
+            msgs[1].classList.add("fade-out");
+            msgs[1].classList.remove("fade-out-second-last");
+        }
+        if (msgs.length > 10)
+            msgs[0].remove();
+    };
+    return Tchat;
 }());
 var Tile = /** @class */ (function () {
     function Tile(food, linemate, deraumere, sibur, mendiane, phiras, thystame, scene) {

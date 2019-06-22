@@ -38,6 +38,14 @@ class Socket
 	{
 		let str:string = String.fromCharCode.apply(null, datas);
 
+		if (str == "dead\n") {
+			this.playSocket.removeAllListeners();
+			this.ioSocket.removeListener("play", this.sendIADataToServer);
+			this.playSocket.destroy();
+			this.playSocket = undefined;
+			return;
+		}
+
 		this.ioSocket.emit("play", str);
 	}
 	private sendDatasToServer = (datas:string):void =>
