@@ -86,8 +86,10 @@ var Camera = /** @class */ (function () {
 var Controller = /** @class */ (function () {
     function Controller(game, socketManager) {
         var _this = this;
-        this.form = document.getElementById("login");
+        this.login = document.getElementById("login");
         this.play = document.getElementById("play");
+        this.tchat = document.getElementById("tchat-form");
+        this.send = document.getElementById("send");
         this.ui = document.getElementById("ui");
         this.forward = document.getElementById("forward");
         this.turnLeft = document.getElementById("turn-left");
@@ -99,7 +101,8 @@ var Controller = /** @class */ (function () {
             console.log(datas);
             if (!(datas[0] == "ko")) {
                 _this.ui.style.display = "block";
-                _this.form.style.display = "none";
+                _this.tchat.style.display = "block";
+                _this.login.style.display = "none";
                 _this.responseHandler = _this.handleNothing;
             }
             else {
@@ -115,9 +118,10 @@ var Controller = /** @class */ (function () {
         this.game = game;
         this.socketManager = socketManager;
         this.ui.style.display = "none";
+        this.tchat.style.display = "none";
         this.play.addEventListener("click", function () {
-            _this.teamName = _this.form.getElementsByTagName("input")[0].value;
-            _this.socketManager.emit("requestPlay", _this.teamName + '\n');
+            _this.teamName = _this.login.getElementsByTagName("input")[0].value;
+            _this.socketManager.emit("requestPlay", _this.teamName + "\n");
         });
         this.forward.addEventListener("click", function () {
             if (_this.free == true) {
@@ -137,6 +141,10 @@ var Controller = /** @class */ (function () {
                 _this.blockInput();
             }
         });
+        this.send.addEventListener("click", function () {
+            var msg = _this.tchat.getElementsByTagName("input")[0].value;
+            _this.socketManager.emit("play", "Broadcast " + msg + "\n");
+        });
     }
     Controller.prototype.blockInput = function () {
         this.forward.disabled = true;
@@ -144,6 +152,7 @@ var Controller = /** @class */ (function () {
         this.turnRight.disabled = true;
         this.grab.disabled = true;
         this.drop.disabled = true;
+        this.send.disabled = true;
         this.free = false;
     };
     Controller.prototype.allowInput = function () {
