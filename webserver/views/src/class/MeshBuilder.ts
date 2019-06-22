@@ -3,10 +3,12 @@ class MeshBuilder
 	private readonly ID:string;
 	private meshes:Array<BABYLON.Mesh>;
 	private nbClones:number = 0;
+	private onLoad:Function;
 
-	constructor(modelName:string, scene:BABYLON.Scene)
+	constructor(modelName:string, scene:BABYLON.Scene, onLoad:Function)
 	{
 		this.ID = modelName;
+		this.onLoad = onLoad;
 		BABYLON.SceneLoader.ImportMesh("", "/assets/", modelName, scene, this.load);
 	}
 
@@ -18,6 +20,8 @@ class MeshBuilder
 			this.meshes[i].position.y = 0.5;
 			this.meshes[i].isVisible = false;
 		}
+		if (this.onLoad)
+			this.onLoad();
 	}
 
 	public getInstance():BerkMesh

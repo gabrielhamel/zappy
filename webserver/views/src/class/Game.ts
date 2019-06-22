@@ -3,10 +3,12 @@ class Game
 	public static size:BABYLON.Vector2;
 	public static timeUnit:number;
 	private readonly CHUNGUS:MeshBuilder;
+	private readonly EGG:MeshBuilder;
 	private camera:Camera;
 	private canvas:HTMLCanvasElement;
 	private engine:BABYLON.Engine;
 	private scene:BABYLON.Scene;
+	private socketManager:SocketManager;
 	private stage:Stage;
 	private chungus:Array<Player> = new Array<Player>();
 	private eggs:Array<Egg> = new Array<Egg>();
@@ -18,12 +20,13 @@ class Game
 		this.engine = new BABYLON.Engine(this.canvas, true);
 		this.scene = new BABYLON.Scene(this.engine);
 		this.scene.collisionsEnabled = true;
-		this.stage = new Stage(this.scene);
-		this.camera = new Camera(this.scene);
-		this.CHUNGUS = new MeshBuilder("chungus.glb", this.scene);
-
-		this.initialiseScene();
-		this.engine.runRenderLoop(this.render);
+		this.CHUNGUS = new MeshBuilder("chungus.glb", this.scene, () => {
+			this.stage = new Stage(this.scene);
+			this.camera = new Camera(this.scene);
+			this.socketManager = new SocketManager(this);
+			this.initialiseScene();
+			this.engine.runRenderLoop(this.render);
+		});
 	}
 
 	private initialiseScene():void
