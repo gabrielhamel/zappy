@@ -44,5 +44,8 @@ void graph_send_ia_pgt(sock_list_t *list, ia_t *ia, ITEM_T item);
 void graph_send_ia_pdr(sock_list_t *list, ia_t *ia, ITEM_T item);
 
 int cmd_ia_settake_parser(sock_t *cli, char **arg);
+bool tile_have_player(sock_list_t *list, tile_t *tile);
+bool tile_have_item(ITEM_T item, tile_t *tile);
+void tile_to_string(sock_list_t *list, tile_t *tile, char *buff);
 
 #endif
