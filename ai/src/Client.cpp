@@ -218,16 +218,12 @@ bool zpy::Client::incantation()
     auto buff = this->commandEnd();
     if (buff[0] == "ko")
         return false;
-    auto buff2 = this->commandEnd();
-    if (buff2[0] == "ko")
-        return false;
-    if (buff2.size() < 2)
-        return false;
-    if (stoul(buff2[2], NULL, 10) > _lvl) {
-        _lvl = stoul(buff2[2], NULL, 10);
-        return true;
+    int idx = 1;
+    for (auto &i : buff) {
+        std::cout << idx << " " << i << std::endl;
+        idx++;
     }
-    return false;
+    return true;
 }
 
 void zpy::Client::broadcast(const std::string &msg)

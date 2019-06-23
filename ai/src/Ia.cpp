@@ -21,7 +21,7 @@ static const int incantations[7][7] = {
 };
 
 zpy::Ia::Ia(std::shared_ptr<zpy::Client> cli)
-: _cli(cli)
+: _cli(cli), _inv(9, 0, 0, 0, 0, 0, 0), _level(1), _readyIncant(false)
 {
     this->run();
 }
@@ -95,6 +95,41 @@ void zpy::Ia::getObject(const zpy::Client::Object &object)
         this->_cli->right();
     for (int i = 0; i < x; i++)
         this->_cli->forward();
+    this->_cli->take(object);
+    this->_inv = this->_cli->inventory();
+}
+
+void zpy::Ia::takeObject(const zpy::Client::Object &object, std::size_t nb)
+{
+    for (std::size_t i = 0; i < nb; i++) {
+        this->_cli->resfresh();
+        this->getObject(object);
+    }
+}
+
+void zpy::Ia::prepareNextIncantation()
+{
+    if (this->_inv.linemate < incantations[this->_level - 1][1])
+        this->takeObject(zpy::Client::Linemate(), incantations[this->_level - 1][1] - this->_inv.linemate);
+    if (this->_inv.deraumere < incantations[this->_level - 1][2])
+        this->takeObject(zpy::Client::Deraumere(), incantations[this->_level - 1][2] - this->_inv.deraumere);
+    if (this->_inv.sibur < incantations[this->_level - 1][3])
+        this->takeObject(zpy::Client::Sibur(), incantations[this->_level - 1][3] - this->_inv.sibur);
+    if (this->_inv.mendiane < incantations[this->_level - 1][4])
+        this->takeObject(zpy::Client::Mendiane(), incantations[this->_level - 1][4] - this->_inv.mendiane);
+    if (this->_inv.phiras < incantations[this->_level - 1][5])
+        this->takeObject(zpy::Client::Phiras(), incantations[this->_level - 1][5] - this->_inv.phiras);
+    if (this->_inv.thystame < incantations[this->_level - 1][6])
+        this->takeObject(zpy::Client::Thystame(), incantations[this->_level - 1][6] - this->_inv.thystame);
+    this->_readyIncant = true;
+}
+
+void zpy::Ia::incantation()
+{
+    if (this->_cli->incantation()) {
+        this->_level++;
+        this->_readyIncant = false;
+    }
 }
 
 void zpy::Ia::run()
@@ -104,6 +139,9 @@ void zpy::Ia::run()
         this->_cli->resfresh();
         while (this->_cli->haveBroadcast())
             std::cout << this->_cli->getBroadcast().msg << std::endl;
-        this->getObject(zpy::Client::Thystame());
+        if (_readyIncant == false)
+            prepareNextIncantation();
+        else
+            incantation();
     }
 }

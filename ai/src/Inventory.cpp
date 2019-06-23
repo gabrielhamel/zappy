@@ -8,13 +8,13 @@
 #include "Client.hpp"
 
 zpy::Client::Inventory::Inventory(
-                        unsigned int food,
-                        unsigned int linemate,
-                        unsigned int deraumere,
-                        unsigned int sibur,
-                        unsigned int mendiane,
-                        unsigned int phiras,
-                        unsigned int thystame)
+                        int food,
+                        int linemate,
+                        int deraumere,
+                        int sibur,
+                        int mendiane,
+                        int phiras,
+                        int thystame)
 {
     this->food = food;
     this->linemate = linemate;
