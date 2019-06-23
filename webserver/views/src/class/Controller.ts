@@ -24,6 +24,11 @@ class Controller
 	);
 	private inventory:Array<number> = new Array<number>(7, 0, 0, 0, 0, 0, 0);
 	private lastItem:number = 0;
+	private inventoryBtn:HTMLButtonElement = document.getElementById("inventory") as HTMLButtonElement;
+	private eject:HTMLButtonElement = document.getElementById("eject") as HTMLButtonElement;
+	private egg:HTMLButtonElement = document.getElementById("egg") as HTMLButtonElement;
+	private incantation:HTMLButtonElement = document.getElementById("incantation") as HTMLButtonElement;
+
 
 	constructor(game:Game, socketManager: SocketManager)
 	{
@@ -90,6 +95,35 @@ class Controller
 		for (let i = 0; i < 7; i++) {
 			this.inventorySpan.push(document.getElementById("inv-" + i));			
 		}
+		
+		this.eject.addEventListener("click", () => {
+			if (this.free == true) {
+				this.socketManager.emit("play", "Eject\n");
+				this.blockInput();
+			}
+		});
+
+		this.egg.addEventListener("click", () => {
+			if (this.free == true) {
+				this.socketManager.emit("play", "Fork\n");
+				this.blockInput();
+			}
+		});
+
+		this.incantation.addEventListener("click", () => {
+			if (this.free == true) {
+				this.socketManager.emit("play", "Incantation\n");
+				this.blockInput();
+			}
+		});
+
+		this.inventoryBtn.addEventListener("click", () => {
+			if (this.free == true) {
+				this.responseHandler = this.handleInventory;
+				this.socketManager.emit("play", "Inventory\n");
+				this.blockInput();
+			}
+		});
 	}
 
 	private handleConnection = (datas:Array<string>): void =>
@@ -121,6 +155,21 @@ class Controller
 			this.inventory[this.lastItem]--;
 		this.allowInput();
 		this.updateInventory(this.lastItem);
+	}
+	private handleInventory = (datas:Array<string>): void =>
+	{
+		this.responseHandler = this.handleNothing;
+		if (datas.length != 16)
+			return;
+
+		for(let i = 0; i < 6; i++) {
+			let tmp = datas[2 + i * 2].substr(0, datas[2 + i * 2].length - 1);
+			this.inventory[i] = parseInt(tmp);
+		}
+		this.inventory[6] = parseInt(datas[14]);
+		this.allowInput();
+		for(let j = 0; j < 7; j++)
+			this.updateInventory(j);
 	}
 	private updateInventory(i:number):void
 	{

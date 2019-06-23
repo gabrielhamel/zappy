@@ -102,6 +102,10 @@ var Controller = /** @class */ (function () {
         this.converterArray = new Array("food", "linemate", "deraumere", "sibur", "mendiane", "phiras", "thystame");
         this.inventory = new Array(7, 0, 0, 0, 0, 0, 0);
         this.lastItem = 0;
+        this.inventoryBtn = document.getElementById("inventory");
+        this.eject = document.getElementById("eject");
+        this.egg = document.getElementById("egg");
+        this.incantation = document.getElementById("incantation");
         this.handleConnection = function (datas) {
             console.log(datas);
             if (!(datas[0] == "ko")) {
@@ -128,6 +132,20 @@ var Controller = /** @class */ (function () {
                 _this.inventory[_this.lastItem]--;
             _this.allowInput();
             _this.updateInventory(_this.lastItem);
+        };
+        this.handleInventory = function (datas) {
+            _this.responseHandler = _this.handleNothing;
+            console.log(datas);
+            if (datas.length != 16)
+                return;
+            for (var i = 0; i < 6; i++) {
+                var tmp = datas[2 + i * 2].substr(0, datas[2 + i * 2].length - 1);
+                _this.inventory[i] = parseInt(tmp);
+            }
+            _this.inventory[6] = parseInt(datas[14]);
+            _this.allowInput();
+            for (var j = 0; j < 7; j++)
+                _this.updateInventory(j);
         };
         this.handleNothing = function (datas) {
             console.log("message reçu mais pas traité");
@@ -202,6 +220,31 @@ var Controller = /** @class */ (function () {
         for (var i = 0; i < 7; i++) {
             this.inventorySpan.push(document.getElementById("inv-" + i));
         }
+        this.eject.addEventListener("click", function () {
+            if (_this.free == true) {
+                _this.socketManager.emit("play", "Eject\n");
+                _this.blockInput();
+            }
+        });
+        this.egg.addEventListener("click", function () {
+            if (_this.free == true) {
+                _this.socketManager.emit("play", "Fork\n");
+                _this.blockInput();
+            }
+        });
+        this.incantation.addEventListener("click", function () {
+            if (_this.free == true) {
+                _this.socketManager.emit("play", "Incantation\n");
+                _this.blockInput();
+            }
+        });
+        this.inventoryBtn.addEventListener("click", function () {
+            if (_this.free == true) {
+                _this.responseHandler = _this.handleInventory;
+                _this.socketManager.emit("play", "Inventory\n");
+                _this.blockInput();
+            }
+        });
     }
     Controller.prototype.updateInventory = function (i) {
         this.inventorySpan[i].innerHTML = this.inventory[i].toString();
