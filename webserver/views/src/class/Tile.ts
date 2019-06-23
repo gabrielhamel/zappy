@@ -58,7 +58,7 @@ class Tile
 			sprite.position.x = this.position.x + middleRand(Tile.SPREAD);
 			sprite.position.y = Tile.Y;
 			sprite.position.z = this.position.y + middleRand(Tile.SPREAD);
-			sprite.size = 0.5;
+			sprite.size = 0.35;
 			sprite.animations = [];
 			sprite.animations.push(this.animation);
 			this.sprites.push(sprite);

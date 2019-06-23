@@ -21,7 +21,8 @@ class Game
 		this.engine = new BABYLON.Engine(this.canvas, true);
 		this.scene = new BABYLON.Scene(this.engine);
 		this.scene.collisionsEnabled = true;
-		this.CHUNGUS = new MeshBuilder("chungus.glb", this.scene, () => {
+		this.EGG = new MeshBuilder("egg.obj", this.scene);
+		this.CHUNGUS = new MeshBuilder("chungus.obj", this.scene, () => {
 			this.stage = new Stage(this.scene);
 			this.camera = new Camera(this.scene);
 			this.socketManager = new SocketManager(this);

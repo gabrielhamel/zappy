@@ -5,7 +5,7 @@ class MeshBuilder
 	private nbClones:number = 0;
 	private onLoad:Function;
 
-	constructor(modelName:string, scene:BABYLON.Scene, onLoad:Function)
+	constructor(modelName:string, scene:BABYLON.Scene, onLoad:Function = undefined)
 	{
 		this.ID = modelName;
 		this.onLoad = onLoad;
