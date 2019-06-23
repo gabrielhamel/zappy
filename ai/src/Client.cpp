@@ -218,11 +218,10 @@ bool zpy::Client::incantation()
     auto buff = this->commandEnd();
     if (buff[0] == "ko")
         return false;
-    int idx = 1;
-    for (auto &i : buff) {
-        std::cout << idx << " " << i << std::endl;
-        idx++;
-    }
+    buff = this->commandEnd();
+    if (std::stoi(buff[2]) == this->_lvl)
+        return false;
+    this->_lvl++;
     return true;
 }
 

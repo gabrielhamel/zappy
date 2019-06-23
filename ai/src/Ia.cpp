@@ -28,14 +28,14 @@ zpy::Ia::Ia(std::shared_ptr<zpy::Client> cli)
 
 void zpy::Ia::randomForward()
 {
-    int direction = rand() % 4 - 1;
+    int direction = rand() % 100;
 
-    if (direction == -1)
+    if (direction >= 0 && direction < 10)
         this->_cli->left();
+    else if (direction >= 10 && direction < 20)
+        this->_cli->right();
     else
-        for (int i = 0; i < direction; i++)
-            this->_cli->right();
-    this->_cli->forward();
+        this->_cli->forward();
 }
 
 bool zpy::Ia::haveObject(const zpy::Client::Tile *tile, const zpy::Client::Object &object)
@@ -107,7 +107,15 @@ void zpy::Ia::takeObject(const zpy::Client::Object &object, std::size_t nb)
     }
 }
 
-void zpy::Ia::prepareNextIncantation()
+void zpy::Ia::setObject(const zpy::Client::Object &object, std::size_t nb)
+{
+    for (std::size_t i = 0; i < nb; i++) {
+        this->_cli->resfresh();
+        this->_cli->set(object);
+    }
+}
+
+bool zpy::Ia::prepareNextIncantation()
 {
     if (this->_inv.linemate < incantations[this->_level - 1][1])
         this->takeObject(zpy::Client::Linemate(), incantations[this->_level - 1][1] - this->_inv.linemate);
@@ -122,26 +130,45 @@ void zpy::Ia::prepareNextIncantation()
     if (this->_inv.thystame < incantations[this->_level - 1][6])
         this->takeObject(zpy::Client::Thystame(), incantations[this->_level - 1][6] - this->_inv.thystame);
     if (this->_inv.linemate < incantations[this->_level - 1][1])
-        return;
+        return false;
     if (this->_inv.deraumere < incantations[this->_level - 1][2])
-        return;
+        return false;
     if (this->_inv.sibur < incantations[this->_level - 1][3])
-        return;
+        return false;
     if (this->_inv.mendiane < incantations[this->_level - 1][4])
-        return;
+        return false;
     if (this->_inv.phiras < incantations[this->_level - 1][5])
-        return;
+        return false;
     if (this->_inv.thystame < incantations[this->_level - 1][6])
-        return;
-    this->_readyIncant = true;
+        return false;
+    return true;
+}
+
+void zpy::Ia::prepareTile()
+{
+    auto look = this->_cli->look();
+    auto tile = look[0];
+
+    this->takeObject(zpy::Client::Linemate(), tile->linemate);
+    this->takeObject(zpy::Client::Deraumere(), tile->deraumere);
+    this->takeObject(zpy::Client::Sibur(), tile->sibur);
+    this->takeObject(zpy::Client::Mendiane(), tile->mendiane);
+    this->takeObject(zpy::Client::Phiras(), tile->phiras);
+    this->takeObject(zpy::Client::Thystame(), tile->thystame);
+
+    this->setObject(zpy::Client::Linemate(), incantations[this->_level - 1][1]);
+    this->setObject(zpy::Client::Deraumere(), incantations[this->_level - 1][2]);
+    this->setObject(zpy::Client::Sibur(), incantations[this->_level - 1][3]);
+    this->setObject(zpy::Client::Mendiane(), incantations[this->_level - 1][4]);
+    this->setObject(zpy::Client::Phiras(), incantations[this->_level - 1][5]);
+    this->setObject(zpy::Client::Thystame(), incantations[this->_level - 1][6]);
 }
 
 void zpy::Ia::incantation()
 {
-    if (this->_cli->incantation()) {
+    this->prepareTile();
+    if (this->_cli->incantation())
         this->_level++;
-        this->_readyIncant = false;
-    }
 }
 
 void zpy::Ia::run()
@@ -151,9 +178,7 @@ void zpy::Ia::run()
         this->_cli->resfresh();
         while (this->_cli->haveBroadcast())
             std::cout << this->_cli->getBroadcast().msg << std::endl;
-        if (_readyIncant == false)
-            prepareNextIncantation();
-        else
+        if (this->prepareNextIncantation())
             incantation();
     }
 }
