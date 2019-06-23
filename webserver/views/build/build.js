@@ -135,7 +135,6 @@ var Controller = /** @class */ (function () {
         };
         this.handleInventory = function (datas) {
             _this.responseHandler = _this.handleNothing;
-            console.log(datas);
             if (datas.length != 16)
                 return;
             for (var i = 0; i < 6; i++) {
@@ -183,7 +182,10 @@ var Controller = /** @class */ (function () {
         this.send.addEventListener("click", function () {
             if (_this.free == true) {
                 var msg = _this.tchat.getElementsByTagName("input")[0].value;
+                if (msg.length < 2)
+                    return;
                 _this.socketManager.emit("play", "Broadcast " + msg + "\n");
+                _this.tchat.getElementsByTagName("input")[0].value = "";
                 _this.blockInput();
             }
         });
@@ -312,6 +314,7 @@ var Game = /** @class */ (function () {
         this.eggs = new Array();
         this.teamsNames = new Array();
         this.tchat = new Tchat();
+        this.teamList = document.getElementById("team-list");
         this.render = function () {
             _this.stage.render();
             _this.scene.render();
@@ -364,6 +367,9 @@ var Game = /** @class */ (function () {
         return (this.stage);
     };
     Game.prototype.addTeam = function (name) {
+        var newTeam = document.createElement("li");
+        newTeam.innerHTML = name;
+        this.teamList.append(newTeam);
         this.teamsNames.push(name);
     };
     Game.prototype.addChungus = function (datas) {
@@ -827,6 +833,24 @@ var SocketManager = /** @class */ (function () {
         this.socket.emit(event, datas);
     };
     return SocketManager;
+}());
+var Sound = /** @class */ (function () {
+    function Sound(src) {
+        this.audio = document.createElement("audio");
+        this.audio.src = src;
+        this.audio.setAttribute("preload", "auto");
+        this.audio.setAttribute("controls", "none");
+        this.audio.style.display = "none";
+        document.body.appendChild(this.audio);
+    }
+    Sound.prototype.stop = function () {
+        this.audio.pause();
+    };
+    Sound.prototype.play = function () {
+        this.audio.currentTime = 0;
+        this.audio.play();
+    };
+    return Sound;
 }());
 var Stage = /** @class */ (function () {
     function Stage(scene) {

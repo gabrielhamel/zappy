@@ -14,6 +14,7 @@ class Game
 	private eggs:Array<Egg> = new Array<Egg>();
 	private teamsNames:Array<string> = new Array<string>();
 	private tchat:Tchat = new Tchat();
+	private teamList:HTMLElement = document.getElementById("team-list");
 
 	constructor()
 	{
@@ -79,6 +80,9 @@ class Game
 	}
 	public addTeam(name:string):void
 	{
+		var newTeam = document.createElement("li");
+		newTeam.innerHTML = name;
+		this.teamList.append(newTeam);
 		this.teamsNames.push(name);
 	}
 	public addChungus(datas:Array<string>):void
