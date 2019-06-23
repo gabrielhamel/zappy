@@ -1,5 +1,0 @@
-ObjName: "BigChungus"
-ArmatureName: "skeleton"
-SubObjectName: "Plane"
-AnimationName: "Walk"
-TextureName: "diffuse.png"

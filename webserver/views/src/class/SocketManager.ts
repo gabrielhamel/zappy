@@ -1,13 +1,15 @@
 class SocketManager
 {
+	private readonly GAME:Game;
 	private socket = io();
-	private game:Game = new Game();
-	private controller:Controller = new Controller(this.game, this);
+	private controller:Controller;
 	private commandsGraph:Map<string, Function> = new Map<string, Function>();
 	private commandsPlay:Map<string, Function> = new Map<string, Function>();
 	
-	constructor()
+	constructor(game:Game)
 	{
+		this.GAME = game;
+		this.controller = new Controller(this.GAME, this);
 		this.initialise();
 		this.socket.emit("data", "GRAPHIC\n");
 		this.socket.on("data", this.getDatas);
@@ -74,7 +76,7 @@ class SocketManager
 	}
 	private bct = (datas:Array<string>) =>
 	{
-		this.game.getStage().addTile(datas);
+		this.GAME.getStage().addTile(datas);
 	}
 	private msz = (datas:Array<string>) =>
 	{
@@ -82,7 +84,7 @@ class SocketManager
 
 		vector.x = parseInt(datas[1]);
 		vector.y = parseInt(datas[2]);
-		this.game.setup(vector);
+		this.GAME.setup(vector);
 	}
 	private sgt = (datas:Array<string>) =>
 	{
@@ -90,23 +92,23 @@ class SocketManager
 	}
 	private tna = (datas:Array<string>) =>
 	{
-		this.game.addTeam(datas[1]);
+		this.GAME.addTeam(datas[1]);
 	}
 	private pnw = (datas:Array<string>) =>
 	{
-		this.game.addChungus(datas);
+		this.GAME.addChungus(datas);
 	}
 	private ppo = (datas:Array<string>) =>
 	{
-		this.game.updateChungusPos(datas);
+		this.GAME.updateChungusPos(datas);
 	}
 	private plv = (datas:Array<string>) =>
 	{
-		this.game.lvlUpChungus(datas);
+		this.GAME.lvlUpChungus(datas);
 	}
 	private pin = (datas:Array<string>) =>
 	{
-		this.game.chungusBag(datas);
+		this.GAME.chungusBag(datas);
 	}
 	private pex = (datas:Array<string>) =>
 	{
@@ -114,7 +116,7 @@ class SocketManager
 	}
 	private pbc = (datas:Array<string>) =>
 	{
-		this.game.chungusYelling(datas);
+		this.GAME.chungusYelling(datas);
 	}
 	private pic = (datas:Array<string>) =>
 	{
@@ -126,35 +128,35 @@ class SocketManager
 	}
 	private pfk = (datas:Array<string>) =>
 	{
-		this.game.chungusLaying(datas);
+		this.GAME.chungusLaying(datas);
 	}
 	private pdr = (datas:Array<string>) =>
 	{
-		this.game.chungusDroping(datas);
+		this.GAME.chungusDroping(datas);
 	}
 	private pgt = (datas:Array<string>) =>
 	{
-		this.game.chungusTaking(datas);
+		this.GAME.chungusTaking(datas);
 	}
 	private pdi = (datas:Array<string>) =>
 	{
-		this.game.removeChungus(datas);
+		this.GAME.removeChungus(datas);
 	}
 	private enw = (datas:Array<string>) =>
 	{
-		this.game.chungusAccouching(datas);
+		this.GAME.chungusAccouching(datas);
 	}
 	private eht = (datas:Array<string>) =>
 	{
-		this.game.maturingEgg(datas);
+		this.GAME.maturingEgg(datas);
 	}
 	private ebo = (datas:Array<string>) =>
 	{
-		this.game.hatchingEgg(datas);
+		this.GAME.hatchingEgg(datas);
 	}
 	private edi = (datas:Array<string>) =>
 	{
-		this.game.dyingEgg(datas);
+		this.GAME.dyingEgg(datas);
 	}
 	private nth = (datas:Array<string>) =>
 	{
