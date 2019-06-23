@@ -25,3 +25,5 @@ tests/html
 *.gcov
 tests/src/*.c
 webserver/build/
+doc_ia
+doc_server
