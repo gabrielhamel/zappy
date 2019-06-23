@@ -85,8 +85,16 @@ void zpy::Ia::getObject(const zpy::Client::Object &object)
     }
     int y = std::sqrt(v);
     int x = -1 * y * y - y + v;
-    std::cout << v << std::endl;
-    std::cout << x << " " << y << std::endl;
+    for (int i = 0; i < y; i++)
+        this->_cli->forward();
+    if (x < 0) {
+        this->_cli->left();
+        x *= -1;
+    }
+    else if (x > 0)
+        this->_cli->right();
+    for (int i = 0; i < x; i++)
+        this->_cli->forward();
 }
 
 void zpy::Ia::run()
@@ -96,6 +104,6 @@ void zpy::Ia::run()
         this->_cli->resfresh();
         while (this->_cli->haveBroadcast())
             std::cout << this->_cli->getBroadcast().msg << std::endl;
-        this->getObject(zpy::Client::Food());
+        this->getObject(zpy::Client::Thystame());
     }
 }
