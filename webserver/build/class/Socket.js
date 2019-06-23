@@ -20,6 +20,13 @@ var Socket = /** @class */ (function () {
         };
         this.receiveServerPlay = function (datas) {
             var str = String.fromCharCode.apply(null, datas);
+            if (str == "dead\n") {
+                _this.playSocket.removeAllListeners();
+                _this.ioSocket.removeListener("play", _this.sendIADataToServer);
+                _this.playSocket.destroy();
+                _this.playSocket = undefined;
+                return;
+            }
             _this.ioSocket.emit("play", str);
         };
         this.sendDatasToServer = function (datas) {

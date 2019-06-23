@@ -121,6 +121,18 @@ void zpy::Ia::prepareNextIncantation()
         this->takeObject(zpy::Client::Phiras(), incantations[this->_level - 1][5] - this->_inv.phiras);
     if (this->_inv.thystame < incantations[this->_level - 1][6])
         this->takeObject(zpy::Client::Thystame(), incantations[this->_level - 1][6] - this->_inv.thystame);
+    if (this->_inv.linemate < incantations[this->_level - 1][1])
+        return;
+    if (this->_inv.deraumere < incantations[this->_level - 1][2])
+        return;
+    if (this->_inv.sibur < incantations[this->_level - 1][3])
+        return;
+    if (this->_inv.mendiane < incantations[this->_level - 1][4])
+        return;
+    if (this->_inv.phiras < incantations[this->_level - 1][5])
+        return;
+    if (this->_inv.thystame < incantations[this->_level - 1][6])
+        return;
     this->_readyIncant = true;
 }
 

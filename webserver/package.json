@@ -2,7 +2,9 @@
   "name": "webserver",
   "version": "1.0.0",
   "main": "build/index.js",
-  "scripts": { "start": "node build/index.js 4242 8080" },
+  "scripts": {
+    "start": "node build/index.js 4242 8080"
+  },
   "author": "",
   "license": "ISC",
   "dependencies": {
