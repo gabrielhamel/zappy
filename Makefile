@@ -155,6 +155,8 @@ documentation:
 				@$(ECHO) $(RED)¶ Generating documentation$(TEAL):$(DEFAULT)
 				@(doxygen doxyfile_ia)
 				@(doxygen doxyfile_server)
+				@(cp assets/Bigchungusthegame.webp doc_ia/html/)
+				@(cp assets/Bigchungusthegame.webp doc_server/html/)
 
 %.o : %.c
 			@gcc -c -o $@ $^ $(CFLAGS) --coverage && $(ECHO) -n $(GREEN)"  [OK] "$(TEAL) || $(ECHO) -n $(SANG)"  [NO] "$(TEAL) && $(ECHO) $< | rev | cut -d'/' -f 1 | rev
