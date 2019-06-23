@@ -129,6 +129,8 @@ bool zpy::Ia::prepareNextIncantation()
         this->takeObject(zpy::Client::Phiras(), incantations[this->_level - 1][5] - this->_inv.phiras);
     if (this->_inv.thystame < incantations[this->_level - 1][6])
         this->takeObject(zpy::Client::Thystame(), incantations[this->_level - 1][6] - this->_inv.thystame);
+    if (this->_inv.food < ((float)this->_level * 10.f) * 0.7f)
+        this->takeObject(zpy::Client::Food(), this->_inv.food - (this->_level * 10));
     if (this->_inv.linemate < incantations[this->_level - 1][1])
         return false;
     if (this->_inv.deraumere < incantations[this->_level - 1][2])
@@ -140,6 +142,8 @@ bool zpy::Ia::prepareNextIncantation()
     if (this->_inv.phiras < incantations[this->_level - 1][5])
         return false;
     if (this->_inv.thystame < incantations[this->_level - 1][6])
+        return false;
+    if (this->_inv.food < ((float)this->_level * 10.f) * 0.7f)
         return false;
     return true;
 }
@@ -166,9 +170,18 @@ void zpy::Ia::prepareTile()
 
 void zpy::Ia::incantation()
 {
-    this->prepareTile();
-    if (this->_cli->incantation())
+    if (this->_readyIncant == false) {
+        this->prepareTile();
+        this->_readyIncant = true;
+    }
+    if (incantations[this->_level - 1][0] > 1) {
+        this->_cli->broadcast(std::string("Ready for incant lvl ") + std::to_string(this->_level + 1));
+        return;
+    }
+    if (this->_cli->incantation()) {
         this->_level++;
+        this->_readyIncant = false;
+    }
 }
 
 void zpy::Ia::run()
