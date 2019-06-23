@@ -28,14 +28,40 @@ canvas {
 	bottom: 0;
 	left: 0;
 	padding: 10px;
-	width: 20%;
+	width: 30%;
 	color: white;
 	border: solid rgba(52, 152, 219, 0.9) 1px;
+	background: rgba(52, 152, 219, 0.5);
 	border-radius: 3px;
 	margin: 30px;
 	animation-name: pop-bottom;
 	animation-duration: 3s;
 	animation-timing-function: ease;
+}
+
+.player-box {
+	position: absolute;
+	bottom: 20%;
+	left: 0;
+	width: 25%;
+	height: 60%;
+	border: solid rgba(52, 152, 219, 0.9) 1px;
+	background: rgba(52, 152, 219, 0.5);
+	display: flex;
+	justify-content: space-around;
+	flex-direction: column;
+}
+
+.item-inv {
+	width: 70%;
+	margin: 0 auto;
+	display: flex;
+	justify-content: space-around;
+	color: white;
+}
+
+.item-img {
+	width: 32px;
 }
 
 .tchat-box {
@@ -63,16 +89,13 @@ canvas {
 	position: relative;
 	bottom: 0px;
 	padding: 5px;
-	/* border: solid rgba(30, 100, 160, 0.9) 1px; */
-	background: rgba(30, 100, 160, 1);
 }
 
 .tchat-input {
-	width: 60%;
+	width: 80%;
 }
 
 .tchat-button {
-	width: 30%
 }
 
 .info-box {
@@ -121,4 +144,8 @@ ul {
 .fade-out-second-last {
 	opacity: 0.3;
 	transition: opacity 2s linear;
+}
+
+.waiter {
+	float: right;
 }

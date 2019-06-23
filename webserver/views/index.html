@@ -3,24 +3,33 @@
 	<head>
 		<title>Zappy</title>
 		<meta charset="utf-8" />
-		<link rel="stylesheet" type="text/css" href="css/style.css" />
+		<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+    	<script src="https://kit.fontawesome.com/03dd273af5.js"></script>
+		<link rel="stylesheet" type="text/css" href="css/style.css">
+		<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 	</head>
 	<body>
 		<canvas>Your browser can't support canvas technology.</canvas>
 
+		<section class="player-box" id="player-info">
+			<div class="item-inv"> <img class="item-img" src="assets/food.png"><button class="btn btn-danger" id="drop-0"><i class="fas fa-minus" ></i></button><span id="inv-0">7</span><button class="btn btn-success" id="take-0"><i class="fas fa-plus"></i></button></div>
+			<div class="item-inv"> <img class="item-img" src="assets/linemate.png"><button class="btn btn-danger" id="drop-1"><i class="fas fa-minus" ></i></button><span id="inv-1">0</span><button class="btn btn-success" id="take-1"><i class="fas fa-plus"></i></button></div>
+			<div class="item-inv"> <img class="item-img" src="assets/deraumere.png"><button class="btn btn-danger" id="drop-2"><i class="fas fa-minus"></i></button><span id="inv-2">0</span><button class="btn btn-success" id="take-2"><i class="fas fa-plus"></i></button></div>
+			<div class="item-inv"> <img class="item-img" src="assets/sibur.png"><button class="btn btn-danger" id="drop-3"><i class="fas fa-minus"></i></button><span id="inv-3">0</span><button class="btn btn-success" id="take-3"><i class="fas fa-plus"></i></button></div>
+			<div class="item-inv"> <img class="item-img" src="assets/mendiane.png"><button class="btn btn-danger" id="drop-4"><i class="fas fa-minus"></i></button><span id="inv-4">0</span><button class="btn btn-success" id="take-4"><i class="fas fa-plus"></i></button></div>
+			<div class="item-inv"> <img class="item-img" src="assets/phiras.png"><button class="btn btn-danger" id="drop-5"><i class="fas fa-minus"></i></button><span id="inv-5">0</span><button class="btn btn-success" id="take-5"><i class="fas fa-plus"></i></button></div>
+			<div class="item-inv"> <img class="item-img" src="assets/thystame.png"><button class="btn btn-danger" id="drop-6"><i class="fas fa-minus"></i></button><span id="inv-6">0</span><button class="btn btn-success" id="take-6"><i class="fas fa-plus"></i></button></div>
+		</section>
 		<section class="controller-box">
 			<div id="login">
 				<input type="text" name="teamName" placeholder="Team Name" />
-				<button type="button" id="play">Play</button>
+				<button type="button" class="btn btn-success" id="play">Play</button>
 			</div>
 			<div class="ui" id="ui">
-				<button id="turn-left">Turn Left</button>
-				<button id="forward">Forward</button>
-				<button id="turn-right">Turn Right</button>
-				<button id="grab">Grab Item</button>
-				<button id="drop">Drop Item</button>
-				<div id="playerInfos">	
-				</div>
+				<button type="button" class="btn btn-primary" id="turn-left"><i class="fas fa-redo-alt fa-flip-horizontal"></i></button>
+				<button type="button" class="btn btn-primary" id="forward"><i class="fas fa-arrow-up"></i></button>
+				<button type="button" class="btn btn-primary" id="turn-right"><i class="fas fa-redo-alt"></i></button>
+				<button type="button" class="btn btn-warning waiter" id="waiter"><i class="fas fa-spin fa-spinner"></i></button>
 			</div>
 		</section>
 		<section class="info-box" id="datas">
@@ -41,15 +50,18 @@
 				<li style="visibility:hidden;"></li>
 				<li style="visibility:hidden;"></li>
 				<li style="visibility:hidden;"></li>
-			</ul>
+			</ul> 
 			<div class="tchat-group-input" id="tchat-form">
 				<input class="tchat-input" type="text" name="tchat" placeholder="Type your message" />
-				<button class="tchat-button" type="button" id="send">Send</button>
+				<button class="tchat-button btn btn-success" type="button" id="send"><i class="fas fa-paper-plane"></i></button>
 			</div>
 		</section>
 		<script src="node_modules/babylonjs/babylon.js"></script>
 		<script src="node_modules/babylonjs-loaders/babylonjs.loaders.min.js"></script>
 		<script src="/socket.io/socket.io.js"></script>
 		<script src="build/build.js"></script>
+		<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
 	</body>
 </html>

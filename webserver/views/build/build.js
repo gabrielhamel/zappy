@@ -70,7 +70,7 @@ var Camera = /** @class */ (function () {
         this.camera = new BABYLON.ArcRotateCamera("mainCamera", Math.PI / 2, Math.PI / 4, 30, target, scene);
         this.camera.allowUpsideDown = false;
         this.camera.checkCollisions = true;
-        this.camera.panningSensibility = 0;
+        // this.camera.panningSensibility = 0;
         this.camera.collisionRadius = new BABYLON.Vector3(1, 1, 1);
         this.camera.attachControl(scene.getEngine().getRenderingCanvas(), false);
     }
@@ -89,24 +89,45 @@ var Controller = /** @class */ (function () {
         this.play = document.getElementById("play");
         this.tchat = document.getElementById("tchat-form");
         this.send = document.getElementById("send");
+        this.inventoryUI = document.getElementById("player-info");
         this.ui = document.getElementById("ui");
         this.forward = document.getElementById("forward");
         this.turnLeft = document.getElementById("turn-left");
         this.turnRight = document.getElementById("turn-right");
-        this.grab = document.getElementById("grab");
-        this.drop = document.getElementById("drop");
+        this.waiter = document.getElementById("waiter");
+        this.take = new Array();
+        this.drop = new Array();
+        this.inventorySpan = new Array();
         this.free = true;
+        this.converterArray = new Array("food", "linemate", "deraumere", "sibur", "mendiane", "phiras", "thystame");
+        this.inventory = new Array(7, 0, 0, 0, 0, 0, 0);
+        this.lastItem = 0;
         this.handleConnection = function (datas) {
             console.log(datas);
             if (!(datas[0] == "ko")) {
                 _this.ui.style.display = "block";
                 _this.tchat.style.display = "block";
+                _this.inventoryUI.style.display = "flex";
                 _this.login.style.display = "none";
                 _this.responseHandler = _this.handleNothing;
             }
             else {
                 _this.socketManager.emit("play", "dead\n");
             }
+        };
+        this.handleTake = function (datas) {
+            _this.responseHandler = _this.handleNothing;
+            if (datas[0] == "ok")
+                _this.inventory[_this.lastItem]++;
+            _this.allowInput();
+            _this.updateInventory(_this.lastItem);
+        };
+        this.handleDrop = function (datas) {
+            _this.responseHandler = _this.handleNothing;
+            if (datas[0] == "ok")
+                _this.inventory[_this.lastItem]--;
+            _this.allowInput();
+            _this.updateInventory(_this.lastItem);
         };
         this.handleNothing = function (datas) {
             console.log("message reçu mais pas traité");
@@ -118,6 +139,7 @@ var Controller = /** @class */ (function () {
         this.socketManager = socketManager;
         this.ui.style.display = "none";
         this.tchat.style.display = "none";
+        this.inventoryUI.style.display = "none";
         this.play.addEventListener("click", function () {
             _this.teamName = _this.login.getElementsByTagName("input")[0].value;
             _this.socketManager.emit("requestPlay", _this.teamName + "\n");
@@ -147,29 +169,72 @@ var Controller = /** @class */ (function () {
                 _this.blockInput();
             }
         });
+        var _loop_1 = function (i) {
+            this_1.drop.push(document.getElementById("drop-" + i));
+            this_1.drop[i].addEventListener("click", function () {
+                if (_this.free == true) {
+                    _this.lastItem = i;
+                    _this.responseHandler = _this.handleDrop;
+                    socketManager.emit("play", "Set " + _this.converterArray[i] + "\n");
+                    _this.blockInput();
+                }
+            });
+        };
+        var this_1 = this;
+        for (var i = 0; i < 7; i++) {
+            _loop_1(i);
+        }
+        var _loop_2 = function (i) {
+            this_2.take.push(document.getElementById("take-" + i));
+            this_2.take[i].addEventListener("click", function () {
+                if (_this.free == true) {
+                    _this.lastItem = i;
+                    _this.responseHandler = _this.handleTake;
+                    socketManager.emit("play", "Take " + _this.converterArray[i] + "\n");
+                    _this.blockInput();
+                }
+            });
+        };
+        var this_2 = this;
+        for (var i = 0; i < 7; i++) {
+            _loop_2(i);
+        }
+        for (var i = 0; i < 7; i++) {
+            this.inventorySpan.push(document.getElementById("inv-" + i));
+        }
     }
+    Controller.prototype.updateInventory = function (i) {
+        this.inventorySpan[i].innerHTML = this.inventory[i].toString();
+    };
     Controller.prototype.blockInput = function () {
         this.forward.disabled = true;
         this.turnLeft.disabled = true;
         this.turnRight.disabled = true;
-        this.grab.disabled = true;
-        this.drop.disabled = true;
         this.send.disabled = true;
+        for (var i = 0; i < 7; i++) {
+            this.drop[i].disabled = true;
+            this.take[i].disabled = true;
+        }
+        this.waiter.style.display = "inline-block";
         this.free = false;
     };
     Controller.prototype.allowInput = function () {
         this.forward.disabled = false;
         this.turnLeft.disabled = false;
         this.turnRight.disabled = false;
-        this.grab.disabled = false;
-        this.drop.disabled = false;
         this.send.disabled = false;
+        for (var i = 0; i < 7; i++) {
+            this.drop[i].disabled = false;
+            this.take[i].disabled = false;
+        }
+        this.waiter.style.display = "none";
         this.free = true;
     };
     Controller.prototype.die = function () {
         this.ui.style.display = "none";
         this.tchat.style.display = "none";
         this.login.style.display = "block";
+        this.inventoryUI.style.display = "none";
         this.responseHandler = this.handleConnection;
     };
     Controller.prototype.handleResponse = function (datas) {
