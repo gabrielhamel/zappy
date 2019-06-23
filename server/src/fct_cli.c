@@ -27,6 +27,8 @@ void *init_client(const sock_t *cli)
 {
     zappy_client_t *data = malloc(sizeof(zappy_client_t));
 
+    if (data == NULL)
+        return NULL;
     memset(data, 0, sizeof(zappy_client_t));
     sock_write(cli, "WELCOME\n");
     data->cmd_buff = strdup("");

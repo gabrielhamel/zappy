@@ -19,7 +19,7 @@ static const char *objects[N_ITEMS] = {
     "thystame"
 };
 
-bool tile_have_player(sock_list_t *list, tile_t *tile)
+static bool tile_have_player(sock_list_t *list, tile_t *tile)
 {
     zappy_client_t *client;
     ia_t *ia;
@@ -36,37 +36,69 @@ bool tile_have_player(sock_list_t *list, tile_t *tile)
     return false;
 }
 
-bool tile_have_item(ITEM_T item, tile_t *tile)
+static bool tile_have_item(ITEM_T item, tile_t *tile)
 {
     if (tile->items[item] != 0)
         return true;
     return false;
 }
 
-void tile_to_string(sock_list_t *list, tile_t *tile, char *buff)
+static void tile_to_string(sock_list_t *list, tile_t *tile, char *buff)
 {
     bool first = false;
 
     if (tile_have_player(list, tile)) {
-        sprintf(buff, "player");
+        sprintf(buff, " player");
         first = true;
     }
     for (ITEM_T item = FOOD; item < N_ITEMS; item++) {
         if (tile_have_item(item, tile) == false)
             continue;
-        if (first == false)
+        if (first == false) {
+            sprintf(buff + strlen(buff), " ");
             first = true;
+        }
         else
             sprintf(buff + strlen(buff), " ");
         sprintf(buff + strlen(buff), "%s", objects[item]);
     }
 }
 
+static tile_t *get_tile_at(facing_t dir, tile_t *tile, facing_t player_facing)
+{
+    facing_t new_dir = (dir - 1 + player_facing - 1) % 4 + 1;
+
+    if (new_dir == NORTH)
+        return tile->bottom;
+    else if (new_dir == EAST)
+        return tile->right;
+    else if (new_dir == SOUTH)
+        return tile->top;
+    else
+        return tile->left;
+}
+
 void cmd_ia_look(sock_t *cli, sock_list_t *list, char **arg, zarg_t *zarg)
 {
     ia_t *ia = ZAPPY_CLIENT(cli)->client.ia;
+    tile_t *base = GET_TILE(GET_GAME(list), ia->x, ia->y);
+    tile_t *tmp = base;
     char buff[4096] = {0};
 
     (void)arg;
     (void)zarg;
+    sprintf(buff + strlen(buff), "[");
+    for (int row = 0; row < ia->level + 1; row++) {
+        for (int col = 0; col < 1 + 2 * row; col++) {
+            tile_to_string(list, tmp, buff + strlen(buff));
+            tmp = get_tile_at(EAST, tmp, ia->ori);
+            if (!(row == ia->level && col == 2 * row))
+                sprintf(buff + strlen(buff), ",");
+        }
+        base = get_tile_at(NORTH, base, ia->ori);
+        base = get_tile_at(WEAST, base, ia->ori);
+        tmp = base;
+    }
+    sprintf(buff + strlen(buff), " ]");
+    sock_write(cli, "%s\n", buff);
 }

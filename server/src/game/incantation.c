@@ -67,6 +67,8 @@ ia_t **get_players_incantable(game_t *game, ia_t *me, int level)
     ia_t **array = malloc(sizeof(ia_t *));
     tile_t *tile = GET_TILE(game, me->x, me->y);
 
+    if (array == NULL)
+        return NULL;
     if (level < 2 || level > 8) {
         free(array);
         return NULL;

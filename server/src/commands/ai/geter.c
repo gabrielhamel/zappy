@@ -8,7 +8,8 @@
 #include "ia_commands.h"
 #include "server.h"
 
-sock_t *ia_get_sock(ia_t *ia)
+sock_t *ia_get_sock(sock_t *sock, ia_t *ia)
 {
-    return (void *)ia;
+    sock->fd = ia->id;
+    return sock;
 }

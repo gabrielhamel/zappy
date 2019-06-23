@@ -39,6 +39,7 @@ void link_map(tile_t **graph, size_t w, size_t h)
             graph[y][x].y = y;
             init_tile(&graph[y][x]);
             add_random_rock(&graph[y][x]);
+            add_random_food(&graph[y][x]);
         }
     }
     link_top(graph, w, h);

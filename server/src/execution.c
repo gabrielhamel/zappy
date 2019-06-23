@@ -57,7 +57,6 @@ zarg_t *zarg, sock_list_t *list)
     size_t i = 0;
     int nb_remaining;
 
-    add_random_food(list, &game->map);
     for (; strcmp(game->teams[i]->name, team); i++);
     init_player(ia, list, game->teams[i], cli->fd);
     ia->live = 126.f / zarg->freq;
@@ -79,7 +78,8 @@ char **arg, zarg_t *zarg)
     (void)list;
     if (arg[0] && !strcmp("GRAPHIC", arg[0])) {
         ZAPPY_CLIENT(cli)->cli_type = GRAPHICAL;
-        ZAPPY_CLIENT(cli)->client.graphic = malloc(sizeof(graphic_t));
+        if (!(ZAPPY_CLIENT(cli)->client.graphic = malloc(sizeof(graphic_t))))
+            return false;
         memset(ZAPPY_CLIENT(cli)->client.graphic, 0, sizeof(graphic_t));
         send_graphics_informations(cli, list, zarg);
         return (true);
@@ -87,7 +87,8 @@ char **arg, zarg_t *zarg)
     else if (arg[0] && strcmp("GRAPHIC", arg[0]) && check_team_names(arg,
         GET_GAME(list), cli, zarg)) {
         ZAPPY_CLIENT(cli)->cli_type = IA;
-        ZAPPY_CLIENT(cli)->client.ia = malloc(sizeof(ia_t));
+        if (!(ZAPPY_CLIENT(cli)->client.ia = malloc(sizeof(ia_t))))
+            return false;
         memset(ZAPPY_CLIENT(cli)->client.ia, 0, sizeof(ia_t));
         STAILQ_INIT(LIST_CMD(cli));
         new_player_connection(cli, arg[0], zarg, list);

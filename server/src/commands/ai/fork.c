@@ -38,7 +38,10 @@ void cmd_ia_fork(sock_t *cli, sock_list_t *list, char **arg, zarg_t *zarg)
     team_t *team = ia->team;
 
     (void)arg;
-    memset(egg, 0, sizeof(egg_t));
+    if (egg == NULL) {
+        sock_write(cli, "ko\n");
+        return;
+    }
     egg->id = id++;
     egg->player = cli->fd;
     egg->state = HATCHING;
