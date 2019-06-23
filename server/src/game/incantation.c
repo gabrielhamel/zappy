@@ -43,9 +43,9 @@ static bool is_on_tile(tile_t *tile, ia_t *me, int level, ia_t *ia)
         return false;
     if (ia->level != level - 1)
         return false;
-    if (ia->inventory[1] < require[1] || ia->inventory[2] < require[2] ||
-        ia->inventory[3] < require[3] || ia->inventory[4] < require[4] ||
-        ia->inventory[5] < require[5] || ia->inventory[6] < require[6])
+    if (tile->items[1] != require[1] || tile->items[2] != require[2] ||
+        tile->items[3] != require[3] || tile->items[4] != require[4] ||
+        tile->items[5] != require[5] || tile->items[6] != require[6])
             return false;
     return true;
 }

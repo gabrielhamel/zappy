@@ -93,7 +93,7 @@ OBJ_MAIN =	$(SRC_MAIN:.c=.o)
 
 OBJ_AI =  	$(SRC_AI:.cpp=.o)
 
-CFLAGS +=	$(INC_DIR) -W -Wall -Wextra -g
+CFLAGS +=	$(INC_DIR) -W -Wall -Wextra
 
 RM =		@rm -rf
 
@@ -133,6 +133,8 @@ clean:
 			@find . -name "*.gcno" -delete > /dev/null
 			@find . -name "*.gcda" -delete > /dev/null
 			$(RM) tests/html
+			$(RM) doc_ia
+			$(RM) doc_server
 
 fclean:		clean
 			$(RM) $(SRC_TESTS)
@@ -148,6 +150,13 @@ tests_run:	titre_tests $(OBJ_SERV)
 			@(mkdir -p tests/html) > /dev/null 2>&1
 			@(genhtml tests/Coverage --output-directory tests/html/) > /dev/null
 			@(gcovr --exclude tests/)
+
+documentation:
+				@$(ECHO) $(RED)¶ Generating documentation$(TEAL):$(DEFAULT)
+				@(doxygen doxyfile_ia)
+				@(doxygen doxyfile_server)
+				@(cp assets/Bigchungusthegame.webp doc_ia/html/)
+				@(cp assets/Bigchungusthegame.webp doc_server/html/)
 
 %.o : %.c
 			@gcc -c -o $@ $^ $(CFLAGS) --coverage && $(ECHO) -n $(GREEN)"  [OK] "$(TEAL) || $(ECHO) -n $(SANG)"  [NO] "$(TEAL) && $(ECHO) $< | rev | cut -d'/' -f 1 | rev

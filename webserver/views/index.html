@@ -12,7 +12,7 @@
 		<canvas>Your browser can't support canvas technology.</canvas>
 
 		<section class="player-box" id="player-info">
-			<div class="item-inv"> <img class="item-img" src="assets/food.png"><button class="btn btn-danger" id="drop-0"><i class="fas fa-minus" ></i></button><span id="inv-0">0</span><button class="btn btn-success" id="take-0"><i class="fas fa-plus"></i></button></div>
+			<div class="item-inv"> <img class="item-img" src="assets/food.png"><button class="btn btn-danger" id="drop-0"><i class="fas fa-minus" ></i></button><span id="inv-0">7</span><button class="btn btn-success" id="take-0"><i class="fas fa-plus"></i></button></div>
 			<div class="item-inv"> <img class="item-img" src="assets/linemate.png"><button class="btn btn-danger" id="drop-1"><i class="fas fa-minus" ></i></button><span id="inv-1">0</span><button class="btn btn-success" id="take-1"><i class="fas fa-plus"></i></button></div>
 			<div class="item-inv"> <img class="item-img" src="assets/deraumere.png"><button class="btn btn-danger" id="drop-2"><i class="fas fa-minus"></i></button><span id="inv-2">0</span><button class="btn btn-success" id="take-2"><i class="fas fa-plus"></i></button></div>
 			<div class="item-inv"> <img class="item-img" src="assets/sibur.png"><button class="btn btn-danger" id="drop-3"><i class="fas fa-minus"></i></button><span id="inv-3">0</span><button class="btn btn-success" id="take-3"><i class="fas fa-plus"></i></button></div>
@@ -21,10 +21,10 @@
 			<div class="item-inv"> <img class="item-img" src="assets/thystame.png"><button class="btn btn-danger" id="drop-6"><i class="fas fa-minus"></i></button><span id="inv-6">0</span><button class="btn btn-success" id="take-6"><i class="fas fa-plus"></i></button></div>
 		</section>
 		<section class="controller-box">
-			<form id="login">
+			<div id="login">
 				<input type="text" name="teamName" placeholder="Team Name" />
 				<button type="button" class="btn btn-success" id="play">Play</button>
-			</form>
+			</div>
 			<div class="ui" id="ui">
 				<button type="button" class="btn btn-primary" id="turn-left"><i class="fas fa-redo-alt fa-flip-horizontal"></i></button>
 				<button type="button" class="btn btn-primary" id="forward"><i class="fas fa-arrow-up"></i></button>
@@ -50,11 +50,11 @@
 				<li style="visibility:hidden;"></li>
 				<li style="visibility:hidden;"></li>
 				<li style="visibility:hidden;"></li>
-			</ul>
-			<form class="tchat-group-input" id="tchat-form" onSubmit="return false;">
+			</ul> 
+			<div class="tchat-group-input" id="tchat-form">
 				<input class="tchat-input" type="text" name="tchat" placeholder="Type your message" />
 				<button class="tchat-button btn btn-success" type="button" id="send"><i class="fas fa-paper-plane"></i></button>
-			</form>
+			</div>
 		</section>
 		<script src="node_modules/babylonjs/babylon.js"></script>
 		<script src="node_modules/babylonjs-loaders/babylonjs.loaders.min.js"></script>

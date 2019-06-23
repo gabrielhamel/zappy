@@ -4,8 +4,7 @@
 
 function main():void
 {
-	// let game:Game = new Game();
-	let sockManager:SocketManager = new SocketManager();
+	let game:Game = new Game();
 }
 
 function middleRand(value:number):number

@@ -75,13 +75,8 @@ std::vector<std::string> zpy::Client::commandEnd()
         this->_server->waitData();
         auto data = this->_server->readData();
         auto buff = Utils::extract(data);
-        for (auto &cmd : buff) {
+        for (auto &cmd : buff)
             this->parseCommand(cmd);
-            std::cout << "server:";
-            for (auto &i : cmd)
-                std::cout << " " << i;
-            std::cout << std::endl;
-        }
         res = this->selectGoodAnswer(buff);
     } while (res.size() == 0);
     return res;
@@ -108,7 +103,6 @@ std::vector<std::string> zpy::Client::selectGoodAnswer(const std::vector<std::ve
 void zpy::Client::forward()
 {
     auto command = "Forward\n";
-    std::cout << "client: " << command;
 
     this->commandStart();
     this->_server->writeData(command);
@@ -118,7 +112,6 @@ void zpy::Client::forward()
 void zpy::Client::right()
 {
     auto command = "Right\n";
-    std::cout << "client: " << command;
 
     this->commandStart();
     this->_server->writeData(command);
@@ -128,7 +121,6 @@ void zpy::Client::right()
 void zpy::Client::left()
 {
     auto command = "Left\n";
-    std::cout << "client: " << command;
 
     this->commandStart();
     this->_server->writeData(command);
@@ -138,7 +130,6 @@ void zpy::Client::left()
 zpy::Client::Response zpy::Client::take(const zpy::Client::Object &object)
 {
     auto command = "Take " + object.str() + "\n";
-    std::cout << "client: " << command;
 
     this->commandStart();
     this->_server->writeData(command);
@@ -151,7 +142,6 @@ zpy::Client::Response zpy::Client::take(const zpy::Client::Object &object)
 zpy::Client::Response zpy::Client::set(const zpy::Client::Object &object)
 {
     auto command = "Set " + object.str() + "\n";
-    std::cout << "client: " << command;
 
     this->commandStart();
     this->_server->writeData(command);
@@ -164,7 +154,6 @@ zpy::Client::Response zpy::Client::set(const zpy::Client::Object &object)
 zpy::Client::Inventory zpy::Client::inventory()
 {
     auto command = "Inventory\n";
-    std::cout << "client: " << command;
 
     this->commandStart();
     this->_server->writeData(command);
@@ -180,10 +169,9 @@ zpy::Client::Inventory zpy::Client::inventory()
     return inv;
 }
 
-std::vector <zpy::Client::Tile *> zpy::Client::look(void)
+std::vector <zpy::Client::Tile *> zpy::Client::look()
 {
     auto command = "Look\n";
-    std::cout << "client: " << command;
     std::vector <zpy::Client::Tile *> tiles;
     std::vector <std::string>::iterator buffIt;
     std::vector <zpy::Client::Tile *>::iterator tileIt;
@@ -198,7 +186,6 @@ std::vector <zpy::Client::Tile *> zpy::Client::look(void)
     }
     tileIt = tiles.begin();
     for (buffIt = buff.begin(); buffIt != buff.end(); buffIt++) {
-        std::cout << *buffIt << std::endl;
         if ((*buffIt).find("player") != std::string::npos)
             (*tileIt)->player++;
         if ((*buffIt).find("food") != std::string::npos)
@@ -225,29 +212,22 @@ std::vector <zpy::Client::Tile *> zpy::Client::look(void)
 bool zpy::Client::incantation()
 {
     auto command = "Incantation\n";
-    std::cout << "client: " << command;
 
     this->commandStart();
     this->_server->writeData(command);
     auto buff = this->commandEnd();
     if (buff[0] == "ko")
         return false;
-    auto buff2 = this->commandEnd();
-    if (buff2[0] == "ko")
+    buff = this->commandEnd();
+    if (std::stoi(buff[2]) == this->_lvl)
         return false;
-    if (buff2.size() < 2)
-        return false;
-    if (stoul(buff2[2], NULL, 10) > _lvl) {
-        _lvl = stoul(buff2[2], NULL, 10);
-        return true;
-    }
-    return false;
+    this->_lvl++;
+    return true;
 }
 
 void zpy::Client::broadcast(const std::string &msg)
 {
     auto command = "Broadcast " + msg + "\n";
-    std::cout << "client: " << command;
 
     this->commandStart();
     this->_server->writeData(command);
@@ -274,11 +254,9 @@ void zpy::Client::resfresh()
     this->commandStart();
 }
 
-
 void zpy::Client::connectNbr()
 {
     auto command = "Connect_nbr \n";
-    std::cout << "client: " << command;
 
     this->commandStart();
     this->_server->writeData(command);

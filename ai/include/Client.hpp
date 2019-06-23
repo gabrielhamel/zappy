@@ -40,20 +40,20 @@ namespace zpy {
             class Inventory {
                 public:
                     Inventory(
-                        unsigned int food,
-                        unsigned int linemate,
-                        unsigned int deraumere,
-                        unsigned int sibur,
-                        unsigned int mendiane,
-                        unsigned int phiras,
-                        unsigned int thystame);
-                    unsigned int food;
-                    unsigned int linemate;
-                    unsigned int deraumere;
-                    unsigned int sibur;
-                    unsigned int mendiane;
-                    unsigned int phiras;
-                    unsigned int thystame;
+                        int food,
+                        int linemate,
+                        int deraumere,
+                        int sibur,
+                        int mendiane,
+                        int phiras,
+                        int thystame);
+                    int food;
+                    int linemate;
+                    int deraumere;
+                    int sibur;
+                    int mendiane;
+                    int phiras;
+                    int thystame;
             };
             /*
             ** Tile
@@ -129,6 +129,12 @@ namespace zpy {
                     std::string str() const { return "thystame"; }
                     unsigned int order() const { return 6; }
             };
+
+            class Player : public Object {
+                public:
+                    std::string str() const { return "player"; }
+                    unsigned int order() const { return 666; }
+            };
             /*
             ** Connect the player, select the team and get size of map
             */
@@ -152,7 +158,7 @@ namespace zpy {
             zpy::Client::Response take(const zpy::Client::Object &object);
             zpy::Client::Response set(const zpy::Client::Object &object);
             zpy::Client::Inventory inventory();
-            std::vector <zpy::Client::Tile *> look(void);
+            std::vector <zpy::Client::Tile *> look();
             void broadcast(const std::string &msg);
             bool haveBroadcast();
             zpy::Client::Message getBroadcast();

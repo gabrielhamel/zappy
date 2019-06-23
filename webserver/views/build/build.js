@@ -2,8 +2,7 @@
 /// <reference path="../node_modules/babylonjs-gltf2interface/babylon.glTF2Interface.d.ts" />
 /// <reference path="../node_modules/babylonjs-loaders/babylonjs.loaders.module.d.ts" />
 function main() {
-    // let game:Game = new Game();
-    var sockManager = new SocketManager();
+    var game = new Game();
 }
 function middleRand(value) {
     return (value - Math.random() * (value * 2));
@@ -90,6 +89,7 @@ var Controller = /** @class */ (function () {
         this.play = document.getElementById("play");
         this.tchat = document.getElementById("tchat-form");
         this.send = document.getElementById("send");
+        this.inventoryUI = document.getElementById("player-info");
         this.ui = document.getElementById("ui");
         this.forward = document.getElementById("forward");
         this.turnLeft = document.getElementById("turn-left");
@@ -97,19 +97,37 @@ var Controller = /** @class */ (function () {
         this.waiter = document.getElementById("waiter");
         this.take = new Array();
         this.drop = new Array();
+        this.inventorySpan = new Array();
         this.free = true;
         this.converterArray = new Array("food", "linemate", "deraumere", "sibur", "mendiane", "phiras", "thystame");
+        this.inventory = new Array(7, 0, 0, 0, 0, 0, 0);
+        this.lastItem = 0;
         this.handleConnection = function (datas) {
             console.log(datas);
             if (!(datas[0] == "ko")) {
                 _this.ui.style.display = "block";
                 _this.tchat.style.display = "block";
+                _this.inventoryUI.style.display = "flex";
                 _this.login.style.display = "none";
                 _this.responseHandler = _this.handleNothing;
             }
             else {
                 _this.socketManager.emit("play", "dead\n");
             }
+        };
+        this.handleTake = function (datas) {
+            _this.responseHandler = _this.handleNothing;
+            if (datas[0] == "ok")
+                _this.inventory[_this.lastItem]++;
+            _this.allowInput();
+            _this.updateInventory(_this.lastItem);
+        };
+        this.handleDrop = function (datas) {
+            _this.responseHandler = _this.handleNothing;
+            if (datas[0] == "ok")
+                _this.inventory[_this.lastItem]--;
+            _this.allowInput();
+            _this.updateInventory(_this.lastItem);
         };
         this.handleNothing = function (datas) {
             console.log("message reçu mais pas traité");
@@ -121,6 +139,7 @@ var Controller = /** @class */ (function () {
         this.socketManager = socketManager;
         this.ui.style.display = "none";
         this.tchat.style.display = "none";
+        this.inventoryUI.style.display = "none";
         this.play.addEventListener("click", function () {
             _this.teamName = _this.login.getElementsByTagName("input")[0].value;
             _this.socketManager.emit("requestPlay", _this.teamName + "\n");
@@ -154,7 +173,10 @@ var Controller = /** @class */ (function () {
             this_1.drop.push(document.getElementById("drop-" + i));
             this_1.drop[i].addEventListener("click", function () {
                 if (_this.free == true) {
-                    socketManager.emit("play", "Drop " + _this.converterArray[i] + "\n");
+                    _this.lastItem = i;
+                    _this.responseHandler = _this.handleDrop;
+                    socketManager.emit("play", "Set " + _this.converterArray[i] + "\n");
+                    _this.blockInput();
                 }
             });
         };
@@ -166,7 +188,10 @@ var Controller = /** @class */ (function () {
             this_2.take.push(document.getElementById("take-" + i));
             this_2.take[i].addEventListener("click", function () {
                 if (_this.free == true) {
+                    _this.lastItem = i;
+                    _this.responseHandler = _this.handleTake;
                     socketManager.emit("play", "Take " + _this.converterArray[i] + "\n");
+                    _this.blockInput();
                 }
             });
         };
@@ -174,8 +199,13 @@ var Controller = /** @class */ (function () {
         for (var i = 0; i < 7; i++) {
             _loop_2(i);
         }
+        for (var i = 0; i < 7; i++) {
+            this.inventorySpan.push(document.getElementById("inv-" + i));
+        }
     }
-    ;
+    Controller.prototype.updateInventory = function (i) {
+        this.inventorySpan[i].innerHTML = this.inventory[i].toString();
+    };
     Controller.prototype.blockInput = function () {
         this.forward.disabled = true;
         this.turnLeft.disabled = true;
@@ -204,6 +234,7 @@ var Controller = /** @class */ (function () {
         this.ui.style.display = "none";
         this.tchat.style.display = "none";
         this.login.style.display = "block";
+        this.inventoryUI.style.display = "none";
         this.responseHandler = this.handleConnection;
     };
     Controller.prototype.handleResponse = function (datas) {
@@ -212,11 +243,13 @@ var Controller = /** @class */ (function () {
     return Controller;
 }());
 var Egg = /** @class */ (function () {
-    function Egg(id, x, y, teamName, scene) {
+    function Egg(id, x, y, teamName, skin, scene) {
         this.maturity = false;
         this.x = x;
         this.y = y;
         this.teamName = teamName;
+        this.skin = skin;
+        this.skin.setPosition(new BABYLON.Vector3(x, 0.5, y));
     }
     Egg.prototype.setMaturity = function (maturity) {
         this.maturity = maturity;
@@ -244,11 +277,14 @@ var Game = /** @class */ (function () {
         this.engine = new BABYLON.Engine(this.canvas, true);
         this.scene = new BABYLON.Scene(this.engine);
         this.scene.collisionsEnabled = true;
-        this.stage = new Stage(this.scene);
-        this.camera = new Camera(this.scene);
-        this.CHUNGUS = new MeshBuilder("chungus.glb", this.scene);
-        this.initialiseScene();
-        this.engine.runRenderLoop(this.render);
+        this.EGG = new MeshBuilder("egg.obj", this.scene);
+        this.CHUNGUS = new MeshBuilder("chungus.obj", this.scene, function () {
+            _this.stage = new Stage(_this.scene);
+            _this.camera = new Camera(_this.scene);
+            _this.socketManager = new SocketManager(_this);
+            _this.initialiseScene();
+            _this.engine.runRenderLoop(_this.render);
+        });
     }
     Game.prototype.initialiseScene = function () {
         var _this = this;
@@ -445,7 +481,7 @@ var Game = /** @class */ (function () {
             console.log(datas);
             return;
         }
-        var egg = new Egg(parseInt(datas[1]), parseInt(datas[3]), parseInt(datas[4]), accouchingChungus.getTeamName(), this.scene);
+        var egg = new Egg(parseInt(datas[1]), parseInt(datas[3]), parseInt(datas[4]), accouchingChungus.getTeamName(), this.EGG.getInstance(), this.scene);
         this.eggs.push(egg);
         accouchingChungus.setLayingState(false);
     };
@@ -515,8 +551,9 @@ var Infobox = /** @class */ (function () {
     return Infobox;
 }());
 var MeshBuilder = /** @class */ (function () {
-    function MeshBuilder(modelName, scene) {
+    function MeshBuilder(modelName, scene, onLoad) {
         var _this = this;
+        if (onLoad === void 0) { onLoad = undefined; }
         this.nbClones = 0;
         this.load = function (meshes) {
             _this.meshes = meshes;
@@ -525,8 +562,11 @@ var MeshBuilder = /** @class */ (function () {
                 _this.meshes[i].position.y = 0.5;
                 _this.meshes[i].isVisible = false;
             }
+            if (_this.onLoad)
+                _this.onLoad();
         };
         this.ID = modelName;
+        this.onLoad = onLoad;
         BABYLON.SceneLoader.ImportMesh("", "/assets/", modelName, scene, this.load);
     }
     MeshBuilder.prototype.getInstance = function () {
@@ -605,11 +645,9 @@ var Player = /** @class */ (function () {
     return Player;
 }());
 var SocketManager = /** @class */ (function () {
-    function SocketManager() {
+    function SocketManager(game) {
         var _this = this;
         this.socket = io();
-        this.game = new Game();
-        this.controller = new Controller(this.game, this);
         this.commandsGraph = new Map();
         this.commandsPlay = new Map();
         this.getDatas = function (datas) {
@@ -638,37 +676,37 @@ var SocketManager = /** @class */ (function () {
             }
         };
         this.bct = function (datas) {
-            _this.game.getStage().addTile(datas);
+            _this.GAME.getStage().addTile(datas);
         };
         this.msz = function (datas) {
             var vector = new BABYLON.Vector2(0, 0);
             vector.x = parseInt(datas[1]);
             vector.y = parseInt(datas[2]);
-            _this.game.setup(vector);
+            _this.GAME.setup(vector);
         };
         this.sgt = function (datas) {
             Game.timeUnit = parseInt(datas[1]);
         };
         this.tna = function (datas) {
-            _this.game.addTeam(datas[1]);
+            _this.GAME.addTeam(datas[1]);
         };
         this.pnw = function (datas) {
-            _this.game.addChungus(datas);
+            _this.GAME.addChungus(datas);
         };
         this.ppo = function (datas) {
-            _this.game.updateChungusPos(datas);
+            _this.GAME.updateChungusPos(datas);
         };
         this.plv = function (datas) {
-            _this.game.lvlUpChungus(datas);
+            _this.GAME.lvlUpChungus(datas);
         };
         this.pin = function (datas) {
-            _this.game.chungusBag(datas);
+            _this.GAME.chungusBag(datas);
         };
         this.pex = function (datas) {
             /// NEED GABI
         };
         this.pbc = function (datas) {
-            _this.game.chungusYelling(datas);
+            _this.GAME.chungusYelling(datas);
         };
         this.pic = function (datas) {
             /// NEED GABI
@@ -677,28 +715,28 @@ var SocketManager = /** @class */ (function () {
             /// NEED GABI
         };
         this.pfk = function (datas) {
-            _this.game.chungusLaying(datas);
+            _this.GAME.chungusLaying(datas);
         };
         this.pdr = function (datas) {
-            _this.game.chungusDroping(datas);
+            _this.GAME.chungusDroping(datas);
         };
         this.pgt = function (datas) {
-            _this.game.chungusTaking(datas);
+            _this.GAME.chungusTaking(datas);
         };
         this.pdi = function (datas) {
-            _this.game.removeChungus(datas);
+            _this.GAME.removeChungus(datas);
         };
         this.enw = function (datas) {
-            _this.game.chungusAccouching(datas);
+            _this.GAME.chungusAccouching(datas);
         };
         this.eht = function (datas) {
-            _this.game.maturingEgg(datas);
+            _this.GAME.maturingEgg(datas);
         };
         this.ebo = function (datas) {
-            _this.game.hatchingEgg(datas);
+            _this.GAME.hatchingEgg(datas);
         };
         this.edi = function (datas) {
-            _this.game.dyingEgg(datas);
+            _this.GAME.dyingEgg(datas);
         };
         this.nth = function (datas) {
             //ne doit rien faire
@@ -709,6 +747,8 @@ var SocketManager = /** @class */ (function () {
         this.die = function (datas) {
             _this.controller.die();
         };
+        this.GAME = game;
+        this.controller = new Controller(this.GAME, this);
         this.initialise();
         this.socket.emit("data", "GRAPHIC\n");
         this.socket.on("data", this.getDatas);
@@ -885,11 +925,16 @@ var Tile = /** @class */ (function () {
             sprite.position.x = this.position.x + middleRand(Tile.SPREAD);
             sprite.position.y = Tile.Y;
             sprite.position.z = this.position.y + middleRand(Tile.SPREAD);
-            sprite.size = 0.5;
+            sprite.size = 0.35;
             sprite.animations = [];
             sprite.animations.push(this.animation);
             this.sprites.push(sprite);
         }
+    };
+    Tile.prototype.updateDisplay = function () {
+        this.destroy();
+        if (this.position)
+            this.initialise(this.position.x, this.position.y);
     };
     Tile.prototype.destroy = function () {
         var cur;
@@ -918,9 +963,7 @@ var Tile = /** @class */ (function () {
         this.stats.set("mendiane", mendiane);
         this.stats.set("phiras", phiras);
         this.stats.set("thystame", thystame);
-        this.destroy();
-        if (this.position)
-            this.initialise(this.position.x, this.position.y);
+        this.updateDisplay();
     };
     Tile.prototype.getPosition = function () {
         return (this.position);
@@ -938,10 +981,12 @@ var Tile = /** @class */ (function () {
     Tile.prototype.addItem = function (item) {
         var convertArray = new Array("food", "linemate", "deraumere", "sibur", "mendiane", "phiras", "thystame");
         this.stats.set(convertArray[item], this.stats.get(convertArray[item]) + 1);
+        this.updateDisplay();
     };
     Tile.prototype.removeItem = function (item) {
         var convertArray = new Array("food", "linemate", "deraumere", "sibur", "mendiane", "phiras", "thystame");
         this.stats.set(convertArray[item], this.stats.get(convertArray[item]) - 1);
+        this.updateDisplay();
     };
     Tile.ANIMATION_BUMP = 0.15;
     Tile.ANIMATION_FPS = 10;
