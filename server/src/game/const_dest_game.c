@@ -65,8 +65,8 @@ static void delete_eggs(team_t *team)
 void delete_game(const sock_t *cli, void *data)
 {
     game_t *game = data;
-    (void)cli;
 
+    (void)cli;
     if (game->teams) {
         for (size_t i = 0; i < game->nb_teams; i++) {
             delete_eggs(game->teams[i]);

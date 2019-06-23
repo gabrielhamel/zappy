@@ -47,6 +47,19 @@ static void zappy_loop(sock_list_t *list, zarg_t *zarg)
     }
 }
 
+static void destroy_incantations(sock_list_t *list)
+{
+    game_t *game = GET_GAME(list);
+    incantation_t *inc = game->incantations.lh_first;
+    incantation_t *inc_tmp;
+
+    while (inc != NULL) {
+        inc_tmp = inc;
+        inc = inc->next.le_next;
+        destroy_incantation(list, inc_tmp, false);
+    }
+}
+
 int launch_zappy(zarg_t *zarg)
 {
     sock_list_t *list = socket_list_init();
@@ -65,6 +78,7 @@ int launch_zappy(zarg_t *zarg)
     socket_list_add(list, tmp);
     signal(SIGINT, forcequit);
     zappy_loop(list, zarg);
+    destroy_incantations(list);
     socket_list_destroy(list);
     return (0);
 }

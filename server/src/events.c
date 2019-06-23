@@ -14,7 +14,6 @@ void refresh_player_live(sock_list_t *list, sock_t *sock, zarg_t *zarg)
     ia_t *ia = ZAPPY_CLIENT(sock)->client.ia;
 
     if (ia->inventory[FOOD] == 0) {
-        sock_write(sock, "dead\n");
         destroy_ftp_sock(list, sock);
         return;
     }
