@@ -133,6 +133,8 @@ clean:
 			@find . -name "*.gcno" -delete > /dev/null
 			@find . -name "*.gcda" -delete > /dev/null
 			$(RM) tests/html
+			$(RM) doc_ia
+			$(RM) doc_server
 
 fclean:		clean
 			$(RM) $(SRC_TESTS)
@@ -148,6 +150,11 @@ tests_run:	titre_tests $(OBJ_SERV)
 			@(mkdir -p tests/html) > /dev/null 2>&1
 			@(genhtml tests/Coverage --output-directory tests/html/) > /dev/null
 			@(gcovr --exclude tests/)
+
+documentation:
+				@$(ECHO) $(RED)¶ Generating documentation$(TEAL):$(DEFAULT)
+				@(doxygen doxyfile_ia)
+				@(doxygen doxyfile_server)
 
 %.o : %.c
 			@gcc -c -o $@ $^ $(CFLAGS) --coverage && $(ECHO) -n $(GREEN)"  [OK] "$(TEAL) || $(ECHO) -n $(SANG)"  [NO] "$(TEAL) && $(ECHO) $< | rev | cut -d'/' -f 1 | rev
