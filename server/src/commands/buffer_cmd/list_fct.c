@@ -15,6 +15,8 @@ void list_insert(void *p_list, char **cmd, float time)
     buffer_cmd_t *new_elem = malloc(sizeof(buffer_cmd_t));
     STAILQ_HEAD(, buffer_cmd_s) *list = p_list;
 
+    if (new_elem == NULL)
+        return;
     new_elem->cmd = cmd;
     new_elem->time = time;
     STAILQ_INSERT_TAIL(list, new_elem, next);

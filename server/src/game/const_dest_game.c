@@ -25,10 +25,14 @@ bool initialize_game_args(game_t *game, zarg_t *zarg)
         return false;
     for (i = 0; i < game->nb_teams; i++) {
         game->teams[i] = malloc(sizeof(team_t));
+        if (game->teams[i] == NULL)
+            return false;
         memset(game->teams[i], 0, sizeof(team_t));
         game->teams[i]->nb_clients = 0;
         game->teams[i]->name = zarg->team_names[i];
         game->teams[i]->sock = malloc(sizeof(sock_t *) * zarg->clients_nb);
+        if (game->teams[i]->sock == NULL)
+            return false;
         memset(game->teams[i]->sock, 0, sizeof(sock_t *) * zarg->clients_nb);
         LIST_INIT(&game->teams[i]->eggs);
     }
@@ -40,6 +44,8 @@ void *init_game(const sock_t *cli)
     game_t *data = malloc(sizeof(game_t));
 
     (void)cli;
+    if (data == NULL)
+        return NULL;
     memset(data, 0, sizeof(game_t));
     return (data);
 }

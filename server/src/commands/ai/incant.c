@@ -60,6 +60,8 @@ void new_incantation(sock_list_t *list, ia_t **ia, tile_t *tile, zarg_t *zarg)
     game_t *game = GET_GAME(list);
     sock_t sock = {0};
 
+    if (inc == NULL)
+        return;
     inc->ia = ia;
     inc->nb_ia = array_lenght((char **)ia);
     inc->nb_valid = inc->nb_ia;
