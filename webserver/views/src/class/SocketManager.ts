@@ -40,6 +40,7 @@ class SocketManager
 
 		this.commandsPlay.set("WELCOME", this.nth);
 		this.commandsPlay.set("Elevation", this.elv);
+		this.commandsPlay.set("dead", this.die);
 	}
 	private getDatas = (datas:any):void =>
 	{
@@ -162,6 +163,10 @@ class SocketManager
 	private elv = (datas:Array<string>) =>
 	{
 		this.controller.blockInput();
+	}
+	private die = (datas:Array<string>) =>
+	{
+		this.controller.die();
 	}
 
 	public emit(event:string, datas:string)
