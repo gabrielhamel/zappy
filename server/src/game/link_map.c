@@ -19,7 +19,7 @@ void link_top(tile_t **graph, size_t w, size_t h)
 void link_right(tile_t **graph, size_t w, size_t h)
 {
     for (size_t x = 0; x < w - 1; x++)
-        for (size_t y = 1; y < h; y++)
+        for (size_t y = 0; y < h; y++)
             graph[y][x].right = &graph[y][x + 1];
     for (size_t y = 0; y < h; y++)
         graph[y][w - 1].right = &graph[y][0];
