@@ -29,6 +29,8 @@ char **alloc_array(size_t nbmemb, size_t sizememb)
 {
     char **tab = malloc(sizememb * (nbmemb + 1));
 
+    if (tab == NULL)
+        return NULL;
     for (size_t i = 0; i < nbmemb + 1; i++)
         tab[i] = NULL;
     return (tab);

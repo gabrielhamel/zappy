@@ -46,8 +46,11 @@ class Controller
 			}
 		});
 		this.send.addEventListener("click", () => {
-			let msg = this.tchat.getElementsByTagName("input")[0].value;
-			this.socketManager.emit("play", "Broadcast " +  msg + "\n");
+			if (this.free == true) {
+				let msg = this.tchat.getElementsByTagName("input")[0].value;
+				this.socketManager.emit("play", "Broadcast " +  msg + "\n");
+				this.blockInput();
+			}
 		});
 	}
 
@@ -90,6 +93,13 @@ class Controller
 		this.drop.disabled = false;
 		this.send.disabled = false;
 		this.free = true;
+	}
+	public die():void
+	{
+		this.ui.style.display = "none";
+		this.tchat.style.display = "none";
+		this.login.style.display = "block";
+		this.responseHandler = this.handleConnection;
 	}
 	public handleResponse(datas:Array<string>):void
 	{

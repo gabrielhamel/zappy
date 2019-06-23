@@ -44,5 +44,4 @@ void graph_send_ia_pgt(sock_list_t *list, ia_t *ia, ITEM_T item);
 void graph_send_ia_pdr(sock_list_t *list, ia_t *ia, ITEM_T item);
 
 int cmd_ia_settake_parser(sock_t *cli, char **arg);
-
 #endif
