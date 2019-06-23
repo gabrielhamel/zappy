@@ -60,7 +60,6 @@ std::string Server::Read()
     if (res == 0)
         throw SocketError("Server disconnected");
     str.append(buff);
-    std::cout << str;
     if (str.back() != '\n') {
         if (getline(&get, &n, fdopen(this->_fd, "r")) == -1)
             throw SocketError("Server disconnected");
