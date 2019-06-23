@@ -7,14 +7,20 @@ class Controller
 	private ui:HTMLElement = document.getElementById("ui");
 	private forward:HTMLButtonElement = document.getElementById("forward") as HTMLButtonElement;
 	private turnLeft:HTMLButtonElement = document.getElementById("turn-left") as HTMLButtonElement;
-	private turnRight:HTMLButtonElement = document.getElementById("turn-right") as HTMLButtonElement;	
-	private grab:HTMLButtonElement = document.getElementById("grab") as HTMLButtonElement;
-	private drop:HTMLButtonElement = document.getElementById("drop") as HTMLButtonElement;
+	private turnRight:HTMLButtonElement = document.getElementById("turn-right") as HTMLButtonElement;
+	private waiter:HTMLButtonElement = document.getElementById("waiter") as HTMLButtonElement;
+	private take:Array<HTMLButtonElement> = new Array<HTMLButtonElement>();
+	private drop:Array<HTMLButtonElement> = new Array<HTMLButtonElement>();
 	private teamName:string;
 	private socketManager: SocketManager;
 	private game:Game;
 	private free:boolean = true;
 	private responseHandler:any;
+	private converterArray:Array<string> = new Array<string>(
+		"food", "linemate", "deraumere", "sibur",
+		"mendiane", "phiras", "thystame"
+	);;
+
 
 	constructor(game:Game, socketManager: SocketManager)
 	{
@@ -52,6 +58,24 @@ class Controller
 				this.blockInput();
 			}
 		});
+
+		for (let i = 0; i < 7; i++) {
+			this.drop.push(document.getElementById("drop-" + i) as HTMLButtonElement);
+			this.drop[i].addEventListener("click", () => {
+				if (this.free == true) {
+					socketManager.emit("play", "Drop " + this.converterArray[i] + "\n");
+				}
+			});
+		}
+
+		for (let i = 0; i < 7; i++) {
+			this.take.push(document.getElementById("take-" + i) as HTMLButtonElement);
+			this.take[i].addEventListener("click", () => {
+				if (this.free == true) {
+					socketManager.emit("play", "Take " + this.converterArray[i] + "\n");
+				}
+			});
+		}
 	}
 
 	private handleConnection = (datas:Array<string>): void =>
@@ -79,9 +103,12 @@ class Controller
 		this.forward.disabled = true;
 		this.turnLeft.disabled = true;
 		this.turnRight.disabled = true;
-		this.grab.disabled = true;
-		this.drop.disabled = true;
 		this.send.disabled = true;
+		for (let i = 0; i < 7; i++) {
+			this.drop[i].disabled = true;
+			this.take[i].disabled = true;
+		}
+		this.waiter.style.display = "inline-block";
 		this.free = false;
 	}
 	public allowInput():void
@@ -89,9 +116,12 @@ class Controller
 		this.forward.disabled = false;
 		this.turnLeft.disabled = false;
 		this.turnRight.disabled = false;
-		this.grab.disabled = false;
-		this.drop.disabled = false;
 		this.send.disabled = false;
+		for (let i = 0; i < 7; i++) {
+			this.drop[i].disabled = false;
+			this.take[i].disabled = false;
+		}
+		this.waiter.style.display = "none";
 		this.free = true;
 	}
 	public die():void

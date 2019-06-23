@@ -71,7 +71,7 @@ var Camera = /** @class */ (function () {
         this.camera = new BABYLON.ArcRotateCamera("mainCamera", Math.PI / 2, Math.PI / 4, 30, target, scene);
         this.camera.allowUpsideDown = false;
         this.camera.checkCollisions = true;
-        this.camera.panningSensibility = 0;
+        // this.camera.panningSensibility = 0;
         this.camera.collisionRadius = new BABYLON.Vector3(1, 1, 1);
         this.camera.attachControl(scene.getEngine().getRenderingCanvas(), false);
     }
@@ -94,9 +94,11 @@ var Controller = /** @class */ (function () {
         this.forward = document.getElementById("forward");
         this.turnLeft = document.getElementById("turn-left");
         this.turnRight = document.getElementById("turn-right");
-        this.grab = document.getElementById("grab");
-        this.drop = document.getElementById("drop");
+        this.waiter = document.getElementById("waiter");
+        this.take = new Array();
+        this.drop = new Array();
         this.free = true;
+        this.converterArray = new Array("food", "linemate", "deraumere", "sibur", "mendiane", "phiras", "thystame");
         this.handleConnection = function (datas) {
             console.log(datas);
             if (!(datas[0] == "ko")) {
@@ -148,24 +150,61 @@ var Controller = /** @class */ (function () {
                 _this.blockInput();
             }
         });
+        var _loop_1 = function (i) {
+            this_1.drop.push(document.getElementById("drop-" + i));
+            this_1.drop[i].addEventListener("click", function () {
+                if (_this.free == true) {
+                    socketManager.emit("play", "Drop " + _this.converterArray[i] + "\n");
+                }
+            });
+        };
+        var this_1 = this;
+        for (var i = 0; i < 7; i++) {
+            _loop_1(i);
+        }
+        var _loop_2 = function (i) {
+            this_2.take.push(document.getElementById("take-" + i));
+            this_2.take[i].addEventListener("click", function () {
+                if (_this.free == true) {
+                    socketManager.emit("play", "Take " + _this.converterArray[i] + "\n");
+                }
+            });
+        };
+        var this_2 = this;
+        for (var i = 0; i < 7; i++) {
+            _loop_2(i);
+        }
     }
+    ;
     Controller.prototype.blockInput = function () {
         this.forward.disabled = true;
         this.turnLeft.disabled = true;
         this.turnRight.disabled = true;
-        this.grab.disabled = true;
-        this.drop.disabled = true;
         this.send.disabled = true;
+        for (var i = 0; i < 7; i++) {
+            this.drop[i].disabled = true;
+            this.take[i].disabled = true;
+        }
+        this.waiter.style.display = "inline-block";
         this.free = false;
     };
     Controller.prototype.allowInput = function () {
         this.forward.disabled = false;
         this.turnLeft.disabled = false;
         this.turnRight.disabled = false;
-        this.grab.disabled = false;
-        this.drop.disabled = false;
         this.send.disabled = false;
+        for (var i = 0; i < 7; i++) {
+            this.drop[i].disabled = false;
+            this.take[i].disabled = false;
+        }
+        this.waiter.style.display = "none";
         this.free = true;
+    };
+    Controller.prototype.die = function () {
+        this.ui.style.display = "none";
+        this.tchat.style.display = "none";
+        this.login.style.display = "block";
+        this.responseHandler = this.handleConnection;
     };
     Controller.prototype.handleResponse = function (datas) {
         this.responseHandler(datas);
@@ -667,6 +706,9 @@ var SocketManager = /** @class */ (function () {
         this.elv = function (datas) {
             _this.controller.blockInput();
         };
+        this.die = function (datas) {
+            _this.controller.die();
+        };
         this.initialise();
         this.socket.emit("data", "GRAPHIC\n");
         this.socket.on("data", this.getDatas);
@@ -696,6 +738,7 @@ var SocketManager = /** @class */ (function () {
         this.commandsGraph.set("edi", this.edi);
         this.commandsPlay.set("WELCOME", this.nth);
         this.commandsPlay.set("Elevation", this.elv);
+        this.commandsPlay.set("dead", this.die);
     };
     SocketManager.prototype.emit = function (event, datas) {
         this.socket.emit(event, datas);
