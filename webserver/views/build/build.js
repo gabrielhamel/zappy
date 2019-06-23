@@ -158,7 +158,8 @@ var Controller = /** @class */ (function () {
         this.tchat.style.display = "none";
         this.inventoryUI.style.display = "none";
         this.play.addEventListener("click", function () {
-            _this.teamName = _this.login.getElementsByTagName("input")[0].value;
+            var temp = _this.login.getElementsByTagName("select")[0].selectedOptions;
+            _this.teamName = temp.item(0).value;
             _this.socketManager.emit("requestPlay", _this.teamName + "\n");
         });
         this.forward.addEventListener("click", function () {
@@ -315,6 +316,7 @@ var Game = /** @class */ (function () {
         this.teamsNames = new Array();
         this.tchat = new Tchat();
         this.teamList = document.getElementById("team-list");
+        this.select = document.getElementById("login-select");
         this.render = function () {
             _this.stage.render();
             _this.scene.render();
@@ -370,6 +372,10 @@ var Game = /** @class */ (function () {
         var newTeam = document.createElement("li");
         newTeam.innerHTML = name;
         this.teamList.append(newTeam);
+        var newOption = document.createElement("option");
+        newOption.innerHTML = name;
+        newOption.value = name;
+        this.select.append(newOption);
         this.teamsNames.push(name);
     };
     Game.prototype.addChungus = function (datas) {

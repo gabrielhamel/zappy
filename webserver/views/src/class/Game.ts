@@ -15,6 +15,8 @@ class Game
 	private teamsNames:Array<string> = new Array<string>();
 	private tchat:Tchat = new Tchat();
 	private teamList:HTMLElement = document.getElementById("team-list");
+	private select:HTMLElement = document.getElementById("login-select");
+
 
 	constructor()
 	{
@@ -83,6 +85,11 @@ class Game
 		var newTeam = document.createElement("li");
 		newTeam.innerHTML = name;
 		this.teamList.append(newTeam);
+
+		var newOption = document.createElement("option");
+		newOption.innerHTML = name;
+		newOption.value = name;
+		this.select.append(newOption);
 		this.teamsNames.push(name);
 	}
 	public addChungus(datas:Array<string>):void

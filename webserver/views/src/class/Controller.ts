@@ -39,7 +39,8 @@ class Controller
 		this.tchat.style.display = "none";
 		this.inventoryUI.style.display = "none";
 		this.play.addEventListener("click", () => {
-			this.teamName = this.login.getElementsByTagName("input")[0].value;
+			let temp = this.login.getElementsByTagName("select")[0].selectedOptions;
+			this.teamName = temp.item(0).value;
 			this.socketManager.emit("requestPlay", this.teamName + "\n");
 		});
 		this.forward.addEventListener("click", () => {
