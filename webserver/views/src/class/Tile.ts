@@ -64,7 +64,13 @@ class Tile
 			this.sprites.push(sprite);
 		}
 	}
-	
+	private updateDisplay()
+	{
+		this.destroy();
+		if (this.position)
+			this.initialise(this.position.x, this.position.y);
+	}
+
 	public destroy()
 	{
 		let cur:BABYLON.Sprite;
@@ -101,9 +107,7 @@ class Tile
 		this.stats.set("mendiane", mendiane);
 		this.stats.set("phiras", phiras);
 		this.stats.set("thystame", thystame);
-		this.destroy();
-		if (this.position)
-			this.initialise(this.position.x, this.position.y);
+		this.updateDisplay();
 	}
 	public getPosition()
 	{
@@ -128,6 +132,7 @@ class Tile
 			"mendiane", "phiras", "thystame"
 		);
 		this.stats.set(convertArray[item], this.stats.get(convertArray[item]) + 1);
+		this.updateDisplay();
 	}
 	public removeItem(item:number):void
 	{
@@ -136,5 +141,6 @@ class Tile
 			"mendiane", "phiras", "thystame"
 		);
 		this.stats.set(convertArray[item], this.stats.get(convertArray[item]) - 1);
+		this.updateDisplay();
 	}
 }

@@ -70,7 +70,6 @@ class SocketManager
 				this.commandsPlay.get(cur[0])(cur);
 				continue;
 			}
-
 			this.controller.handleResponse(cur); // GESTION D'UN RETOUR DE CMD
 		}
 	}
