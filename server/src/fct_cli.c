@@ -45,6 +45,7 @@ void end_client(const sock_t *cli, void *data)
     client_type_t type = zcli->cli_type;
 
     if (type == IA) {
+        sock_write(cli, "dead\n");
         tmp = list->stqh_first;
         while (tmp != NULL) {
             destroy_array(tmp->cmd);
