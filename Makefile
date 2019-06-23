@@ -93,7 +93,7 @@ OBJ_MAIN =	$(SRC_MAIN:.c=.o)
 
 OBJ_AI =  	$(SRC_AI:.cpp=.o)
 
-CFLAGS +=	$(INC_DIR) -W -Wall -Wextra -g
+CFLAGS +=	$(INC_DIR) -W -Wall -Wextra
 
 RM =		@rm -rf
 
