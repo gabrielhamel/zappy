@@ -57,6 +57,8 @@ static void explore_team(game_t *game, ia_t ***array, int level, ia_t *me)
 
     for (size_t t = 0; t < game->nb_teams; t++)
         for (size_t p = 0; p < game->teams[t]->nb_clients; p++) {
+            if (game->teams[t]->sock[p] == NULL)
+                continue;
             ia = ZAPPY_CLIENT(game->teams[t]->sock[p])->client.ia;
             is_on_tile(tile, me, level, ia) ? insert_ia(array, ia) : 0;
         }
