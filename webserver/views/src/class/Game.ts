@@ -252,7 +252,7 @@ class Game
 			return;
 		}
 		let egg = new Egg(parseInt(datas[1]), parseInt(datas[3]), parseInt(datas[4]),
-		accouchingChungus.getTeamName(), this.scene);
+		accouchingChungus.getTeamName(), this.EGG.getInstance(), this.scene);
 		this.eggs.push(egg);
 		accouchingChungus.setLayingState(false);
 	}
