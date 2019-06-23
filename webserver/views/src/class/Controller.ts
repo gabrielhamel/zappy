@@ -58,7 +58,11 @@ class Controller
 		this.send.addEventListener("click", () => {
 			if (this.free == true) {
 				let msg = this.tchat.getElementsByTagName("input")[0].value;
+				
+				if (msg.length < 2)
+					return;
 				this.socketManager.emit("play", "Broadcast " +  msg + "\n");
+				this.tchat.getElementsByTagName("input")[0].value = "";
 				this.blockInput();
 			}
 		});
