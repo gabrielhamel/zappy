@@ -19,10 +19,11 @@ static const char *objects[N_ITEMS] = {
     "thystame"
 };
 
-static bool tile_have_player(sock_list_t *list, tile_t *tile)
+static int tile_have_player(sock_list_t *list, tile_t *tile)
 {
     zappy_client_t *client;
     ia_t *ia;
+    int nb = 0;
 
     for (sock_node_t *node = list->start; node != NULL; node = node->next) {
         client = node->socket->data;
@@ -31,36 +32,29 @@ static bool tile_have_player(sock_list_t *list, tile_t *tile)
             continue;
         ia = client->client.ia;
         if (ia->x == tile->x && ia->y == tile->y)
-            return true;
+            nb++;
     }
-    return false;
+    return nb;
 }
 
-static bool tile_have_item(ITEM_T item, tile_t *tile)
+static int tile_have_item(ITEM_T item, tile_t *tile)
 {
     if (tile->items[item] != 0)
-        return true;
-    return false;
+        return tile->items[item];
+    return 0;
 }
 
 static void tile_to_string(sock_list_t *list, tile_t *tile, char *buff)
 {
-    bool first = false;
+    int player = tile_have_player(list, tile);
+    int items;
 
-    if (tile_have_player(list, tile)) {
+    for (int i = 0; i < player; i++)
         sprintf(buff, " player");
-        first = true;
-    }
     for (ITEM_T item = FOOD; item < N_ITEMS; item++) {
-        if (tile_have_item(item, tile) == false)
-            continue;
-        if (first == false) {
-            sprintf(buff + strlen(buff), " ");
-            first = true;
-        }
-        else
-            sprintf(buff + strlen(buff), " ");
-        sprintf(buff + strlen(buff), "%s", objects[item]);
+        items = tile_have_item(item, tile);
+        for (int i = 0; i < items; i++)
+            sprintf(buff + strlen(buff), " %s", objects[item]);
     }
 }
 
