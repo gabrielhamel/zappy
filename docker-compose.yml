@@ -7,7 +7,14 @@ services:
 
   router:
     build: webserver/router
-    depends_on:
-      - game_server
     ports:
       - "3001:3001"
+    depends_on:
+      - game_server
+
+  html:
+    build: webserver/views
+    depends_on:
+      - router
+    ports:
+      - "3002:5000"
