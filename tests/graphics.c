@@ -15,7 +15,7 @@ Test(graphics, tna)
     sock_t *fake = socket_cli_init(ntohs(serv->info.sin_port), 0, NULL, NULL);
     sock_list_t *list = socket_list_init();
     char *team[3] = {"team1", "team2", NULL};
-    char buff[4096] = {0};
+    char buff[70000] = {0};
     zarg_t zarg = {0};
     arg_t arg = {"8080", "3", "3", team, "2", "1"};
 
@@ -27,14 +27,12 @@ Test(graphics, tna)
     manage_event(list, socket_list_get_event(list), &zarg);
     sendto(fake->fd, "GRAPHIC\n", 8, 0, (struct sockaddr *)&serv->info, sizeof(struct sockaddr_in));
     manage_event(list, socket_list_get_event(list), &zarg);
-    sendto(fake->fd, "tna\n", 4, 0, (struct sockaddr *)&serv->info, sizeof(struct sockaddr_in));
-    manage_event(list, socket_list_get_event(list), &zarg);
     cr_assert_eq(ZAPPY_CLIENT(list->start->next->socket)->cli_type, GRAPHICAL);
-    read(fake->fd, buff, 4096);
+    read(fake->fd, buff, 70000);
     cmd_graph_tna(list->start->next->socket, list, NULL, &zarg);
-    memset(buff, 0, 4096);
-    read(fake->fd, buff, 4096);
-    cr_assert_str_eq(buff, "tna team1\ntna team2\ntna team1\ntna team2\n");
+    memset(buff, 0, 70000);
+    read(fake->fd, buff, 70000);
+    cr_assert_str_eq(buff, "tna team1\ntna team2\n");
 }
 
 Test(graphics, send_all_graphic)
