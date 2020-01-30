@@ -148,13 +148,14 @@ tests_run:	titre_tests $(OBJ_SERV)
 			@(mkdir -p tests/html) > /dev/null 2>&1
 			@(genhtml tests/Coverage --output-directory tests/html/) > /dev/null
 			@(gcovr --exclude tests/)
+			@$(ECHO) Open $(GREEN)file://`realpath tests/html/index.html`$(TEAL)$(DEFAULT) to see the whole coverage
 
 documentation:
 			@$(ECHO) $(RED)¶ Generating documentation$(TEAL):$(DEFAULT)
 			@(doxygen doxyfile_ia)
 			@(doxygen doxyfile_server)
-			@(cp assets/Bigchungusthegame.webp doc_ia/html/)
-			@(cp assets/Bigchungusthegame.webp doc_server/html/)
+			@$(ECHO) Open $(GREEN)file://`realpath doc_ia/html/index.html`$(TEAL)$(DEFAULT) to see the ia documentation
+			@$(ECHO) Open $(GREEN)file://`realpath doc_server/html/index.html`$(TEAL)$(DEFAULT) to see the server documentation
 
 %.o : %.c
 			@gcc -c -o $@ $^ $(CFLAGS) --coverage && $(ECHO) -n $(GREEN)"  [OK] "$(TEAL) || $(ECHO) -n $(SANG)"  [NO] "$(TEAL) && $(ECHO) $< | rev | cut -d'/' -f 1 | rev
