@@ -3,4 +3,13 @@ services:
   game_server:
     build: server
     ports:
-      - "3000:8080"
+      - "3000:3000"
+
+  router:
+    build: webserver/router
+    depends_on:
+      - game_server
+    ports:
+      - "3001:3001"
+    links:
+      - game_server
