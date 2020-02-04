@@ -16,9 +16,10 @@ int main(int ac, char **av)
     int ret;
 
     srand(time(NULL));
-    if (parsing(&arg, ac, av) == false)
-        return (84);
-    arg_to_zarg(&arg, &zarg);
+    if (parsing(&arg, ac, av))
+        arg_to_zarg(&arg, &zarg);
+    else if (get_environment(&zarg) == false)
+        return 84;
     ret = launch_zappy(&zarg);
     free(zarg.team_names);
     return (ret);

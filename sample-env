@@ -1,0 +1,8 @@
+#!/bin/bash
+
+export ZPY_PORT=8080
+export ZPY_WIDTH=20
+export ZPY_HEIGHT=20
+export ZPY_SPEED=10
+export ZPY_NB_CLIENT_TEAM_MAX=5
+export ZPY_TEAM_NAMES=Blue:Red:Yellow:Green

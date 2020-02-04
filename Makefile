@@ -26,6 +26,7 @@ SRC_SERV =	./server/src/sockets/client.c						\
 			./server/src/parsing/checking.c						\
 			./server/src/parsing/team_name.c					\
 			./server/src/parsing/arguments.c					\
+			./server/src/parsing/environment.c					\
 			./server/src/parsing/types.c						\
 			./server/src/commands/buffer_cmd/list_fct.c 		\
 			./server/src/commands/graphic/list.c 				\
