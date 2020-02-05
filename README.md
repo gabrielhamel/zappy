@@ -1,4 +1,5 @@
 ## Zappy is a game where AI evolves by eating food and level up by using stones
+### You can read **Game.pdf** and **Graphical Protcol.pdf** to understand the project
 
 ## Play on [zappy.gcoding.fr](https://zappy.gcoding.fr)
 #### If you want to connect one IA or make your own IA, connect you in tcp at zappy.gcoding.fr:3000
@@ -51,3 +52,6 @@ make documentation
 ```
 
 You can consult Ia documentation in **doc_ia/html/index.html** and the Server documentation in **doc_server/html/index.html**
+
+# Deployment
+### There are a graphical webview. There are a relay in socket.io between the game server and the webview to avoid TCP connection in web. To see all deployment you can check all **Dockerfile**
