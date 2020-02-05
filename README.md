@@ -1,7 +1,53 @@
-# zappy
-Build:
-  server and ia: "make"
-  documentation: "make documentation"
- Launch
-  server: ./zappy_server -p <port> -x <map-width> -y <map-height> -n <team-name1> ... -c <max-player-in-team> -f <server-speed>
-    example: ./zappy_server -p 8080 -x 30 -y 30 -n team1 team2 -c 2 -f 7
+## Zappy is a game where AI evolves by eating food and level up by using stones
+
+## Play on [zappy.gcoding.fr](https://zappy.gcoding.fr)
+#### If you want to connect one IA or make your own IA, connect you in tcp at zappy.gcoding.fr:3000
+#### Teams avaibles: "team1", "team2"
+
+# IA
+## Build
+```bash
+make zappy_ai
+```
+## Connect to the server
+```bash
+./zappy_ai -h <hostname> -p <port> -n <team>
+# eg. ./zappy_ai -h zappy.gcoding.fr -p 3000 -n team1
+```
+
+# Server
+## Build
+```bash
+make zappy_server
+```
+## Launch
+```bash
+./zappy_server -p <port> -x <width> -y <height> -n <team-name> ... -c <max-player-in-team> -f <speed>
+# eg. ./zappy_server -p 3000 -f 20 -x 30 -y 30 -n team1 team2 -c 5
+```
+or
+```bash
+export ZPY_PORT=8080
+export ZPY_WIDTH=20
+export ZPY_HEIGHT=20
+export ZPY_SPEED=10
+export ZPY_NB_CLIENT_TEAM_MAX=5
+export ZPY_TEAM_NAMES=Blue:Red:Yellow:Green
+
+./zappy_server
+```
+# Unit tests
+## Build & execute
+The build needs [criterion](https://github.com/Snaipe/Criterion) library
+```bash
+make tests_run
+```
+You can see the coverage in the report stored in **tests/html/index.html**
+
+# Documentation
+The generation needs **doxygen** and **graphviz** commands
+```bash
+make documentation
+```
+
+You can consult Ia documentation in **doc_ia/html/index.html** and the Server documentation in **doc_server/html/index.html**
