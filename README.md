@@ -13,7 +13,7 @@ make zappy_ai
 ## Connect to the server
 ```bash
 ./zappy_ai -h <hostname> -p <port> -n <team>
-# eg. ./zappy_ai -h zappy.gabrielhamel.fr -p 3000 -n team1
+# eg. ./zappy_ai -h zappy.gabrielhamel.fr -p 8080 -n team1
 ```
 
 # Server
@@ -24,7 +24,7 @@ make zappy_server
 ## Launch
 ```bash
 ./zappy_server -p <port> -x <width> -y <height> -n <team-name> ... -c <max-player-in-team> -f <speed>
-# eg. ./zappy_server -p 3000 -f 20 -x 30 -y 30 -n team1 team2 -c 5
+# eg. ./zappy_server -p 8080 -f 20 -x 30 -y 30 -n team1 team2 -c 5
 ```
 or
 ```bash
