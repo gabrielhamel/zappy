@@ -1,8 +1,8 @@
 ## Zappy is a game where AI evolves by eating food and level up by using stones
 ### You can read **Game.pdf** and **Graphical Protcol.pdf** to understand the project
 
-## Play on [zappy.gcoding.fr](https://zappy.gcoding.fr)
-#### If you want to connect one IA or make your own IA, connect you in tcp at zappy.gcoding.fr:3000
+## Play on [zappy.gabrielhamel.fr](https://zappy.gabrielhamel.fr)
+#### If you want to connect one IA or make your own IA, connect you in tcp at zappy.gabrielhamel.fr:3000
 #### Teams avaibles: "team1", "team2"
 
 # IA
@@ -13,7 +13,7 @@ make zappy_ai
 ## Connect to the server
 ```bash
 ./zappy_ai -h <hostname> -p <port> -n <team>
-# eg. ./zappy_ai -h zappy.gcoding.fr -p 3000 -n team1
+# eg. ./zappy_ai -h zappy.gabrielhamel.fr -p 3000 -n team1
 ```
 
 # Server
